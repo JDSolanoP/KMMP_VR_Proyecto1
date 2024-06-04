@@ -592,7 +592,6 @@ GameObject:
   - component: {fileID: 4644774255775842795}
   - component: {fileID: 2540805474532410685}
   - component: {fileID: 4578097894660564638}
-  - component: {fileID: 1701298669159980479}
   - component: {fileID: 1701298669159980476}
   - component: {fileID: 1701298669159980419}
   m_Layer: 5
@@ -668,29 +667,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &1701298669159980479
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1701298669159980473}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 0.17499849
-  m_Height: 0.34996074
-  m_Direction: 1
-  m_Center: {x: -0.0013070032, y: 0.001634114, z: -0.032217905}
 --- !u!95 &1701298669159980476
 Animator:
   serializedVersion: 5
@@ -3142,7 +3118,6 @@ GameObject:
   - component: {fileID: 7388302772413518964}
   - component: {fileID: 7388302772413518971}
   - component: {fileID: 7388302772413518970}
-  - component: {fileID: 7388302772413518965}
   m_Layer: 0
   m_Name: Piso verde 2
   m_TagString: Untagged
@@ -3215,28 +3190,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &7388302772413518965
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7388302772413518967}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &7388302772415186194
 GameObject:
   m_ObjectHideFlags: 0
@@ -3844,7 +3797,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9f087c39a7bcfac4ab14615d5dad2ef5, type: 3}
+  - {fileID: 10100, guid: 0000000000000000e000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -8079,7 +8032,6 @@ GameObject:
   - component: {fileID: 7388302772916549619}
   - component: {fileID: 7388302772916549618}
   - component: {fileID: 7388302772916549613}
-  - component: {fileID: 7388302772916549612}
   m_Layer: 0
   m_Name: Piso verde 1
   m_TagString: Untagged
@@ -8152,28 +8104,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &7388302772916549612
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7388302772916549615}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &7388302772928550329
 GameObject:
   m_ObjectHideFlags: 0
@@ -14069,7 +13999,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9f087c39a7bcfac4ab14615d5dad2ef5, type: 3}
+  - {fileID: 10100, guid: 0000000000000000e000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -15239,7 +15169,6 @@ GameObject:
   - component: {fileID: 7388302773827129473}
   - component: {fileID: 7388302773827129480}
   - component: {fileID: 7388302773827129483}
-  - component: {fileID: 7388302773827129482}
   - component: {fileID: 7388302773827129477}
   - component: {fileID: 7388302773827129476}
   m_Layer: 5
@@ -15315,29 +15244,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &7388302773827129482
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7388302773827129472}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 0.17499849
-  m_Height: 0.34996074
-  m_Direction: 1
-  m_Center: {x: -0.0013070032, y: 0.001634114, z: -0.032217905}
 --- !u!95 &7388302773827129477
 Animator:
   serializedVersion: 5
