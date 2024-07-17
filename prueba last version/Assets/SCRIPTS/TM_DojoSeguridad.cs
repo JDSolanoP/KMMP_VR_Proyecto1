@@ -349,28 +349,28 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
             case 8://Pernos000 y adaptador
                 if (contacto_confirmado[confirmarContacto]== true&&PernoEnDado==false)
                 {
-                    Debug.Log("contacto perno "+(confirmarContacto-8)+"en funcion verificar contacto");
+                    //Debug.Log("contacto perno "+(confirmarContacto-8)+"en funcion verificar contacto");
                     StartCoroutine(cronometro(confirmarContacto-7));
                 }
                 break;
             case 9://Pernos001 y adaptador
                 if (contacto_confirmado[confirmarContacto] == true && PernoEnDado == false)
                 {
-                    Debug.Log("contacto perno " + (confirmarContacto - 8) + "en funcion verificar contacto");
+                    //Debug.Log("contacto perno " + (confirmarContacto - 8) + "en funcion verificar contacto");
                     StartCoroutine(cronometro(confirmarContacto - 7));
                 }
                 break;
             case 10://Pernos002 y adaptador
                 if (contacto_confirmado[confirmarContacto] == true && PernoEnDado == false)
                 {
-                    Debug.Log("contacto perno " + (confirmarContacto - 8) + "en funcion verificar contacto");
+                    //Debug.Log("contacto perno " + (confirmarContacto - 8) + "en funcion verificar contacto");
                     StartCoroutine(cronometro(confirmarContacto - 7));
                 }
                 break;
             case 11 ://Pernos003 y adaptador
                 if (contacto_confirmado[confirmarContacto] == true && PernoEnDado == false)
                 {
-                    Debug.Log("contacto perno " + (confirmarContacto - 8) + "en funcion verificar contacto");
+                    //Debug.Log("contacto perno " + (confirmarContacto - 8) + "en funcion verificar contacto");
                     StartCoroutine(cronometro(confirmarContacto - 7));
                 }
                 break;
@@ -380,7 +380,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                     nPernosSacados = 0;
                     if (contacto_confirmado[confirmarContacto] == true)
                     {
-                        Debug.Log("contacto perno " + (confirmarContacto) + "en funcion verificar contacto COLOCADO en el cajon");
+                        //Debug.Log("contacto perno " + (confirmarContacto) + "en funcion verificar contacto COLOCADO en el cajon");
                         for (int j = 0; j < verificacionNPernos.Length; j++)
                         {
                             
