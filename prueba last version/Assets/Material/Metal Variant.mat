@@ -10,7 +10,7 @@ Material:
   m_Name: Metal Variant
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 2100000, guid: ad67d7eaba3a44c4aaa4665243626d06, type: 2}
-  m_ModifiedSerializedProperties: 16
+  m_ModifiedSerializedProperties: 18
   m_ValidKeywords:
   - _ALPHAPREMULTIPLY_ON
   m_InvalidKeywords: []
@@ -24,12 +24,21 @@ Material:
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - _OcclusionMap:
+        m_Texture: {fileID: 2800000, guid: ac686032eb5564f42945ba63f69c5b83, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _DstBlend: 10
+    - _Glossiness: 0
+    - _Metallic: 0
     - _Mode: 3
+    - _OcclusionStrength: 0
+    - _SmoothnessTextureChannel: 0
+    - _UVSec: 0
     - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 0.41044316, g: 1, b: 0, a: 0.4745098}
+    - _Color: {r: 0.4104429, g: 1, b: 0, a: 0.25490198}
   m_BuildTextureStacks: []
