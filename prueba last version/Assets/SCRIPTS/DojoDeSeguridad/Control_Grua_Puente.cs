@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Control_Grua_Puente : MonoBehaviour { 
+public class Control_Grua_Puente : MonoBehaviour {
+    public TM_DojoSeguridad tmDojo;
+    public bool corneta_presionada;
 public GameObject grua;
 public GameObject puente;
 public GameObject i_izq;
@@ -97,13 +99,28 @@ void Start()
 }*/
 public void press(int nB)
 {
-    //Debug.Log("presiono " + nB);
-
+        AudioManager.aSource.goFx("Boton");//****************************************************sonido boton*****************************************
     switch (nB)
     {
+            case 7:
+                if (btn_controlgrua[7] == true)
+                {
+                    AudioManager.aSource.goFx("Corneta_aviso",1,true,false);
+                    tmDojo.si_corneta_Presionada = true;///////////////////////////////////////*******************************para tarea de revision si se presiono la corneta de aviso***************************
+                    corneta_presionada = true;///////////////////////////////////////*******************************para tarea de revision si se presiono la corneta de aviso***************************
+                }
+                else
+                {
+                    AudioManager.aSource.altoFxLoop("Corneta_aviso");
+                }
+                //AudioManager.aSource.goFx("Corneta_aviso");
+                
+                //btn_controlgrua[nB] = true;
+                break;
         case 0:
             if (puente.transform.localPosition.x >= LimitesXYZ[0].localPosition.x && bloqueo[0] == false)
             {
+                corneta_presionada= false;
                 //moviendo = 0;
                     desplazamiento(0);
                 //StartCoroutine(move1);
@@ -118,7 +135,8 @@ public void press(int nB)
         case 1:
             if (puente.transform.localPosition.x <= LimitesXYZ[1].localPosition.x && bloqueo[1] == false)
             {
-                //moviendo = 1;
+                    corneta_presionada = false;
+                    //moviendo = 1;
                     desplazamiento(1);
                     //StartCoroutine(move2);
                     Debug.Log("Hacia la atras");// sumo con respecto a la posicion local por lotanto es el mayor
@@ -132,6 +150,7 @@ public void press(int nB)
         case 2:
             if (grua.transform.localPosition.z >= LimitesXYZ[0].localPosition.z && bloqueo[2] == false)
             {
+                    corneta_presionada = false;
                     desplazamiento(2);
                     //StartCoroutine(move3);
                     Debug.Log("Hacia izquierda grua");
@@ -145,6 +164,7 @@ public void press(int nB)
         case 3:
             if (grua.transform.localPosition.z <= LimitesXYZ[1].localPosition.z && bloqueo[3] == false)
             {
+                    corneta_presionada = false;
                     desplazamiento(3);
                     //StartCoroutine(move4);
                     Debug.Log("Hacia derecha grua");
@@ -158,26 +178,28 @@ public void press(int nB)
         case 4:
             if (gancho.transform.localPosition.y <= LimitesXYZ[1].localPosition.y && bloqueo[4] == false)
             {
+                    corneta_presionada = false;
                     desplazamiento(4);
                     //StartCoroutine(move5);
                     Debug.Log("Hacia arriba");
             }
             else
             {
-                Debug.Log("Limite1 en y alcanzado bloqueo[4]=" + bloqueo[4]);
+                    Debug.Log("Limite1 en y alcanzado bloqueo[4]=" + bloqueo[4]);
                 //No_press();
             }
             break;
         case 5:
             if (gancho.transform.localPosition.y >= LimitesXYZ[0].localPosition.y && bloqueo[5] == false)
             {
+                    corneta_presionada = false;
                     desplazamiento(5);
                     //StartCoroutine(move6); 
                     Debug.Log("Hacia abajo");
             }
             else
             {
-                Debug.Log("Limite2 en y alcanzado bloqueo[5]=" + bloqueo[5]);
+                    Debug.Log("Limite2 en y alcanzado bloqueo[5]=" + bloqueo[5]);
                 //No_press();
             }
             break;
@@ -190,7 +212,10 @@ public void press(int nB)
             ly1 = lg1.transform.localPosition.y;
             break;*/
     }
+        if (corneta_presionada == true)///////////////////////////////////////*******************************para tarea de revision si se presiono la corneta de aviso***************************
+        {
 
+        }
 }
 /*IEnumerator plat_move(bool en_z, int dir)
 {
@@ -403,15 +428,17 @@ public void paradaXbloqueo(int nMove)
             case 5:
                 StartCoroutine(GanchoMove(false));
                 break;
-        }
+            }
     }
     IEnumerator PuenteGruaMove(bool si_adelante)
     {
-        
+        AudioManager.aSource.goFx("Sirena_grua",1,true,false);
         int sentido = 0;
         while (btn_controlgrua[botonPresionado] == true) {
             if (btn_controlgrua[botonPresionado] == false)
             {
+                AudioManager.aSource.altoFxLoop("Sirena_grua");//***************************AGREGADO EL 02-08-24**************************
+                AudioManager.aSource.goFx("Corneta_freno");
                 Debug.Log("alto puente");
                 break;
             }
@@ -419,6 +446,8 @@ public void paradaXbloqueo(int nMove)
              {
                 if (bloqueo[0] == true)
                 {
+                    AudioManager.aSource.goFx("4Puerta_Corrediza_Alto");//**************************Agregado 30-07-24****reemplazado el 31-07-24
+                    
                     Debug.Log("alto puente (bloqueo[0]="+bloqueo[0]);
                     break;
                 }
@@ -431,6 +460,8 @@ public void paradaXbloqueo(int nMove)
                 }
                 else
                 {
+                    AudioManager.aSource.altoFxLoop("Sirena_grua");//***************************AGREGADO EL 02-08-24**************************
+                    AudioManager.aSource.goFx("Corneta_freno");
                     Debug.Log(sentido+" "+ puente.transform.localPosition.x+ " en x Limite0 hacia adelante alcanzado puente bloqueo[0]="+ LimitesXYZ[0].localPosition.x+" " + bloqueo[0]);
                     break;
                 }
@@ -438,6 +469,8 @@ public void paradaXbloqueo(int nMove)
             else {
                 if (bloqueo[1] == true)
                 {
+                    AudioManager.aSource.goFx("4Puerta_Corrediza_Alto");//**************************Agregado 30-07-24****reemplazado el 31-07-24
+                    
                     Debug.Log("alto puente grua bloqueo[1]=" + bloqueo[1]);
                     break;
                 }
@@ -450,6 +483,8 @@ public void paradaXbloqueo(int nMove)
                 }
                 else
                 {
+                    AudioManager.aSource.altoFxLoop("Sirena_grua");//***************************AGREGADO EL 02-08-24**************************
+                    AudioManager.aSource.goFx("Corneta_freno");
                     Debug.Log(sentido + " Limite alcanzado puente bloqueo[1]="+ puente.transform.localPosition.x+">= " + LimitesXYZ[1].localPosition.x+" o "+ bloqueo[1]);
                     break;
                 }
@@ -458,6 +493,7 @@ public void paradaXbloqueo(int nMove)
     }
     IEnumerator GruaMove(bool si_izquierda)
     {
+        AudioManager.aSource.goFx("Rieles_grua", 1, true, false);
         int sentido = 0;
         while (btn_controlgrua[botonPresionado] == true)
         {
@@ -471,6 +507,9 @@ public void paradaXbloqueo(int nMove)
         {
                 if (bloqueo[2] == true)
                 {
+                    AudioManager.aSource.goFx("4Puerta_Corrediza_Alto");//**************************Agregado 30-07-24****reemplazado el 31-07-24
+                    AudioManager.aSource.altoFxLoop("Rieles_grua");
+                    AudioManager.aSource.goFx("Corneta_freno");
                     Debug.Log("alto grua bloqueo[2]=" + bloqueo[2]);
                     break;
                 }
@@ -483,6 +522,9 @@ public void paradaXbloqueo(int nMove)
                 }
                 else
                 {
+                    AudioManager.aSource.altoFxLoop("Rieles_grua");
+                    AudioManager.aSource.goFx("Corneta_freno");
+
                     Debug.Log(grua.transform.localPosition.z + "Limite izquierdo grua alcanzado bloqueo[2]=" + LimitesXYZ[0].localPosition.z + " " + bloqueo[2]);
                     break;
                 }
@@ -490,6 +532,9 @@ public void paradaXbloqueo(int nMove)
         else {
                 if (bloqueo[3] == true)
                 {
+                    AudioManager.aSource.goFx("4Puerta_Corrediza_Alto");//**************************Agregado 30-07-24****reemplazado el 31-07-24
+                    AudioManager.aSource.altoFxLoop("Rieles_grua");
+                    AudioManager.aSource.goFx("Corneta_freno");
                     Debug.Log("alto grua bloqueo[3]=" + bloqueo[3]);
                     break;
                 }
@@ -503,6 +548,8 @@ public void paradaXbloqueo(int nMove)
                 }
                 else
                 {
+                    AudioManager.aSource.altoFxLoop("Rieles_grua");
+                    AudioManager.aSource.goFx("Corneta_freno");
                     Debug.Log(grua.transform.localPosition.z +"Limite derecho grua alcanzado grua bloqueo[3]= " + LimitesXYZ[1].localPosition.z+" " + bloqueo[3]);
                     break;
                 }
@@ -511,11 +558,13 @@ public void paradaXbloqueo(int nMove)
     }
     IEnumerator GanchoMove(bool si_arriba)
     {
+        AudioManager.aSource.goFx("Ascenso_grua", 1, true, false);
         int sentido = 0;
         while (btn_controlgrua[botonPresionado] == true)
         {
             if (btn_controlgrua[botonPresionado] == false)
             {
+                AudioManager.aSource.altoFxLoop("Ascenso_grua");
                 Debug.Log("alto gancho");
                 break;
             }
@@ -523,7 +572,9 @@ public void paradaXbloqueo(int nMove)
             {
                 if (bloqueo[4] == true)
                 {
+                    AudioManager.aSource.goFx("4Puerta_Corrediza_Alto");//**************************Agregado 30-07-24****reemplazado el 31-07-24
                     Debug.Log("alto gancho bloqueo[4]=" + bloqueo[4]);
+                    
                     break;
                 }
                 sentido = 1;
@@ -535,6 +586,7 @@ public void paradaXbloqueo(int nMove)
                 }
                 else
                 {
+                    AudioManager.aSource.altoFxLoop("Ascenso_grua");
                     Debug.Log(sentido + "+Limite alcanzado gancho bloqueo[4]=" + bloqueo[4]);
                     break;
                 }
@@ -543,7 +595,9 @@ public void paradaXbloqueo(int nMove)
             else {
                 if (bloqueo[5] == true)
                 {
+                    AudioManager.aSource.goFx("4Puerta_Corrediza_Alto");//**************************Agregado 30-07-24****reemplazado el 31-07-24
                     Debug.Log("alto gancho bloqueo[5]=" + bloqueo[5]);
+                    AudioManager.aSource.altoFxLoop("Ascenso_grua");
                     break;
                 }
                 sentido = -1;
@@ -556,6 +610,7 @@ public void paradaXbloqueo(int nMove)
                 }
                 else
                 {
+                    AudioManager.aSource.altoFxLoop("Ascenso_grua");
                     Debug.Log(sentido + " Limite alcanzado gancho bloqueo[5]=" + bloqueo[5]);
                     break;
                 }
@@ -564,10 +619,4 @@ public void paradaXbloqueo(int nMove)
 
         }
     }
-    public void Soltar_Boton()
-    {
-        btn_controlgrua[botonPresionado] = false;
-    }
-    
-
 }

@@ -24,6 +24,7 @@ public class CargaIzable_Limites : MonoBehaviour
         {
             if (other.isTrigger == false)
             {
+                AudioManager.aSource.goFx("4Puerta_Corrediza_Alto");//******************************************audio carga**************************
                 BloqueaActivo = true;
                 cgp.bloqueo[nBloqueo] = true;
                 ContactoNombre = other.gameObject;

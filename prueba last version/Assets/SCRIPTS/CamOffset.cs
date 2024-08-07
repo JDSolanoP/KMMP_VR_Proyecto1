@@ -21,6 +21,7 @@ public class CamOffset : MonoBehaviour
         Resize.z = - Camera.transform.localPosition.z;
         Resize.y = this.gameObject.transform.localPosition.y;
         this.gameObject.transform.localPosition = Resize;
+        
     }
 
 }

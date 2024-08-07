@@ -18,7 +18,7 @@ public class DetectorObjObj : MonoBehaviour//PROPIO DE DOJO DE SEGURIDAD
     {
         if (Mas_de_1_Objeto == false)
         {
-            if (other.gameObject.name == n_obj)
+            if (other.gameObject.name == n_obj && PermiteOntriggerStay == false)
             {
                 tm_Dojo.contacto_confirmado[confirmarContacto] = true;
                 tm_Dojo.verificarContacto(confirmarContacto);
