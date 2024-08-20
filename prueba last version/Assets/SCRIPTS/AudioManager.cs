@@ -41,7 +41,7 @@ public class AudioManager : MonoBehaviour
     }
     private void Start()
     {
-        PlayMusica(MusicaSonidos[0].nombre, 0.7f,true);
+        //PlayMusica(MusicaSonidos[0].nombre, 0.7f,true);
         //FxVol(1);
         //VozVol(1);
 

@@ -144,7 +144,7 @@ TextureImporter:
         width: 512
         height: 241
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -165,7 +165,7 @@ TextureImporter:
         width: 256
         height: 233
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -173,6 +173,27 @@ TextureImporter:
       bones: []
       spriteID: 742251941f4103f44a861a3f562e7b23
       internalID: -55570197
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flecha2Blanca23_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 269
+        width: 250
+        height: 243
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3f772df3e9df254c9960c65883e1f17
+      internalID: 1946847838
       vertices: []
       indices: 
       edges: []
@@ -190,6 +211,7 @@ TextureImporter:
     nameFileIdTable:
       flecha2Blanca23_0: 1668069558
       flecha2Blanca23_1: -55570197
+      flecha2Blanca23_2: 1946847838
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

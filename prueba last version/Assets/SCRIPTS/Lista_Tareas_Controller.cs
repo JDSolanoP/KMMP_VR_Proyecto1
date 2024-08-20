@@ -14,7 +14,7 @@ public class Lista_Tareas_Controller : MonoBehaviour
     public virtual void Start()
     {
         Debug.Log("Inicia herencia del Start");
-        totalTareas = aSource.VocesSonidos.Length;
+        //totalTareas = aSource.VocesSonidos.Length;
         StartCoroutine(InicioDeNivel());
     }
 
@@ -48,7 +48,7 @@ public class Lista_Tareas_Controller : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
 
-        aSource.PlayVoz(aSource.VocesSonidos[TareaActual].nombre);
+        AudioManager.aSource.PlayVoz(aSource.VocesSonidos[TareaActual].nombre);
         Debug.Log($"se cargo clip de tarea n"+TareaActual+" correctamente");
 
         yield return new WaitForSeconds(0.5f);

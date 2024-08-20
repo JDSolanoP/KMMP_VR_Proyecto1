@@ -102,7 +102,10 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 //audioManager de bienvenida
                 aSource.MusicaVol(0.5f);//**************************************Sonido Musica Inicial*************
                 //aSource.FxVol(1);
-
+                for(int i = 0; i < Tablero_Indicaciones.Length; i++)
+                {
+                    Tablero_Indicaciones[i].SetActive(false);
+                }
                 yield return new WaitForSeconds(0.1f);
                 aSource.goFx(aSource.FxSonidos[0].nombre, 0.5f, true, false);
                 aSource.goFx(aSource.FxSonidos[1].nombre, 0.5f, true, false);
@@ -131,7 +134,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 break;//cuando se sale del area intermedia
             case 2:// empieza la amoladora
                 Tablero_Indicaciones[0].SetActive(true);
-
+                aSource.goFx("Bien");
                 //ya_interior = false;
                 //Debug.Log("Se esta reproduciendo audio");
 
@@ -160,6 +163,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 aSource.goFx("Bien");
                 murosConos[0].SetActive(false);
                 Tablero_Indicaciones[6].SetActive(true);
+                Tablero_Indicaciones[15].SetActive(true);
                 ObjetosReferencias[0].SetActive(true);
                 //Debug.Log("Se esta reproduciendo audio");
                 while (AudioManager.aSource.IsPlayingVoz() == true)
@@ -171,6 +175,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
             case 5:// Da pase a la siguiente area PISTOLA NEUMATICA
                 aSource.goFx("Bien");
                 murosConos[2].SetActive(false);
+                Tablero_Indicaciones[15].SetActive(false);
                 Tablero_Indicaciones[10].SetActive(true);
                 RefeinterruptorCompresora.SetActive(true);
                 conexIWPCalbePos0=ObjConexionIWPCable.transform.localPosition;
@@ -703,6 +708,12 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
             manosXR[1].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[0];
             guantesComplementos[0].SetActive(true);
             guantesComplementos[1].SetActive(true);
+        }
+        if (nE==1)
+        {
+            aSource.FxVolPropio("0Cigarras001",0.25f);
+            aSource.FxVolPropio("1Cuervos_Vientos", 0.25f);
+            aSource.FxVolPropio("2Cuervos_Loop", 0.25f);
         }
         Epps[nE].SetActive(false);
         ActivarEvento(1);
