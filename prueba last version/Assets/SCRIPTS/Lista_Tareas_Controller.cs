@@ -47,10 +47,11 @@ public class Lista_Tareas_Controller : MonoBehaviour
     IEnumerator CargarReproducir_Clip()
     {
         yield return new WaitForSeconds(0.5f);
-
-        AudioManager.aSource.PlayVoz(aSource.VocesSonidos[TareaActual].nombre);
-        Debug.Log($"se cargo clip de tarea n"+TareaActual+" correctamente");
-
+        if (aSource.VocesSonidos.Length>TareaActual )
+        {
+            AudioManager.aSource.PlayVoz(aSource.VocesSonidos[TareaActual].nombre);
+            Debug.Log($"se cargo clip de tarea n " + TareaActual + " correctamente");
+        }
         yield return new WaitForSeconds(0.5f);
 
         //audioManager.ReproducirAudioClip();

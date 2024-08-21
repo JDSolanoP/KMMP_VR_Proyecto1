@@ -134,7 +134,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 break;//cuando se sale del area intermedia
             case 2:// empieza la amoladora
                 Tablero_Indicaciones[0].SetActive(true);
-                aSource.goFx("Bien");
+                
                 //ya_interior = false;
                 //Debug.Log("Se esta reproduciendo audio");
 
@@ -301,6 +301,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                     {
                         if (ya_interior == true)
                         {
+                            aSource.goFx("Bien");
                             aSource.MusicaVol(1);
                             aP.aperturaDojo(false);
                         }
@@ -520,6 +521,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                             {
                                 if (Si_Careta==false)
                                 {
+                                    Tablero_Indicaciones[5].SetActive(false);
                                     Tablero_Indicaciones[1].SetActive(true);
                                     M_1[2].GetComponent<Collider>().enabled = false;
                                     M_1[2].SetActive(true);//activar careta de referencia
@@ -528,6 +530,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                                 {
                                     if (Si_Mandil == false)
                                     {
+                                        Tablero_Indicaciones[1].SetActive(false);
                                         Tablero_Indicaciones[5].SetActive(true);
                                         M_1[5].GetComponent<Collider>().enabled = false;
                                         M_1[5].SetActive(true);//activar lentes de referencia
