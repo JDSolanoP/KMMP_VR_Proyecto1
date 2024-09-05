@@ -15,6 +15,10 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
     public AccionPuertaDojo aP;
     public GameObject[] Tablero_Indicaciones;
     public GameObject[] murosConos;
+    public GameObject[] DetectorSgtM;
+    public int contadorDetectorSgtMod=0;
+    string NombreAuxAudio;
+    float tiempoEsperaAux;
     [Header("Modulo 0")]
     bool llamada_apertura=false;
     public GameObject[] guantesComplementos;
@@ -24,6 +28,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
     public GameObject[] detectorPos;
     [Header("Modulo 1")]
     public GameObject[] Epps;
+    public GameObject Flechasgrupo2;
     public bool correctaTareaMEpps1 = false;
     public int nEpps=0;
     public int TotalEpps = 0;
@@ -38,6 +43,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
     public float tTemp=0;//recorrido del tiempo
     public bool amoladoraOn=false;
     bool amolando = false;
+    bool tareaCorrectaAmoladora = false;
     [Header("Modulo 3")]
     public GameObject[] ObjetosReferencias;
     public bool si_corneta_Presionada;
@@ -82,6 +88,9 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
     public GameObject IWP_Mesh;
     public GameObject IWP_OBJ;
     public GameObject ParticulasExpl;
+    public GameObject Flecha_Indi;
+    [Header("Extras")]
+    public GameObject UI_btn_Continuar_Panel;
 
     public override void Start()
     {
@@ -100,16 +109,24 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
             case 0:// AQUI, llegada delante del dojo
                 //Tablero_Indicaciones[0].SetActive(true);
                 //audioManager de bienvenida
+                yield return new WaitForSeconds(0.5f);
+                for (int i = 0; i < PernosGrab.Length; i++)
+                {
+                    PernosGrab[i].SetActive(false);
+                }
                 aSource.MusicaVol(0.5f);//**************************************Sonido Musica Inicial*************
                 //aSource.FxVol(1);
                 for(int i = 0; i < Tablero_Indicaciones.Length; i++)
                 {
                     Tablero_Indicaciones[i].SetActive(false);
                 }
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(2f);
+                Tablero_Indicaciones[16].SetActive(true);
                 aSource.goFx(aSource.FxSonidos[0].nombre, 0.5f, true, false);
-                aSource.goFx(aSource.FxSonidos[1].nombre, 0.5f, true, false);
-                aSource.goFx(aSource.FxSonidos[2].nombre, 0.5f, true, false);
+                aSource.goFx(aSource.FxSonidos[1].nombre, 0.2f, true, false);
+                aSource.goFx(aSource.FxSonidos[2].nombre, 0.2f, true, false);
+                yield return new WaitForSeconds(1f);
+                //Tablero_Indicaciones[16].SetActive(true);
                 /*aSource.PlayFx(aSource.FxSonidos[0].nombre,0.5f,true);
                 aSource.PlayFx(aSource.FxSonidos[1].nombre, 0.5f, true);
                 aSource.PlayFx(aSource.FxSonidos[2].nombre, 0.5f, true);*/
@@ -124,7 +141,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
             case 1:// AQUI, esta dentro de la instancia intermedia
 
                 yield return new WaitForSeconds(.1f);
-
+                Tablero_Indicaciones[16].SetActive(false);
                 //Debug.Log("Se esta reproduciendo audio");
 
                 while (AudioManager.aSource.IsPlayingVoz() == true)
@@ -144,8 +161,10 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 }
                 break;//Se hizo correctamente el ejercicio de amoladora
 
-            case 3:// Da pase a la siguiente area
-                aSource.goFx("Bien");
+            case 3:// devolver careta y mandil
+                Tablero_Indicaciones[0].SetActive(false);
+                //aSource.goFx("Bien");
+                //aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
                 M_1[2].SetActive(true);
                 M_1[5].SetActive(true);
                 M_1[2].GetComponent<Collider>().enabled = true;
@@ -160,8 +179,9 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 }
                 break;
             case 4:// Da pase a la siguiente area PUENTE GRUA
-                aSource.goFx("Bien");
-                murosConos[0].SetActive(false);
+                //aSource.goFx("Bien");
+                //aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
+                aSource.altoFx("SiguienteModulo");
                 Tablero_Indicaciones[6].SetActive(true);
                 Tablero_Indicaciones[15].SetActive(true);
                 ObjetosReferencias[0].SetActive(true);
@@ -173,11 +193,14 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 }
                 break;//Fin puente grua
             case 5:// Da pase a la siguiente area PISTOLA NEUMATICA
-                aSource.goFx("Bien");
-                murosConos[2].SetActive(false);
+                iwg.DetectorPerno.SetActive(false);
+                //aSource.goFx("Bien");
+                //aSource.goFx("Devolver_Epps");//********************AGREGADO EL 27-08-24********************////////////
+                aSource.altoFx("SiguienteModulo");
                 Tablero_Indicaciones[15].SetActive(false);
                 Tablero_Indicaciones[10].SetActive(true);
                 RefeinterruptorCompresora.SetActive(true);
+                Flecha_Indi.SetActive(true);
                 conexIWPCalbePos0=ObjConexionIWPCable.transform.localPosition;
                 conexIWPCalbeRot0 = ObjConexionIWPCable.transform.localEulerAngles;
                 //Tablero_Indicaciones[6].SetActive(true);
@@ -190,10 +213,14 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 }
                 break;//Fin de modulo de PISTOLA NEUMATICA, CUANDO SE DESCONECTA CORRECTAMENTE LA PISTOLA DEL COMPRESOR DE AIRE
             case 6://INICIO DE MOD5 Conclusiones
-                aSource.goFx("Bien");
-                murosConos[3].SetActive(false);
+                //aSource.goFx("Bien");
+                //aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
+                aSource.altoFx("SiguienteModulo");
+                Tablero_Indicaciones[10].SetActive(false);
                 Tablero_Indicaciones[13].SetActive(true);
-                Tablero_Indicaciones[14].SetActive(true);
+                yield return new WaitForSeconds(12);
+                UI_btn_Continuar_Panel.SetActive(true);
+
                 //ObjetosReferencias[0].SetActive(true);
                 //Debug.Log("Se esta reproduciendo audio");
                 while (AudioManager.aSource.IsPlayingVoz() == true)
@@ -202,8 +229,13 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                     yield return new WaitForFixedUpdate();
                 }
                 break;
-            case 7:// Da p
-                murosConos[3].SetActive(false);
+            case 7:// Finde conclusiones
+                //aSource.VocesSourceCanal[aSource.VozCanalActual].Stop();
+                aSource.goFx("Aplausos");
+                aSource.goFx("fanfarrias");
+                Tablero_Indicaciones[13].SetActive(false);
+                Tablero_Indicaciones[14].SetActive(true);
+                murosConos[4].SetActive(false);
                 //Tablero_Indicaciones[6].SetActive(true);
                 //ObjetosReferencias[0].SetActive(true);
                 //Debug.Log("Se esta reproduciendo audio");
@@ -231,30 +263,25 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                             if (TareaActual == 0)
                             {
                                 // aSource.PlayFx(aSource.FxSonidos[4].nombre);
-                                aSource.PlayMusica(aSource.MusicaSonidos[0].nombre, 1f, true);
+                                aSource.PlayMusica(aSource.MusicaSonidos[0].nombre, 0.9f, true);
                                 aP.aperturaDojo(true);
                             }
                         }
-                        /*else
-                        {
-                            if (correctaTareaM2 == true)
-                            {
-                                aP.aperturaDojo(false);
-                            }
-                        }*/
                     }
                 }else
                     {
                         if (ya_interior == true)
                         {
                         aP.cerrandoDojo(true);
+                        
                         //aSource.goFx();
                         aSource.FxVolPropio(aSource.FxSonidos[0].nombre, 0.25f);//****************************************Sonidos para ambientacion***********************
                         aSource.FxVolPropio(aSource.FxSonidos[1].nombre, 0.25f);
                         aSource.FxVolPropio(aSource.FxSonidos[2].nombre, 0.25f);
                         }
-                        if (TareaActual>=0&&TareaActual<2)
+                        if (TareaActual<2)
                         {
+                        llamada_apertura = false;
                             if (ya_interior == false)
                             {
 
@@ -291,10 +318,11 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 if (contacto_confirmado[confirmarContacto] == true)
                 {
                     
-                    ambientacion.SetActive(false);
+                    //ambientacion.SetActive(false);
                     if (correctaTareaMEpps1 == false)
                     {
                         aSource.goFx("Fallo");
+                        aSource.goFx("Locu_Fallo");//********************AGREGADO EL 27-08-24********************////////////
                         Tablero_Indicaciones[3].SetActive(true);
                     }
                     else
@@ -302,7 +330,8 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                         if (ya_interior == true)
                         {
                             aSource.goFx("Bien");
-                            aSource.MusicaVol(1);
+                            aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
+                            aSource.MusicaVol(0.9f);
                             aP.aperturaDojo(false);
                         }
                         //audio de bienvenido;
@@ -324,7 +353,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 {
                     if (TareaActual ==0)
                     {
-                        aSource.MusicaVol(1);
+                        aSource.MusicaVol(0.9f);
                         TareaCompletada(0);//////////////////////////////////////////////////completando la tarea 0******************************
                         ya_interior = true;
                     }
@@ -333,8 +362,6 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 {
                     if(TareaActual == 2)
                     {
-
-
                         ya_interior = false;
                     }
                 }
@@ -343,6 +370,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 if (contacto_confirmado[confirmarContacto] == true)
                 {
                     aSource.goFx("Fallo");//*************************************************verificado/////07-08-24
+                    aSource.goFx("Locu_Fallo");//********************AGREGADO EL 27-08-24********************////////////
                     Tablero_Indicaciones[7].SetActive(true);
                     ObjetosReferencias[7].SetActive(true);
                     //if()
@@ -351,7 +379,11 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
             case 5://si coloca la carga en el lugar adecuado
                 if (contacto_confirmado[confirmarContacto] == true)
                 {
+                    
                     aSource.goFx("Bien");//*************************************************verificado/////07-08-24
+                    aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
+                    NombreAuxAudio = "Devolver_Control";//******************************************agregado 04-09-24************************************
+                    StartCoroutine(TiempoEsperaAudio(10));
                     Tablero_Indicaciones[7].SetActive(false);
                     Tablero_Indicaciones[8].SetActive(true);
                     Tablero_Indicaciones[9].SetActive(true);
@@ -362,9 +394,10 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                     murosConos[1].SetActive(false);
                 }
                 break;
-            case 6://******************************************************confirma dejar control en el punto verde indicado********
+            case 6://******************************************************confirma dejar control en el punto verde indicado********////////////////////
                 if(contacto_confirmado[confirmarContacto] == true)
                 {
+                    aSource.altoFx("Devolver_Control");
                     aSource.goFx("Soltar");//*************************************************sonido soltar control grua******************
                     ObjetosReferencias[2].SetActive(false);
                     ObjetosReferencias[3].SetActive(false);
@@ -372,20 +405,37 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                     ObjetosReferencias[4].SetActive(true);//si lo deja en bahia fin
                     ObjetosReferencias[7].SetActive(false);
                     aSource.goFx("Bien");//*************************************************verificado/////07-08-24
-                    TareaCompletada(TareaActual);
+                    aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
+                    murosConos[2].SetActive(false);
+                    NombreAuxAudio = "SiguienteModulo";
+                    StartCoroutine(TiempoEsperaAudio(5));
+                    tiempoEsperaAux = 15;
+                    StartCoroutine(TiempoEsperaTarea(4));
+                    contadorDetectorSgtMod = 1;
+                    DetectorSgtM[1].SetActive(true);
+                    //TareaCompletada(TareaActual);
                 }
                 break;
             case 7://control remoto
                 if (contacto_confirmado[confirmarContacto] == true)
                 {
+                    aSource.altoFx("Devolver_Control");
                     aSource.goFx("Soltar");
                     ObjetosReferencias[2].SetActive(false);//REFE1
                     ObjetosReferencias[3].SetActive(false);//DESACTIVA EL CONTROL
                     ObjetosReferencias[5].SetActive(false);//REFE2
                     ObjetosReferencias[6].SetActive(true);//SI LO DEJA EN BAHIA INICIO
                     ObjetosReferencias[7].SetActive(false);
+                    aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
                     aSource.goFx("Bien");
-                    TareaCompletada(TareaActual);
+                    NombreAuxAudio = "SiguienteModulo";
+                    murosConos[2].SetActive(false);
+                    StartCoroutine(TiempoEsperaAudio(5));
+                    tiempoEsperaAux = 15;
+                    StartCoroutine(TiempoEsperaTarea(4));
+                    contadorDetectorSgtMod = 1;
+                    DetectorSgtM[1].SetActive(true);
+                    //TareaCompletada(TareaActual);
                 }
                 break;
             case 8://Pernos000 y adaptador
@@ -436,6 +486,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                         {
 
                             RefeinterruptorCompresora.SetActive(true);
+                            Flecha_Indi.SetActive(true);
                         }
                     }
                     else
@@ -476,9 +527,37 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                     IWP_Refe.SetActive(false);
                     IWP_Mesh.SetActive(true);
                     IWP_OBJ.SetActive(false);
-                    TareaCompletada(5);
+                    murosConos[3].SetActive(false);
+                    aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
+                    aSource.goFx("Bien");
+                    NombreAuxAudio = "SiguienteModulo";
+                    StartCoroutine(TiempoEsperaAudio(5));//*******************************************Agregado el 04-09-24***************************************
+                    contadorDetectorSgtMod = 2;
+                    DetectorSgtM[2].SetActive(true);
+                    tiempoEsperaAux = 15;
+                    StartCoroutine(TiempoEsperaTarea(5));
+
+                    //TareaCompletada(5);
                 }
                 break;
+                case 15 :
+                aSource.goFx("Bien");
+                TareaCompletada(6);
+                break;
+                case 16 ://****Contacto de detector de cambio de modulos para emezar la siguiente tarea****
+                if (contacto_confirmado[confirmarContacto] == true)
+                {
+                    
+                    Debug.Log("se detecto contacto con el detector" + contadorDetectorSgtMod);
+                    if (contadorDetectorSgtMod + 3 == TareaActual)
+                    {
+                        Debug.Log("siguiente tarea por detector " + contadorDetectorSgtMod);
+                        TareaCompletada(contadorDetectorSgtMod + 3);
+                    }
+                    DetectorSgtM[contadorDetectorSgtMod].SetActive(false);
+
+                }
+                    break;
         }
     }
     //***********MODULO Herramientas con tiempo de accion*****************
@@ -487,23 +566,25 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
         switch (contactoV)//verifica contacto en el codigo detectorObjObj
         {
             case 0://***** PARA AMOLADORA******************************************
-                if (contacto_confirmado[contactoV] == true)//verifica contacto en el codigo detectorObjObj
+                if (contacto_confirmado[contactoV])//verifica contacto en el codigo detectorObjObj
                 {
                     amolando=true;
-                    while (contacto_confirmado[contactoV] == true && amoladoraOn==true)
+                    
+                    while (contacto_confirmado[contactoV]&& amoladoraOn&&amolando)
                     {
                         yield return new WaitForSeconds(0.5f);
-                        if (amoladoraOn == false)
+                        if (!amoladoraOn)
                         {
                             M_1[3].SetActive(false);//desactivar particulas
                             tTemp = 0;
                             break;
                         }
                         tTemp += 0.5f;
-                        if (tiempoEspera <= tTemp&& TareaActual==2)//cumplido el tiempo de espera//cambiado el 07-08-24
+                        if (tiempoEspera <= tTemp&& TareaActual==2&&tareaCorrectaAmoladora==false)//cumplido el tiempo de espera//cambiado el 07-08-24
                         {
                             if (correctaTareaM2 == true)//si se puso los lentes 
                             {
+                                //amolando=false;
 //                                aSource.goFx("Bien");//***************************************************07-08-24
                                 Tablero_Indicaciones[0].SetActive(false);
                                 if (Tablero_Indicaciones[1].activeInHierarchy==true|| Tablero_Indicaciones[5].activeInHierarchy == true)
@@ -514,12 +595,15 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                                 Tablero_Indicaciones[2].SetActive(true);//pantalla de bien hecho
                                 M_1[0].SetActive(false);//desactivar la barra de metal
                                 M_1[3].SetActive(false);//desactivar particulas
-                                TareaCompletada(2);//*********************************************Completar TAREA 2*****************
+                                aSource.goFx("Bien");
+                                aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
+                                tareaCorrectaAmoladora=true;
+
                                 break;
                             }
                             else
                             {
-                                if (Si_Careta==false)
+                                if (!Si_Careta)
                                 {
                                     Tablero_Indicaciones[5].SetActive(false);
                                     Tablero_Indicaciones[1].SetActive(true);
@@ -528,12 +612,12 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                                 }
                                 else
                                 {
-                                    if (Si_Mandil == false)
+                                    if (!Si_Mandil)
                                     {
                                         Tablero_Indicaciones[1].SetActive(false);
                                         Tablero_Indicaciones[5].SetActive(true);
-                                        M_1[5].GetComponent<Collider>().enabled = false;
-                                        M_1[5].SetActive(true);//activar lentes de referencia
+                                        M_1[5].GetComponent<Collider>().enabled = false;//DEACTIVA EL COLLIDER DE LA REFERENCIA A MANDIL
+                                        M_1[5].SetActive(true);//activar MANDIL de referencia
                                     }
                                 }
                                 
@@ -544,11 +628,20 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                                 {
                                     amolando = false;
                                     aSource.goFx("Fallo");//******************************************************Fallos**************//////////////////////////
+                                    aSource.goFx("Locu_Fallo");//***************AGREGADO EL 27-08-24**************************///////////////////////////////////////////////
                                 }
                                 yield return new WaitForSeconds(0.1f);
                                 break;
                             }
                         }
+                    }
+                    if (tareaCorrectaAmoladora && TareaActual == 2)
+                    {
+                        tTemp = 0;
+                        tiempoEsperaAux = 2;
+                        StartCoroutine(TiempoEsperaTarea(2));
+                        
+                        //TareaCompletada(2);//*********************************************Completar TAREA 2*****************
                     }
                 }
                 else
@@ -574,7 +667,10 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                             //aSource.altoFx("IWG_Rot02");
                             break;
                         }
-                        PernosTiempo[contactoV-1] += 0.25f;
+                        PernosTiempo[0] += 0.25f;
+                        PernosTiempo[2] = 0;
+                        PernosTiempo[1] = 0;
+                        PernosTiempo[3] = 0;
                         if (tiempoEspera <= PernosTiempo[contactoV -1])//cumplido el tiempo de espera
                         {
                             //Debug.Log("Perno" + (contactoV - 1) + "sacado en funcion Cronometro");
@@ -600,7 +696,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 }
                 break;
             case 2://*********PARA IMPACT WRENCH GUN****************************Perno001
-                if (contacto_confirmado[contactoV + 7] == true)//verifica contacto en el codigo detectorObjObj
+                if (contacto_confirmado[contactoV + 7] == true&&PernoEnDado==false)//verifica contacto en el codigo detectorObjObj
                 {
                     if (contacto_confirmado[contactoV + 7] == true && iwg.si_presionando == true)
                     {
@@ -614,7 +710,10 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                             aSource.altoFx("IWG_Rot02");
                             break;
                         }
-                        PernosTiempo[contactoV-1] += 0.25f;
+                        PernosTiempo[1] += 0.25f;
+                        PernosTiempo[2] = 0;
+                        PernosTiempo[0] = 0;
+                        PernosTiempo[3] = 0;
                         if (tiempoEspera <= PernosTiempo[contactoV-1])//cumplido el tiempo de espera
                         {
                             //Debug.Log("Perno" + (contactoV - 1) + "sacado en funcion Cronometro");
@@ -634,7 +733,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 }
                 break;
             case 3://*********PARA IMPACT WRENCH GUN****************************Perno002
-                if (contacto_confirmado[contactoV + 7] == true)//verifica contacto en el codigo detectorObjObj
+                if (contacto_confirmado[contactoV + 7] == true && PernoEnDado == false)//verifica contacto en el codigo detectorObjObj
                 {
                     if (contacto_confirmado[contactoV + 7] == true && iwg.si_presionando == true)
                     {
@@ -648,7 +747,12 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                             aSource.altoFx("IWG_Rot02");
                             break;
                         }
-                        PernosTiempo[contactoV-1] += 0.25f;
+                        PernosTiempo[2] += 0.25f;
+                        PernosTiempo[1] = 0;
+                        PernosTiempo[0] = 0;
+                        PernosTiempo[3] = 0;
+
+
                         if (tiempoEspera <= PernosTiempo[contactoV-1])//cumplido el tiempo de espera
                         {
                             //Debug.Log("Perno" + (contactoV - 1) + "sacado en funcion Cronometro");
@@ -667,7 +771,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 }
                 break;
             case 4://*********PARA IMPACT WRENCH GUN****************************Perno003
-                if (contacto_confirmado[contactoV + 7] == true)//verifica contacto en el codigo detectorObjObj
+                if (contacto_confirmado[contactoV + 7] == true && PernoEnDado == false)//verifica contacto en el codigo detectorObjObj
                 {
                     if (contacto_confirmado[contactoV + 7] == true && iwg.si_presionando == true)
                     {
@@ -682,7 +786,10 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                             aSource.altoFx("IWG_Rot02");
                             break;
                         }
-                        PernosTiempo[contactoV-1] += 0.25f;
+                        PernosTiempo[3] += 0.25f;
+                        PernosTiempo[2] = 0;
+                        PernosTiempo[0] = 0;
+                        PernosTiempo[1] = 0;
                         if (TiempoPernos <= PernosTiempo[contactoV-1])//cumplido el tiempo de espera
                         {
                             //Debug.Log("Perno" + (contactoV - 1) + "sacado en funcion Cronometro");
@@ -705,7 +812,12 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
     //***********MODULO EPPS*****************
     public void EppPuesto(int nE)
     {
-       if (nE == 0)
+        
+        if(!Flechasgrupo2.activeInHierarchy)
+        Flechasgrupo2.SetActive(true);
+        //ambientacion.SetActive(false);
+        Destroy(ambientacion.gameObject);
+        if (nE == 0)
         {
             manosXR[0].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[0];
             manosXR[1].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[0];
@@ -715,8 +827,8 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
         if (nE==1)
         {
             aSource.FxVolPropio("0Cigarras001",0.25f);
-            aSource.FxVolPropio("1Cuervos_Vientos", 0.25f);
-            aSource.FxVolPropio("2Cuervos_Loop", 0.25f);
+            aSource.FxVolPropio("1Cuervos_Vientos", 0.1f);
+            aSource.FxVolPropio("2Cuervos_Loop", 0.1f);
         }
         Epps[nE].SetActive(false);
         ActivarEvento(1);
@@ -759,7 +871,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                     correctaTareaMEpps1 = true;
                 }
                 break;
-            case 2:
+            case 2://agarra mandilM2
                 Si_Mandil = true;
                 M_1[3].SetActive(false);//desactivar chispas
                 M_1[4].SetActive(false);//desActivar mandil
@@ -777,11 +889,21 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 {
                     M_1[2].SetActive(false);
                     Si_Careta = false;
+                    M_1[1].GetComponent<Collider>().enabled = false;
                     M_1[1].SetActive(true);
+                    
                     if (Si_Mandil == false)
                     {
-                        
-                        TareaCompletada(3);
+                        aSource.goFx("Bien");
+                        aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
+                        murosConos[0].SetActive(false);
+                        NombreAuxAudio = "SiguienteModulo";
+                        StartCoroutine(TiempoEsperaAudio(8));
+                        tiempoEsperaAux = 15;
+                        StartCoroutine(TiempoEsperaTarea(3));
+                        contadorDetectorSgtMod = 0;
+                        DetectorSgtM[0].SetActive(true);
+                        //TareaCompletada(3);
                     }
                 }
                 break;
@@ -789,11 +911,22 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 if (TareaActual == 3)
                 {
                     M_1[5].SetActive(false);//desactivar refe
+                    M_1[4].GetComponent<Collider>().enabled = false;
                     Si_Mandil = false;
                     M_1[4].SetActive(true);//activar mandil devuelto
                     if (Si_Careta == false)
                     {
-                        TareaCompletada(3);
+                        aSource.goFx("Bien");
+                        aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
+                        murosConos[0].SetActive(false);
+                        NombreAuxAudio = "SiguienteModulo";
+                        StartCoroutine(TiempoEsperaAudio(8));
+                        tiempoEsperaAux = 15;
+                        StartCoroutine(TiempoEsperaTarea(3));
+                        contadorDetectorSgtMod = 0;
+                        DetectorSgtM[0].SetActive(true);
+                        
+                        //TareaCompletada(3);
                     }
                 }
                 break;
@@ -802,17 +935,22 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 {
                     if (nPernosSacados < TotalPernos)
                     {
+                        murosConos[2].SetActive(true);
                         aSource.goFx("Compresor_On", 0.5f, true,true);//*****************************************************************************SONIDO COMPRESORA*******************
                         iwg.MaquinaON_OFF(true);
+                        iwg.DetectorPerno.SetActive(true);
+                        Flecha_Indi.SetActive(false);
                         RefeinterruptorCompresora.SetActive(false);
                         interruptorBTN_Compress.transform.localEulerAngles = new Vector3(0, 0, rotEncendido);//debe ser angulo -65
                     }
                     else
                     {
                         aSource.altoFxLoop("Compresor_On");
+                        aSource.goFx("Guardar_Pistola");
                         //aSource.FxAlto("Compresor_On");
                         iwg.MaquinaON_OFF(false);
                         RefeinterruptorCompresora.SetActive(false);
+                        Flecha_Indi.SetActive(false);
                         interruptorBTN_Compress.transform.localEulerAngles = new Vector3(0, 0, 0);//debe ser angulo -65
                         ObjConexionIWPCableRefe.SetActive(true);
                         ObjConexionIWPCable.GetComponent<CapsuleCollider>().enabled = true;//Agregado el 16-07-24********
@@ -828,7 +966,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
 
                 break;
             case 7://desactive exit
-
+                
                 break;
         }
     }
@@ -850,7 +988,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
     {
         murosConos[pick].SetActive(true);
     }
-    //********************************MODULO 4 IMPACTGUN PERNOS******************************
+    //********************************MODULO 4 IMPACTGUN PERNOS*********************************************************************
     public void PernosColliderActived(int nPerno,bool si_activado)//cuando mano cerca
     {
         PernosGrab[nPerno].GetComponent<BoxCollider>().enabled =si_activado;
@@ -897,6 +1035,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
         if (iwg.Cargada == false)
         {
             aSource.goFx("Bien");
+            aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
             CableCorrecto.SetActive(false);
             ObjConexionIWPCable.SetActive(false);
             ObjConexionIWPCableRefe.SetActive(false);
@@ -923,6 +1062,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
             ObjConexionIWPCableRefe.SetActive(false);
             Tablero_Indicaciones[11].SetActive(true);//panel fallido
             aSource.goFx("Fallo");
+            aSource.goFx("Locu_Fallo");//********************AGREGADO EL 27-08-24********************////////////
             Debug.Log("Desconexion incorrecta");
         }
         
@@ -937,7 +1077,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
         Debug.Log("animacion realizando el latigueo");
         yield return new WaitForSeconds(1.5f);
         ParticulasExpl.SetActive(false);
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
         Debug.Log("FIN DE animacion de latigueo");
         for (int i = 0; i < ComponentAnimLatigueo.Length; i++)
         {
@@ -958,5 +1098,49 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
     {
         PernoEnMano[NpSoltado] = false;
     }
+    //************************************************DETALLES DE INTERFACE DE USUARIO - AGREGADO PARA LOS AUDIOS DE LOCUCION ****************************
+    public IEnumerator TiempoEsperaAudio(float t)//*******************************************Agregado el 04-09-24***************************************
+    {string nAudioAux=NombreAuxAudio;
+        int auxTarea = TareaActual;
+        if (tutorial)
+        {
+            yield return new WaitForSeconds(t+1);
+            Debug.Log("Se espero " + t + "segundos - AuxAudio : " + NombreAuxAudio);
+            while (auxTarea == TareaActual)
+            {
+                if (NombreAuxAudio != nAudioAux)
+                {
+                    aSource.goFx(NombreAuxAudio);
+                    Debug.Log("Se espero y se reprodujo el audio " + NombreAuxAudio + " por seguir en la tarea auxiliar : " + auxTarea);
+                    break;
+                }
+                else
+                {
+                    yield return new WaitForSeconds(5);
+                    if(auxTarea != TareaActual)
+                    {
+                        NombreAuxAudio = "";
+                        break;
+                    }
+                    aSource.goFx(nAudioAux);
+                }
+                yield return new WaitForSeconds(10);
+            }
+            NombreAuxAudio = "";
+        }
+        
+    }
+    public IEnumerator TiempoEsperaTarea(int tarea)//*******************************************Agregado el 04-09-24***************************************
+    {
+        yield return new WaitForSeconds(tiempoEsperaAux+1);
+        Debug.Log("Se espero por la tarea " + tarea + "- tiempoEsperaAux : " + tiempoEsperaAux);
+        if (TareaActual == tarea)
+        {
+            Debug.Log("Se completo la tarea " + tarea + "- dentro del tiempo tiempoEsperaAux : " + tiempoEsperaAux);
+            TareaCompletada(tarea);
+        }
+        
+    }
+    
 }
 

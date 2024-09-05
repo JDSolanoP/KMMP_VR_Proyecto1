@@ -8,7 +8,7 @@ public class Lista_Tareas_Controller : MonoBehaviour
     public int TareaActual;
     public int totalTareas;
     public bool tutorial = true;
-
+    public GameObject[] aros_indicadores;
 
     // Ejemplo metodo para hacer herencia
     public virtual void Start()

@@ -21,6 +21,7 @@ public class ImpactWrenchGunAccion : MonoBehaviour
     public float RoT0;
     public Vector3 RotInicial;
     public bool si_MaquinaPrendida;
+    public GameObject DetectorPerno;
     //funcion 2 prueba
     /*public WheelCollider wc;//agregado 22-07-24
     public int torque;//agregado 22-07-24
@@ -56,7 +57,6 @@ public class ImpactWrenchGunAccion : MonoBehaviour
         float Desaceaux = 0;
         if (si_MaquinaPrendida == true)//pregunta por la maquina
         {
-
             //Debug.Log("girando " + ObjRot.name + " velocidadInical = " + velIniaux);
             Desaceaux = 0;
             //Debug.Log("girando " + ObjRot.name + " desaceleracion = " + Desaceaux);
@@ -128,18 +128,21 @@ public class ImpactWrenchGunAccion : MonoBehaviour
         {
             if (Cargada == true)
             {
+                DetectorPerno.SetActive(true);
                 AudioManager.aSource.goFx("IWG_Rot01", 1, true, false);///////////////////////////////////////////////////02-08-24
             }
             
         }
         else
         {
+            DetectorPerno.SetActive(false);
             if (TmDojo.Boquilla_ContactoRefe == false)
             {
                 AudioManager.aSource.altoFxLoop("IWG_Rot01");////////////////////////////////////////////02-08-24
             }
             else
             {
+                
                 Debug.Log("deteneindo IWG_ROT02 por perno sacado");
                 AudioManager.aSource.altoFxLoop("IWG_Rot02");////////////////////////////////////////////02-08-24
                 TmDojo.Boquilla_ContactoRefe = false;

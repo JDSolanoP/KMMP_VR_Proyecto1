@@ -619,7 +619,7 @@ public class AudioManager : MonoBehaviour
                     }
 
                 }
-                }
+            }
         }
     }
     public void altoFxLoop(string nombre)

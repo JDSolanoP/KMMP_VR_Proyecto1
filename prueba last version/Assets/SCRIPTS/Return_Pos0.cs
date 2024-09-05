@@ -7,6 +7,8 @@ public class Return_Pos0 : MonoBehaviour
 {
     public Vector3 Pos0;
     public Vector3 Rot0;
+    public Vector3 LocalPos0;
+    public Vector3 LocalRot0;
     public bool enPos0=true;
     public string TagEspecial = "";
     public bool en_piso;
@@ -27,6 +29,8 @@ public class Return_Pos0 : MonoBehaviour
         //NivelDeReferencia = GameObject.FindGameObjectWithTag("Ground");
         Pos0=this.gameObject.transform.position;
         Rot0=this.gameObject.transform.eulerAngles;
+        LocalPos0 = this.gameObject.transform.localPosition;
+        LocalRot0 = this.gameObject.transform.localEulerAngles;
     }
 
     void Update()
@@ -69,6 +73,7 @@ public class Return_Pos0 : MonoBehaviour
     }
     void reposicionObj()
     {
+        AudioManager.aSource.goFx("Fallo");
         enPos0= true;
         this.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         this.gameObject.transform.position = Pos0;
