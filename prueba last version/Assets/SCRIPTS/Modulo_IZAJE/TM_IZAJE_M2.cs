@@ -1,0 +1,125 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using JetBrains.Annotations;
+using UnityEngine.XR.Interaction.Toolkit;
+
+public class TM_IZAJE_M2 : Lista_Tareas_Controller
+{
+    [Header("Modulo 2 de IZAJE")]
+    
+    public bool[] contacto_confirmado;
+    public int contactoIntAux;
+    string NombreAuxAudio;
+    float tiempoEsperaAux;
+    public GameObject[] Tablero_Indicaciones;
+    public GameObject[] guantesComplementos;
+    public GameObject[] manosXR;
+    public Material[] manosXRMaterial;
+    [Header("ESLINGAS")]
+    public Set_Eslingas[] sE;
+    public int nEslingaCorrecta;
+    public bool[] si_UsableEslinga;//perfecto estado
+    public GameObject[] Eslinga_Colocada_MT;
+    public int MAT_Eslinga;
+    
+    public override void Start()
+    {
+        base.Start();
+        StartCoroutine(ListaTareas(TareaActual));
+    }
+    public override void TareaCompletada(int TareaSiguiente)
+    {
+        base.TareaCompletada(TareaSiguiente);
+        StartCoroutine(ListaTareas(TareaActual));
+    }
+    IEnumerator ListaTareas(int tarea)
+    {
+        switch (tarea)
+        {//Agregar notaciones de tareas en cada caso
+            case 0:// AQUI, Colocando todos los componentes
+
+                /*   //audioManager de bienvenida
+
+                yield return new WaitForSeconds(0.5f);
+                manosXR[0].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[1];
+                manosXR[1].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[1];
+
+                aSource.MusicaVol(0.5f);//**************************************Sonido Musica Inicial*************
+                //aSource.FxVol(1);
+                /*for (int i = 0; i < Tablero_Indicaciones.Length; i++)
+                {
+                    Tablero_Indicaciones[i].SetActive(false);
+                }*/
+                for (int i = 0; i < sE.Length; i++)//asignando caracteristicas a eslingas 
+                {
+                    int rnd = Random.Range(0, 8);
+                    sE[i].set_Valores(rnd);
+                    sE[i].Num_Material=rnd;
+                }
+                Saber_Eslinga_Correcta();
+                colocar_Eslinga();
+                yield return new WaitForSeconds(1f);
+
+                //Debug.Log("Se esta reproduciendo audio");
+
+                while (AudioManager.aSource.IsPlayingVoz() == true)
+                {
+
+                    yield return new WaitForFixedUpdate();
+                }
+                break;//cuando se tiene todos los EPPS
+        }
+    }
+    //**********************VERIFICAR CONTACTO OBJETO A OBJETO****************************************
+    public void verificarContacto(int confirmarContacto)//*******realiza acciones cuando2 objetos interactuan usan
+    {
+        switch (confirmarContacto)
+        {
+            case 0://verifica contacto de eslinga con detector_eslinga
+                if (contacto_confirmado[confirmarContacto] == true)
+                {
+                    MAT_Eslinga = contactoIntAux;
+                    Eslinga_Colocada_MT[MAT_Eslinga].SetActive(true);
+                    Eslinga_Colocada_MT[8].SetActive(false);
+                }
+                
+                
+                break;
+        }
+    }
+    //*********************************Parte 1 Verificacion de eslinga correcta***********************
+    public void Saber_Eslinga_Correcta()//recopila detalles de las eslingas
+    {
+        for (int i = 0; i < si_UsableEslinga.Length; i++)
+        {
+            if (sE[i].Num_Material == nEslingaCorrecta && sE[i].usable) 
+            {
+                si_UsableEslinga[i] = true;
+            }
+        }
+    }
+    public void colocar_Eslinga()
+    {
+        bool existecorrecto=false;
+        for(int i = 0; i<si_UsableEslinga.Length; i++)
+        {
+            if (si_UsableEslinga[i] == true)
+            {
+                existecorrecto = true;
+                Debug.Log("Se encontro una eslinga correcta,es " + i);
+                break;
+            }
+        }
+        if (!existecorrecto)
+        {
+            int rnd = Random.Range(0, 8);
+            sE[rnd].set_Valores(7, 1, 1, 1);
+            sE[rnd].Num_Material = 7;
+            si_UsableEslinga[rnd]=true;
+            Debug.Log("No se encontro una eslinga correcta y se reasigno a " + rnd);
+        }
+    }
+}

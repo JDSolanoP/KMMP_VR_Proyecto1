@@ -6,12 +6,16 @@ using UnityEngine.UI;
 using TMPro;
 using JetBrains.Annotations;
 using UnityEngine.XR.Interaction.Toolkit;
+
+using System.Runtime.CompilerServices;
+
 //using UnityEditorInternal;
 //using UnityEditor.Animations;
 
 public class TM_DojoSeguridad : Lista_Tareas_Controller
 {
     //public AudioManager aSource;
+    [Header("Dojo_Seguridad")]
     public AccionPuertaDojo aP;
     public GameObject[] Tablero_Indicaciones;
     public GameObject[] murosConos;
@@ -89,8 +93,13 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
     public GameObject IWP_OBJ;
     public GameObject ParticulasExpl;
     public GameObject Flecha_Indi;
+    bool si_algun_pernoEnMano = false;
     [Header("Extras")]
     public GameObject UI_btn_Continuar_Panel;
+    public GameObject UI_btn_Salir_Panel;
+    public GameObject UI_btn_Reiniciar_Panel;
+    public GameObject UI_btn_Menu_Panel;
+
 
     public override void Start()
     {
@@ -109,7 +118,10 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
             case 0:// AQUI, llegada delante del dojo
                 //Tablero_Indicaciones[0].SetActive(true);
                 //audioManager de bienvenida
+                
                 yield return new WaitForSeconds(0.5f);
+                manosXR[0].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[1];
+                manosXR[1].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[1];
                 for (int i = 0; i < PernosGrab.Length; i++)
                 {
                     PernosGrab[i].SetActive(false);
@@ -231,11 +243,17 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 break;
             case 7:// Finde conclusiones
                 //aSource.VocesSourceCanal[aSource.VozCanalActual].Stop();
+                UI_btn_Reiniciar_Panel.SetActive(false);
+                UI_btn_Salir_Panel.SetActive(false);
                 aSource.goFx("Aplausos");
                 aSource.goFx("fanfarrias");
                 Tablero_Indicaciones[13].SetActive(false);
                 Tablero_Indicaciones[14].SetActive(true);
                 murosConos[4].SetActive(false);
+                yield return new WaitForSeconds(8f);
+                UI_btn_Reiniciar_Panel.SetActive(true);
+                yield return new WaitForSeconds(4f);
+                UI_btn_Salir_Panel.SetActive(true);
                 //Tablero_Indicaciones[6].SetActive(true);
                 //ObjetosReferencias[0].SetActive(true);
                 //Debug.Log("Se esta reproduciendo audio");
@@ -383,7 +401,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                     aSource.goFx("Bien");//*************************************************verificado/////07-08-24
                     aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
                     NombreAuxAudio = "Devolver_Control";//******************************************agregado 04-09-24************************************
-                    StartCoroutine(TiempoEsperaAudio(10));
+                    StartCoroutine(TiempoEsperaAudio(8));
                     Tablero_Indicaciones[7].SetActive(false);
                     Tablero_Indicaciones[8].SetActive(true);
                     Tablero_Indicaciones[9].SetActive(true);
@@ -408,7 +426,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                     aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
                     murosConos[2].SetActive(false);
                     NombreAuxAudio = "SiguienteModulo";
-                    StartCoroutine(TiempoEsperaAudio(5));
+                    StartCoroutine(TiempoEsperaAudio(6));
                     tiempoEsperaAux = 15;
                     StartCoroutine(TiempoEsperaTarea(4));
                     contadorDetectorSgtMod = 1;
@@ -468,29 +486,44 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 }
                 break;
         case 12 ://Contacto con el Cajon de pernos
-                if (PernoEnDado == false) 
+                if (contacto_confirmado[confirmarContacto] == true && PernoEnDado == false)
                 {
-                    nPernosSacados = 0;
-                    if (contacto_confirmado[confirmarContacto] == true)
-                    {
-                        //Debug.Log("contacto perno " + (confirmarContacto) + "en funcion verificar contacto COLOCADO en el cajon");
-                        for (int j = 0; j < verificacionNPernos.Length; j++)
+                    si_algun_pernoEnMano = false;
+                    for (int i = 0; i < PernoEnMano.Length; i++)
                         {
-                            
-                            if (verificacionNPernos[j] == true)
+                            if (PernoEnMano[i] == true)
                             {
-                                nPernosSacados++;
+                            Debug.Log("prueba00");
+                            si_algun_pernoEnMano = true;
+                                break;
                             }
                         }
-                        if (nPernosSacados == TotalPernos)
-                        {
+                    Debug.Log("prueba1");
+                    if (!si_algun_pernoEnMano)
+                    { 
+                        Debug.Log("prueba2");
 
-                            RefeinterruptorCompresora.SetActive(true);
-                            Flecha_Indi.SetActive(true);
+                        nPernosSacados = 0;
+
+                        //Debug.Log("contacto perno " + (confirmarContacto) + "en funcion verificar contacto COLOCADO en el cajon");
+                        for (int j = 0; j < verificacionNPernos.Length; j++)
+                            {
+
+                                if (verificacionNPernos[j] == true)
+                                {
+                                    nPernosSacados++;
+                                }
+                            }
+                            if (nPernosSacados == TotalPernos)
+                            {
+
+                                RefeinterruptorCompresora.SetActive(true);
+                                Flecha_Indi.SetActive(true);
+                            }
                         }
-                    }
                     else
                     {
+                        nPernosSacados = 0;
                         for (int j = 0; j < verificacionNPernos.Length; j++)
                         {
                             
@@ -531,10 +564,10 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                     aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
                     aSource.goFx("Bien");
                     NombreAuxAudio = "SiguienteModulo";
-                    StartCoroutine(TiempoEsperaAudio(5));//*******************************************Agregado el 04-09-24***************************************
+                    StartCoroutine(TiempoEsperaAudio(1));//*******************************************Agregado el 04-09-24***************************************
                     contadorDetectorSgtMod = 2;
                     DetectorSgtM[2].SetActive(true);
-                    tiempoEsperaAux = 15;
+                    tiempoEsperaAux = 10;
                     StartCoroutine(TiempoEsperaTarea(5));
 
                     //TareaCompletada(5);
@@ -557,7 +590,13 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                     DetectorSgtM[contadorDetectorSgtMod].SetActive(false);
 
                 }
-                    break;
+                break;
+                case 17 :
+                IrEscenaAsincron(0);
+                break;
+                case 18 :
+                Application.Quit();
+                break;
         }
     }
     //***********MODULO Herramientas con tiempo de accion*****************
@@ -651,14 +690,9 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 }
                     break;
             case 1://*********PARA IMPACT WRENCH GUN****************************Perno000// implementado el 10-07-2024
-                if (contacto_confirmado[contactoV+7] == true)//verifica contacto en el codigo detectorObjObj
+                if (contacto_confirmado[contactoV+7] == true && PernoEnDado == false)//verifica contacto en el codigo detectorObjObj
                 {
-                    if (contacto_confirmado[contactoV + 7] == true && iwg.si_presionando == true)
-                    {   //Boquilla_ContactoRefe=true;
-                        //AudioManager.aSource.altoFxLoop("IWG_Rot01");
-                        //AudioManager.aSource.goFx("IWG_Rot02", 1, true, false);//**************************************************      SONIDO PISTOLA NEUMATICA CONTACTO PERNO*************
-                    }
-                    while (contacto_confirmado[contactoV+7] == true && iwg.si_presionando == true)
+                while (contacto_confirmado[contactoV+7] == true && iwg.si_presionando == true)
                     {
                         yield return new WaitForSeconds(0.25f);
                         //Debug.Log("sacando perno "+(contactoV-1)+" tiempoxPernoActual = " + PernosTiempo[contactoV-1]);
@@ -826,7 +860,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
         }
         if (nE==1)
         {
-            aSource.FxVolPropio("0Cigarras001",0.25f);
+            aSource.FxVolPropio("0Cigarras001",0.3f);
             aSource.FxVolPropio("1Cuervos_Vientos", 0.1f);
             aSource.FxVolPropio("2Cuervos_Loop", 0.1f);
         }
@@ -989,45 +1023,63 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
         murosConos[pick].SetActive(true);
     }
     //********************************MODULO 4 IMPACTGUN PERNOS*********************************************************************
-    public void PernosColliderActived(int nPerno,bool si_activado)//cuando mano cerca
+    public void PernosColliderActived(int nPerno)//cuando mano cerca
     {
-        PernosGrab[nPerno].GetComponent<BoxCollider>().enabled =si_activado;
-        PernosGrab[nPerno].GetComponent<CapsuleCollider>().enabled = si_activado;
+        //PernosGrab[nPerno].GetComponent<BoxCollider>().enabled = false;
+        PernosGrab[nPerno].GetComponent<CapsuleCollider>().enabled = true;
     }
     public void pernosRGBDActived(int nPerno)//cuando agarra el perno
-        {
-        //Debug.Log("Perno" + (nPerno) + "agarrado de activo el toggles de Rigidbody en funcion PernosRGBDActived");
-        PernosGrab[nPerno].transform.SetParent(PuntoDeRecepccionPernos.transform);
-        PernosGrab[nPerno].GetComponent<Rigidbody>().isKinematic = false;
-        PernosGrab[nPerno].GetComponent<Rigidbody>().useGravity = true;
-        PernoEnDado = false;
-        PernoEnMano[nPerno] = true;
+    {
+            Debug.Log("Perno" + (nPerno) + "agarrado de activo el toggles de Rigidbody en funcion PernosRGBDActived");
+
+            PernosGrab[nPerno].transform.SetParent(PuntoDeRecepccionPernos.transform);
+            PernosGrab[nPerno].GetComponent<BoxCollider>().enabled = true;
+            PernosGrab[nPerno].GetComponent<Rigidbody>().isKinematic = false;
+            PernosGrab[nPerno].GetComponent<Rigidbody>().useGravity = true;
+            PernoEnMano[nPerno] = false;
+        
+        
     }
     public void verificarNombrePerno(string nomPer, bool si_entrando)//creado el 16-07-24
     {
-        for(int i = 0; i < verificacionNPernos.Length; i++)
+        AudioManager.aSource.goFx("Perno_Contacto");//************************************************************************************************SONIDO PARA CONTACTO CON EL PISO*************AGREGADO EL 02-08-24
+        if (PernoEnDado == false)
         {
-            if (nomPer == PernosGrab[i].name)
+            for (int i = 0; i < verificacionNPernos.Length; i++)
             {
-                verificacionNPernos[i] = si_entrando;
-
-                if (si_entrando == true)
+                if (nomPer == PernosGrab[i].name)
                 {
-                    PernosGrab[i].GetComponent<One_Hand_PickUp>().enabled = false;//desactiva este escript paa que no puede ser agarrado denuevo//creado 17/-07-24
-                    AudioManager.aSource.goFx("Perno_Contacto");//************************************************************************************************SONIDO PARA CONTACTO CON EL PISO*************AGREGADO EL 02-08-24
+                    verificacionNPernos[i] = si_entrando;
 
+                    if (si_entrando == true)
+                    {
+                        if (PernosGrab[i].GetComponent<Rigidbody>().isKinematic == true)//agregado el 07-10-24
+                        {
+                            Debug.Log("verificamos de que perno " + i + " si este en caja a pesar de estar en el dado");
+                            pernosRGBDActived(i);
+                        }
+                        else
+                        {
+                            PernosGrab[i].GetComponent<One_Hand_PickUp>().enabled = false;//desactiva este escript paa que no puede ser agarrado denuevo//creado 17/-07-24
+                        }
+
+
+                        PernosGrab[i].name = "Perno_" + i + "_EnCaja";
+
+                    }
+                    else
+                    {
+                        PernosGrab[i].GetComponent<One_Hand_PickUp>().enabled = true;//desactiva este escript paa que no puede ser agarrado denuevo//creado 17/-07-24
+                    }
+                    break;
                 }
                 else
                 {
-                    PernosGrab[i].GetComponent<One_Hand_PickUp>().enabled = true;//desactiva este escript paa que no puede ser agarrado denuevo//creado 17/-07-24
+                    //Debug.Log("Nombre "+nomPer+" no coincide con PernosGrab["+i+"]");
                 }
-                break;
-            }
-            else
-            {
-                //Debug.Log("Nombre "+nomPer+" no coincide con PernosGrab["+i+"]");
             }
         }
+        
     }
     public void animLatigueoIWG(bool si_descargada)//cuando se detecta la desconexion de la manguera y la pistola
     {
@@ -1092,7 +1144,10 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
     }
     public void Si_PernoEnMano(int NpEnMano)
     {
+        PernoEnDado=false;
         PernoEnMano[NpEnMano] = true;
+
+        //PernosGrab[NpEnMano].transform.SetParent(PuntoDeRecepccionPernos.transform);
     }
     public void Si_PernoSoltado(int NpSoltado)
     {
@@ -1122,7 +1177,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                         NombreAuxAudio = "";
                         break;
                     }
-                    aSource.goFx(nAudioAux);
+                    aSource.goFx(NombreAuxAudio);
                 }
                 yield return new WaitForSeconds(10);
             }
@@ -1141,6 +1196,6 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
         }
         
     }
-    
+
 }
 

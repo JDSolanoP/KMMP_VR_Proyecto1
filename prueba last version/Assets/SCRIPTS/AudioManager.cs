@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Android.Gradle;
+//using Unity.Android.Gradle;
 
 //using Unity.Android.Gradle;
 using UnityEngine;
@@ -41,9 +41,6 @@ public class AudioManager : MonoBehaviour
     }
     private void Start()
     {
-        //PlayMusica(MusicaSonidos[0].nombre, 0.7f,true);
-        //FxVol(1);
-        //VozVol(1);
 
     }
 
@@ -59,7 +56,7 @@ public class AudioManager : MonoBehaviour
             MusicaSource.clip = s.clip;
             MusicaSource.loop = true;
             MusicaSource.volume = 1;
-            Debug.Log(nombre + " Sonido Encontrado y colocado->"+MusicaSource.clip.name);
+            //Debug.Log(nombre + " Sonido Encontrado y colocado->"+MusicaSource.clip.name);
             MusicaSource.Play();
         }
     }

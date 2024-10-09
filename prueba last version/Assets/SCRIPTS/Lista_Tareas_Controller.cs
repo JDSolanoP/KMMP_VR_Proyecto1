@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Lista_Tareas_Controller : MonoBehaviour
 {
@@ -9,10 +10,23 @@ public class Lista_Tareas_Controller : MonoBehaviour
     public int totalTareas;
     public bool tutorial = true;
     public GameObject[] aros_indicadores;
+    [Header("Transiciones_Elementos")]
+    public bool SiFadeActivo;
+    public Renderer rend;
+    public Color fadeColor;
+    public float fadeTiempo = 2;
+    public bool IniciaFade = true;
 
     // Ejemplo metodo para hacer herencia
     public virtual void Start()
     {
+        if (SiFadeActivo)//mantener desactivado para usar render asigando en el editor
+        {
+            rend = GetComponent<Renderer>();
+            if (IniciaFade) FadeIn();
+        }
+        //rend = GetComponent<Renderer>();
+        if (IniciaFade) FadeIn();
         Debug.Log("Inicia herencia del Start");
         //totalTareas = aSource.VocesSonidos.Length;
         StartCoroutine(InicioDeNivel());
@@ -25,7 +39,7 @@ public class Lista_Tareas_Controller : MonoBehaviour
             CargarSiguienteTarea();
             return;
         }
-        Debug.Log("La tarea numero "+indexTarea+" no es n{TareaActual}");
+        Debug.Log("La tarea numero " + indexTarea + " no es n{TareaActual}");
     }
     public void CargarSiguienteTarea()
     {
@@ -35,7 +49,7 @@ public class Lista_Tareas_Controller : MonoBehaviour
         if (TareaActual < totalTareas)
         {
             StartCoroutine(CargarReproducir_Clip());
-            Debug.Log("se cargo tarea numero "+TareaActual);
+            Debug.Log("se cargo tarea numero " + TareaActual);
             return;
         }
         else
@@ -47,7 +61,7 @@ public class Lista_Tareas_Controller : MonoBehaviour
     IEnumerator CargarReproducir_Clip()
     {
         yield return new WaitForSeconds(0.5f);
-        if (aSource.VocesSonidos.Length>TareaActual )
+        if (aSource.VocesSonidos.Length > TareaActual)
         {
             AudioManager.aSource.PlayVoz(aSource.VocesSonidos[TareaActual].nombre);
             Debug.Log($"se cargo clip de tarea n " + TareaActual + " correctamente");
@@ -70,5 +84,64 @@ public class Lista_Tareas_Controller : MonoBehaviour
     IEnumerator espera(float t)
     {
         yield return new WaitForSeconds(t);
+    }
+    //***********************************************FADE MANAGER***********************************//
+    
+    public void FadeIn()
+    {
+        Fade(1, 0);
+    }
+    public void FadeIn(float tiempo)
+    {
+        fadeTiempo = tiempo;
+        FadeIn();
+    }
+    public void FadeOut()
+    {
+        Fade(0, 1);
+    }
+    public void FadeOut(float tiempo)
+    {
+        fadeTiempo = tiempo;
+        FadeOut();
+    }
+    public void Fade(float alfaIn,float alfaOut)
+    {
+        StartCoroutine(CoroutineFade(alfaIn, alfaOut));
+    }
+    public IEnumerator CoroutineFade(float alfaIn, float alfaOut)
+    {
+        float timer = 0;
+        while (timer <= fadeTiempo)
+        {
+            Color newColor = fadeColor;
+            newColor.a = Mathf.Lerp(alfaIn, alfaOut, timer / fadeTiempo);
+            rend.material.SetColor("_Color",newColor);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        Color newColor2 = fadeColor;
+        newColor2.a = alfaOut;
+        rend.material.SetColor("_Color",newColor2);
+    }
+    //*********************************CAMBO DE ESCENA CON FADE*********************************
+    public void IrEscenaAsincron(int escena)
+    {
+        StartCoroutine(GoEscenaAsincro(escena));
+    }
+    IEnumerator GoEscenaAsincro(int nEscena)
+    {
+        FadeOut();
+        AsyncOperation ope = SceneManager.LoadSceneAsync(nEscena);
+        ope.allowSceneActivation = false;
+        float time = 0;
+        while (time < fadeTiempo && !ope.isDone)
+        { 
+            time += Time.deltaTime;
+            yield return null;
+        }   
+        ope.allowSceneActivation = true;
+        yield return new WaitForSeconds(fadeTiempo);
+        SceneManager.LoadScene(nEscena);
     }
 }

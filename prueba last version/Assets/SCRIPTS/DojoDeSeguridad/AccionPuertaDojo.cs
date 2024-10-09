@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Android.Types;
+//using Unity.Android.Types;
 using UnityEngine;
 
 public class AccionPuertaDojo : MonoBehaviour

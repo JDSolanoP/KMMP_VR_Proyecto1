@@ -51,15 +51,50 @@ public class DetectorObjObj : MonoBehaviour//PROPIO DE DOJO DE SEGURIDAD
         
     }
     void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.name == n_obj&&PermiteOntriggerStay==true)
+    {if(PermiteOntriggerStay == true)
         {
-            tm_Dojo.contacto_confirmado[confirmarContacto] = true;
-            tm_Dojo.verificarContacto(confirmarContacto);
-            //Debug.Log(other.gameObject.name + " verificando contacto: " + confirmarContacto);
+            if (Mas_de_1_Objeto == false)
+            {
+                if (other.gameObject.name == n_obj)
+                {
+                    tm_Dojo.contacto_confirmado[confirmarContacto] = true;
+                    tm_Dojo.verificarContacto(confirmarContacto);
+                    Debug.Log(other.gameObject.name + " verificando contacto: " + confirmarContacto);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < nn_obj.Length; i++)
+                {
+                    if (other.gameObject.name == nn_obj[i])
+                    {
+                        if (si_verif_Obj_Perno == true)//USADO EN DOJO DE SEGURIDAD
+                        {
+                            //Debug.Log("Detectado NPerno : " + nn_obj[i]);
+                            if (tm_Dojo.PernoEnMano[i] == false&&!tm_Dojo.PernoEnDado)
+                            {
+                                Debug.Log(other.gameObject.name + " verificando no enMano y no en dado, " + confirmarContacto + " entrando ala zona final desde el stay");
+                                tm_Dojo.verificarNombrePerno(nn_obj[i], true);
+                                tm_Dojo.contacto_confirmado[confirmarContacto] = true;
+                                tm_Dojo.verificarContacto(confirmarContacto);
+                                Debug.Log(other.gameObject.name + " verificando en detector perno de obj contacto: " + confirmarContacto + " entrando ala zona final desde el stay");
+                                break;
+                            }
 
-
+                        }
+                        else
+                        {
+                            tm_Dojo.contacto_confirmado[confirmarContacto] = true;
+                            tm_Dojo.verificarContacto(confirmarContacto);
+                            Debug.Log(other.gameObject.name + " verificando contacto: " + confirmarContacto + " entrando ala zona final desde el stay");
+                            break;
+                        }
+                        
+                    }
+                }
+            }
         }
+
 
     }
     void OnTriggerExit(Collider other)
