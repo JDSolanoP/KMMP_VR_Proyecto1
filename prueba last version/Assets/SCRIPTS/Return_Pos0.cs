@@ -44,6 +44,7 @@ public class Return_Pos0 : MonoBehaviour
         //Debug.Log(col.gameObject.tag);
         if (col.gameObject.tag == "Ground")
         {
+            AudioManager.aSource.goFx("Fallo");
             reposicionObj();
             en_piso = false;
            
@@ -63,6 +64,7 @@ public class Return_Pos0 : MonoBehaviour
     {
         if (other.CompareTag("Ground"))
         {
+            AudioManager.aSource.goFx("Fallo");
             reposicionObj();
             en_piso = false;
         }
@@ -71,9 +73,9 @@ public class Return_Pos0 : MonoBehaviour
             en_piso = true;
         }
     }
-    void reposicionObj()
+    public void reposicionObj()
     {
-        AudioManager.aSource.goFx("Fallo");
+        Debug.Log("REpos "+this.gameObject.name);
         enPos0= true;
         this.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         this.gameObject.transform.position = Pos0;

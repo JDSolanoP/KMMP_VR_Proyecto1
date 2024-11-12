@@ -5,19 +5,39 @@ using UnityEngine.SceneManagement;
 
 public class Lista_Tareas_Controller : MonoBehaviour
 {
+    public static Lista_Tareas_Controller tm;
+    public string nombre_funcion;
     public AudioManager aSource;
     public int TareaActual;
     public int totalTareas;
     public bool tutorial = true;
     public GameObject[] aros_indicadores;
+    public bool[] GlobalBool;
+    public int[] GlobalInt;
+    public float[] GlobalFloat;
     [Header("Transiciones_Elementos")]
     public bool SiFadeActivo;
     public Renderer rend;
     public Color fadeColor;
     public float fadeTiempo = 2;
     public bool IniciaFade = true;
+    [Header("ELEMENTOS DE MODULOS")]
+    public GameObject[] Tablero_Indicaciones;
+    public bool[] contacto_confirmado;
 
     // Ejemplo metodo para hacer herencia
+    private void Awake()
+    {
+        if (tm == null)
+        {
+            tm = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     public virtual void Start()
     {
         if (SiFadeActivo)//mantener desactivado para usar render asigando en el editor
@@ -39,7 +59,7 @@ public class Lista_Tareas_Controller : MonoBehaviour
             CargarSiguienteTarea();
             return;
         }
-        Debug.Log("La tarea numero " + indexTarea + " no es n{TareaActual}");
+        Debug.Log("La tarea numero " + indexTarea + " no es n{"+TareaActual+"}");
     }
     public void CargarSiguienteTarea()
     {
@@ -61,11 +81,14 @@ public class Lista_Tareas_Controller : MonoBehaviour
     IEnumerator CargarReproducir_Clip()
     {
         yield return new WaitForSeconds(0.5f);
-        if (aSource.VocesSonidos.Length > TareaActual)
-        {
-            AudioManager.aSource.PlayVoz(aSource.VocesSonidos[TareaActual].nombre);
-            Debug.Log($"se cargo clip de tarea n " + TareaActual + " correctamente");
+        if(aSource != null) {
+            if (aSource.VocesSonidos.Length > TareaActual)
+            {
+                AudioManager.aSource.PlayVoz(aSource.VocesSonidos[TareaActual].nombre);
+                Debug.Log($"se cargo clip de tarea n " + TareaActual + " correctamente");
+            }
         }
+        
         yield return new WaitForSeconds(0.5f);
 
         //audioManager.ReproducirAudioClip();
@@ -144,4 +167,5 @@ public class Lista_Tareas_Controller : MonoBehaviour
         yield return new WaitForSeconds(fadeTiempo);
         SceneManager.LoadScene(nEscena);
     }
+
 }

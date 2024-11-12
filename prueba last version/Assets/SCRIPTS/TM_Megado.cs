@@ -78,12 +78,12 @@ public class TM_Megado : Lista_Tareas_Controller
                 Tablero_Indicaciones[0].SetActive(true);//tablero0:bienvenida colocar guantes
                 guantesComplementos[0].SetActive(false);
                 guantesComplementos[1].SetActive(false);
-                while (AudioManager.aSource.IsPlayingVoz() == true)
+                /*while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
                     //Debug.Log("Se esta reproduciendo audio");
                     yield return new WaitForFixedUpdate();
 
-                }
+                }*/
                 //ORefe[0].SetActive(true);
                 break;
                 case 1://colocar caBLE ROJO
@@ -98,11 +98,11 @@ public class TM_Megado : Lista_Tareas_Controller
                 yield return new WaitForSeconds(1f);
                 Tablero_Indicaciones[1].SetActive(true);//TABLERO 1 PRENDER
                 ObjRefe[1].SetActive(true);//ACTIVAR PINZA ROJA REFERENCIAS
-                while (AudioManager.aSource.IsPlayingVoz() == true)
+                /*while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
                     //Debug.Log("Se esta reproduciendo audio");
                     yield return new WaitForFixedUpdate();
-                }
+                }*/
 
                 break;
             case 2://colocar caBLE negro
@@ -111,11 +111,11 @@ public class TM_Megado : Lista_Tareas_Controller
                 yield return new WaitForSeconds(1f);
                 Tablero_Indicaciones[2].SetActive(true);//PRENDER TABLERO2
                 ObjRefe[6].SetActive(true);//PRENDER PPINZA NEGRA REFE
-                while (AudioManager.aSource.IsPlayingVoz() == true)
+                /*while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
                     //Debug.Log("Se esta reproduciendo audio");
                     yield return new WaitForFixedUpdate();
-                }
+                }*/
                 break;
             case 3://Encender MEgometro
                 ObjRefe[6].SetActive(false);//APAGAR PINZA NEGRA DE REFERENCIA
@@ -126,11 +126,11 @@ public class TM_Megado : Lista_Tareas_Controller
 
                 //Tablero_Indicaciones[2].SetActive(true);
                 //ObjRefe[2].SetActive(true);
-                while (AudioManager.aSource.IsPlayingVoz() == true)
+                /*while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
                     //Debug.Log("Se esta reproduciendo audio");
                     yield return new WaitForFixedUpdate();
-                }
+                }*/
                 break;
             case 4://Esperar encendidio y Calibrar voltaje y tiempo
                 activarBTN(0);
@@ -150,11 +150,11 @@ public class TM_Megado : Lista_Tareas_Controller
 
                 //Debug.Log("activar OBJ boton STart");
                 ObjRefeBotones[4].SetActive(true);//ACTIVAR de Start de referencia
-                while (AudioManager.aSource.IsPlayingVoz() == true)
+                /*while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
                     //Debug.Log("Se esta reproduciendo audio");
                     yield return new WaitForFixedUpdate();
-                }
+                }*/
                 break;
             case 5://Esperando a que termine la medicion
                 ObjRefeBotones[0].SetActive(false);//Apagar Boton de referencia de encendido
@@ -164,11 +164,11 @@ public class TM_Megado : Lista_Tareas_Controller
                 ObjRefeBotones[4].SetActive(false);//encender dial de referencia;Movera el ObjRefeBotones[2], no debe apagarse
                 yield return new WaitForSeconds(1f);
                 Tablero_Indicaciones[5].SetActive(true);//apagar panel 02
-                while (AudioManager.aSource.IsPlayingVoz() == true)
+                /*while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
                     //Debug.Log("Se esta reproduciendo audio");
                     yield return new WaitForFixedUpdate();
-                }
+                }*/
                 //TareaCompletada(5);
                 break;
             case 6://Se uso boton Start y se mostrará resulta de victoria o derrota
@@ -178,11 +178,11 @@ public class TM_Megado : Lista_Tareas_Controller
                 //ObjRefeBotones[3].SetActive(false);//encender dial de referencia;Movera el ObjRefeBotones[2], no debe apagarse
                 //ObjRefeBotones[4].SetActive(false);//encender dial de referencia;Movera el ObjRefeBotones[2], no debe apagarse
                 pantallaUIMegometro[0].SetActive(false);
-                while (AudioManager.aSource.IsPlayingVoz() == true)
+                /*while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
                     //Debug.Log("Se esta reproduciendo audio");
                     yield return new WaitForFixedUpdate();
-                }
+                }*/
                 //TareaCompletada(5);
                 break;
                 

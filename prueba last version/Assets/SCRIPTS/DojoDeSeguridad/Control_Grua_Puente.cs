@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Control_Grua_Puente : MonoBehaviour {
-    public TM_DojoSeguridad tmDojo;
+  
+    public int numMod;
+    public bool usar_globalFuncion;
+    public int BoolG;
     public bool corneta_presionada;
 public GameObject grua;
 public GameObject puente;
@@ -50,6 +53,7 @@ bool mano_derecha;
 // Start is called before the first frame update
 void Start()
 {
+        
         //LimitesXYZ = new Transform[2];
     bloqueo = new bool[6];
     LimitY0 = LimitY1.localPosition.y;
@@ -93,20 +97,18 @@ void Start()
         limiteMayor = LimitesXYZ[1].localPosition;
 
     }
-/*private void Update()
-{
-    pos_Gruay = gancho.transform.localPosition.y;
-}*/
+
 public void press(int nB)
 {
         AudioManager.aSource.goFx("Boton");//****************************************************sonido boton*****************************************
     switch (nB)
     {
-            case 7:
+            case 7://corneta
                 if (btn_controlgrua[7] == true)
                 {
+                    int aux=0;
                     AudioManager.aSource.goFx("Corneta_aviso",1,true,false);
-                    tmDojo.si_corneta_Presionada = true;///////////////////////////////////////*******************************para tarea de revision si se presiono la corneta de aviso***************************
+
                     corneta_presionada = true;///////////////////////////////////////*******************************para tarea de revision si se presiono la corneta de aviso***************************
                 }
                 else
@@ -217,177 +219,6 @@ public void press(int nB)
 
         }
 }
-/*IEnumerator plat_move(bool en_z, int dir)
-{
-    while (on_press == true)
-    {
-            if (en_z == true)
-                {
-
-                    grua.transform.localPosition += movex * dir * velocidad * 0.1f; Debug.Log("enZ");
-                    yield return new WaitForSeconds(0.01f);
-                    if (dir < 0)
-                    {
-                        if (grua.transform.localPosition.z >= lx2) { 
-                            StartCoroutine(move1);
-                        }
-                        else { No_press(); }
-                    } else { 
-                        if (dir > 0) { if (grua.transform.localPosition.z <= lx1)
-                            { StartCoroutine(move2); }else { No_press(); } } 
-                    }
-
-
-                }
-            else
-            {
-                puente.transform.localPosition += movez * dir*velocidad * 0.1f; Debug.Log("enZ"); ;
-                    yield return new WaitForSeconds(0.01f);
-                    if (dir < 0) {
-                        if (puente.transform.localPosition.x >= lz1)
-                        {
-                            StartCoroutine(move3); Debug.Log("Hacia adelante");
-                        }
-                        else
-                        {
-                            Debug.Log("Limite1 en z alcanzado");
-                            No_press();
-                        }
-                    } else { if (dir > 0)
-                        {
-                            if (puente.transform.localPosition.x <= lz2)
-                            {
-                                StartCoroutine(move4); Debug.Log("Hacia atras");
-                            }
-                            else
-                            {
-                                Debug.Log("Limite2 en z alcanzado");
-                                No_press();
-                            }
-                        }
-                    }
-            }
-            yield return new WaitForSeconds(0.01f);
-        }
-}*/
-/*IEnumerator plat_move(string movil, int dir)
-{
-    while (on_press == true)
-    {
-        switch (movil)
-        {
-            case "gancho":
-                    if (on_press == false) { break; }
-                if (dir < 0)
-                {
-                    if (choque == true)
-                    {
-                        bloqueo[4] = true;//colision por debajo del obj
-                        //objIz.Abajo = true;
-                    }
-                    else
-                    {
-                        if (gancho.transform.localPosition.y >= ly1 && bloqueo[4] == false)
-                        {
-                                gancho.transform.localPosition += ganchoVelocidad * dir * velocidad * 0.1f;
-                                Debug.Log("en gancho");
-                                yield return new WaitForSeconds(0.01f);
-
-                                //StartCoroutine(move5);
-                        }
-                        else { 
-                                //No_press();
-                                break;
-                            }
-                    }
-                }
-                else
-                {
-                    if (gancho.transform.localPosition.y <= ly2 && bloqueo[5] == false)
-                    { //StartCoroutine(move6);
-                      
-                      }
-                    else { //No_press();
-                            break;
-                        }
-
-                }
-                yield return new WaitForSeconds(0.01f);
-                break;
-            case "grua":
-                
-                if (dir < 0)
-                {
-                    if (grua.transform.localPosition.z >= lz2 && bloqueo[0] == false)
-                    {
-                        //StartCoroutine(move1);
-                    }
-                    else { No_press(); }
-                }
-                else
-                {
-                    if (dir > 0)
-                    {
-                        if (grua.transform.localPosition.z <= lz1 && bloqueo[1] == false)
-                        {
-                                grua.transform.localPosition += gruaVelocidad * dir * velocidad * 0.1f; Debug.Log("enZ");
-                                yield return new WaitForSeconds(0.01f);
-                                //StartCoroutine(move2);
-                                }
-                        else { No_press(); }
-                    }
-                }
-                break;
-            case "puente":
-                
-                if (dir < 0)
-                {
-                    if (puente.transform.localPosition.x >= lx1 && bloqueo[2] == false)
-                    {
-                            puente.transform.localPosition += puenteVelocidad * dir * velocidad * 0.1f;
-                            Debug.Log("enZ"); ;
-                            yield return new WaitForSeconds(0.01f);
-                            //StartCoroutine(move3); 
-                            Debug.Log("Hacia adelante");
-                    }
-                    else
-                    {
-                        Debug.Log("Limite1 en puente alcanzado");
-                        No_press();
-                    }
-                }
-                else
-                {
-                    if (dir > 0)
-                    {
-                        if (puente.transform.localPosition.x <= lx2 && bloqueo[3] == false)
-                        {
-                                puente.transform.localPosition += puenteVelocidad * dir * velocidad * 0.1f; Debug.Log("enZ"); ;
-                                //StartCoroutine(move4);
-                                Debug.Log("Hacia atras");
-                        }
-                        else
-                        {
-                            Debug.Log("Limite2 puente alcanzado");
-                            No_press();
-                        }
-                    }
-                }
-                break;
-        }
-    }
-    yield return new WaitForSeconds(0.01f);
-}
-public void No_press()
-{
-    Debug.Log("deteniendo coroutines");
-    /*StopCoroutine(move1);
-    StopCoroutine(move2);
-    StopCoroutine(move3);
-    StopCoroutine(move4);
-    StopCoroutine(move5);
-    StopCoroutine(move6);
-}*/
 public void paradaXbloqueo(int nMove)
 {
     if (nMove >= 0)

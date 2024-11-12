@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: KMMP_CFK_JSolano
-  productName: DOJO de Seguridad
+  productName: MegadoMT_CFK
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0, g: 0, b: 0, a: 1}
@@ -143,7 +143,7 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 1.5
+  bundleVersion: 1.0
   preloadedAssets:
   - {fileID: 11400000, guid: fb8d2e7de2c21b240be96c84d112e17d, type: 2}
   metroInputSource: 0

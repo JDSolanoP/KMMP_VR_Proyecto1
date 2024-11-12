@@ -56,6 +56,7 @@ public class TM_Oficina : Lista_Tareas_Controller
                 break;//cuando se tiene todos los EPPS
             case 1://Tarea de numero completa
                 aSource.goFx("Bien");
+                aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
                 flechas[0].SetActive(true);
                 muros[0].SetActive(false);//para la siguiente area
                 Paneles[0].SetActive(false);
@@ -69,6 +70,7 @@ public class TM_Oficina : Lista_Tareas_Controller
             case 2://se agarro los guantes
                 Epps[1].SetActive(true);//refe prendido
                 aSource.goFx("Bien");
+                aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
                 Paneles[3].SetActive(true);
                 muros[0].SetActive(true);//Muro inter areas m0 a m1
                 /*while (AudioManager.aSource.IsPlayingVoz() == true)
@@ -78,6 +80,7 @@ public class TM_Oficina : Lista_Tareas_Controller
                 break;//cuando se tiene todos los EPPS
             case 3://se dejo los guantes
                 aSource.goFx("Bien");
+                aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
                 Epps[0].SetActive(true);//refe prendido
                 Epps[0].GetComponent<BoxCollider>().enabled = false;
                 muros[2].SetActive(false);//para la siguiente area de m1  a m2
@@ -91,6 +94,7 @@ public class TM_Oficina : Lista_Tareas_Controller
             case 4://firmo
                 muros[2].SetActive(true);//para la siguiente area
                 flechas[2].SetActive(true);
+                aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
                 aSource.goFx("Bien");
                 /*while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
@@ -100,6 +104,7 @@ public class TM_Oficina : Lista_Tareas_Controller
             case 5://dejo el tablero en la otra area
                 muros[3].SetActive(true);//para la siguiente area
                 aSource.goFx("Bien");
+                aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
                 /*while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
                     yield return new WaitForFixedUpdate();

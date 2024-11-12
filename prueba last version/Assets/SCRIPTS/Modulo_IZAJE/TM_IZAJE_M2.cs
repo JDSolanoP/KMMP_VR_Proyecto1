@@ -18,13 +18,26 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
     public GameObject[] guantesComplementos;
     public GameObject[] manosXR;
     public Material[] manosXRMaterial;
+
     [Header("ESLINGAS")]
     public Set_Eslingas[] sE;
-    public int nEslingaCorrecta;
-    public bool[] si_UsableEslinga;//perfecto estado
+    public GameObject[] EslingasObj;
     public GameObject[] Eslinga_Colocada_MT;
-    public int MAT_Eslinga;
-    
+    public int nEslingaCorrecta;
+    public int[] MAT_Eslinga;
+    public bool[] si_UsableEslinga;//perfecto estado
+    public bool Si_HayEslingaColocada=false;//verifica si hay eslinga
+    public bool Si_EslingaColocadaUsable = false;//verifica si la eslinga es usable
+    public bool TodoCorrecto;
+    [Header("Gruas 0:5T 1:25T")]
+    public GameObject[] Gruas;
+    public GameObject perillaSelectGancho;
+    public float AnguloPerilla;//+90 grados;
+    public bool si_perilla;
+    public bool perilla_correcta=true;
+    [Header("Elementos Post Verificacion")]
+    public GameObject[] ElementoPost; 
+
     public override void Start()
     {
         base.Start();
@@ -71,6 +84,8 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                     yield return new WaitForFixedUpdate();
                 }
                 break;//cuando se tiene todos los EPPS
+            case 1:
+                break;
         }
     }
     //**********************VERIFICAR CONTACTO OBJETO A OBJETO****************************************
@@ -79,14 +94,26 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
         switch (confirmarContacto)
         {
             case 0://verifica contacto de eslinga con detector_eslinga
-                if (contacto_confirmado[confirmarContacto] == true)
+                if (contacto_confirmado[confirmarContacto] == true)// 15-10-24 Colocar Eslinga desde el OBJ hasta el MT
                 {
-                    MAT_Eslinga = contactoIntAux;
-                    Eslinga_Colocada_MT[MAT_Eslinga].SetActive(true);
-                    Eslinga_Colocada_MT[8].SetActive(false);
+                    if (sE[contactoIntAux].En_Mano == false)
+                    {
+                        for (int i = 0; i < EslingasObj.Length; i++)
+                        {
+                            Eslinga_Colocada_MT[i].SetActive(false);
+                            EslingasObj[i].SetActive(true);
+                        }
+                        Eslinga_Colocada_MT[8].SetActive(false);
+                        Eslinga_Colocada_MT[MAT_Eslinga[contactoIntAux]].SetActive(true);
+                        EslingasObj[contactoIntAux].SetActive(false);
+                        sE[contactoIntAux].usable = si_UsableEslinga[contactoIntAux];
+                        Si_HayEslingaColocada = true;
+                        Si_EslingaColocadaUsable=(MAT_Eslinga[contactoIntAux] == nEslingaCorrecta&& si_UsableEslinga[contactoIntAux])?true:false;
+                        Debug.Log("Se coloco la eslinga " + contactoIntAux);
+                        
+                    }
                 }
-                
-                
+                VerificarTodoCorrecto();
                 break;
         }
     }
@@ -95,9 +122,15 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
     {
         for (int i = 0; i < si_UsableEslinga.Length; i++)
         {
+            MAT_Eslinga[i] = sE[i].Num_Material;
             if (sE[i].Num_Material == nEslingaCorrecta && sE[i].usable) 
             {
                 si_UsableEslinga[i] = true;
+            }
+            else
+            {//si la materia es incorrecta
+                if(sE[i].usable)
+                sE[i].usable = false;//reasigna valor falso
             }
         }
     }
@@ -113,13 +146,46 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 break;
             }
         }
-        if (!existecorrecto)
+        if (existecorrecto==false)
         {
             int rnd = Random.Range(0, 8);
-            sE[rnd].set_Valores(7, 1, 1, 1);
+            sE[rnd].set_Valores(7, 1, 1, 1,true);
             sE[rnd].Num_Material = 7;
-            si_UsableEslinga[rnd]=true;
+            MAT_Eslinga[rnd] = 7;
+            si_UsableEslinga[rnd] = true;
+            //sE[rnd].usable = true;
             Debug.Log("No se encontro una eslinga correcta y se reasigno a " + rnd);
         }
+    }
+    public void Seleccion_Grua()
+    {
+        if (si_perilla)
+        {
+            si_perilla=false;
+            perillaSelectGancho.transform.localEulerAngles = new Vector3(perillaSelectGancho.transform.localEulerAngles.x, 0, perillaSelectGancho.transform.localEulerAngles.z);
+            Gruas[1].SetActive(false);
+            Gruas[0].SetActive(true);
+        }
+        else
+        {
+            si_perilla = true;//si es true es la medida correcta
+            perillaSelectGancho.transform.localEulerAngles = new Vector3(perillaSelectGancho.transform.localEulerAngles.x, AnguloPerilla, perillaSelectGancho.transform.localEulerAngles.z);
+            Gruas[0].SetActive(false);
+            Gruas[1].SetActive(true);
+        }
+        VerificarTodoCorrecto();
+    }
+    public void VerificarTodoCorrecto()
+    {
+        if (si_perilla && Si_EslingaColocadaUsable)
+        {
+            
+            TodoCorrecto =true;
+        }
+        else
+        {
+            TodoCorrecto = false;
+        }
+        Debug.Log("TODO CORRECTO : " + TodoCorrecto + " - " + si_perilla + " " + Si_EslingaColocadaUsable);
     }
 }

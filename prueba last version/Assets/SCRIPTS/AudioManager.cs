@@ -268,7 +268,7 @@ public class AudioManager : MonoBehaviour
                 if (VocesSourceCanal[VozCanalActual].isPlaying != true || s.clip.name == VocesSourceCanal[VozCanalActual].name)
                 {
                     VocesSourceCanal[VozCanalActual].clip = s.clip;
-                    Debug.Log(VocesSourceCanal[VozCanalActual].clip.name + " SonidoVoz Encontrado tocado en el canal " + VozCanalActual);
+                    //Debug.Log(VocesSourceCanal[VozCanalActual].clip.name + " SonidoVoz Encontrado tocado en el canal " + VozCanalActual);
                     VocesSourceCanal[VozCanalActual].Play();
                     isVozPlay = true;
                     StartCoroutine(CheckingPlayVoz());//************************************************************07-08-24
@@ -462,7 +462,7 @@ public class AudioManager : MonoBehaviour
                         Debug.Log(vol + " Nuevo vol para " + name);
                         break;
                     }
-                    Debug.Log(FxSourceCanal[i].clip.name + " Clip en FXSource " + FxSourceCanal[i].name + "-> " + i + " SonidoFX no Encontrado en el FXSource " + s.clip.name);
+                    //Debug.Log(FxSourceCanal[i].clip.name + " Clip en FXSource " + FxSourceCanal[i].name + "-> " + i + " SonidoFX no Encontrado en el FXSource " + s.clip.name);
                 }
                 
             }
@@ -508,7 +508,7 @@ public class AudioManager : MonoBehaviour
                             {
                                 if (s.clip.name == FxSourceCanal[i].clip.name)
                                 {
-                                    Debug.Log("se volvio a dar play a " + FxSourceCanal[i].clip.name+"en el canal "+i);
+                                    //Debug.Log("se volvio a dar play a " + FxSourceCanal[i].clip.name+"en el canal "+i);
                                     FxSourceCanal[i].Play();
                                     break;
                                 }
@@ -538,7 +538,7 @@ public class AudioManager : MonoBehaviour
                             {
                                 if (s.clip.name == FxSourceCanal[i].clip.name)
                                 {
-                                    Debug.Log("se volvio a dar play a " + FxSourceCanal[i].clip.name + "en el canal " + i);
+                                    //Debug.Log("se volvio a dar play a " + FxSourceCanal[i].clip.name + "en el canal " + i);
                                     if (FxSourceCanal[i].loop == false)
                                     {
                                         Debug.Log("Loopeando " + FxSourceCanal[i].clip.name);
@@ -607,7 +607,7 @@ public class AudioManager : MonoBehaviour
                         {
                             if (s.clip.name == FxSourceCanal[i].clip.name)
                             {
-                                Debug.Log("se volvio a dar play a " + FxSourceCanal[i].clip.name + "en el canal " + i);
+                               // Debug.Log("se volvio a dar play a " + FxSourceCanal[i].clip.name + "en el canal " + i);
                                 FxSourceCanal[i].Play();
                                 //fxDarValores(s, i, 1, false, false);
                                 break;
@@ -682,7 +682,7 @@ public class AudioManager : MonoBehaviour
         FxSourceCanal[i].loop = Looping;
 
         FxSourceCanal[i].volume = vol;
-        Debug.Log(s.clip.name + " " + i + "  goSonidoFX Encontrado " + " " + FxSourceCanal[i].clip.name + " vol custom = " + vol + " loop =" + Looping + " reemplazable = " + reemplazable);
+       // Debug.Log(s.clip.name + " " + i + "  goSonidoFX Encontrado " + " " + FxSourceCanal[i].clip.name + " vol custom = " + vol + " loop =" + Looping + " reemplazable = " + reemplazable);
         fxPlaying[i] = true;
         fxloop[i] = Looping;
         fxNoReemplazable[i] = reemplazable;

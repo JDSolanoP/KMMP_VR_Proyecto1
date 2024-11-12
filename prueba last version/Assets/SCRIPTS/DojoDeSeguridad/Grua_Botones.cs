@@ -83,10 +83,6 @@ public class Grua_Botones : MonoBehaviour
             //Debug.Log("boton detecta " + other.name + " saliendo");
         }
     }
-    /*public void dejar_Pres()
-    {
-        ctrl.Invoke("No_press", 0);
-        Debug.Log("no presiona");
-    }*/
+
 }
  
