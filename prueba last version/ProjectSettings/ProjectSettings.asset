@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: KMMP_CFK_JSolano
-  productName: MegadoMT_CFK
+  productName: Izaje_M1_CFK
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0, g: 0, b: 0, a: 1}
@@ -146,6 +146,8 @@ PlayerSettings:
   bundleVersion: 1.0
   preloadedAssets:
   - {fileID: 11400000, guid: fb8d2e7de2c21b240be96c84d112e17d, type: 2}
+  - {fileID: -8040513811631674224, guid: 5ab34495fba3c874e903e79afffe8ebf, type: 2}
+  - {fileID: 11400000, guid: 82ede1403d5ed634bbbdffe5939ce53f, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1

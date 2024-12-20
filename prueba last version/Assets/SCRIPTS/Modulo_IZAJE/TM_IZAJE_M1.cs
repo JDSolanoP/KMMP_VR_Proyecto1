@@ -58,7 +58,8 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
         switch (tarea)
         {//Agregar notaciones de tareas en cada caso
             case 0:// AQUI, en al entra del taller
-                //audioManager de bienvenida
+                   //audioManager de bienvenida
+                activarCtrlBTN(false);
                 aSource.PlayMusica(aSource.MusicaSonidos[0].nombre, 1f, true);
                 yield return new WaitForSeconds(0.5f);
                 manosXR[0].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[0];
@@ -70,19 +71,28 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
                 {
                     Tablero_Indicaciones[i].SetActive(false);
                 }
-                yield return new WaitForSeconds(2f);
+                yield return new WaitForSeconds(1f);
                 Tablero_Indicaciones[0].SetActive(true);//tablero de bienvenida
 
-                yield return new WaitForSeconds(3f);
-                Tablero_Indicaciones[1].SetActive(true);//tablero de parte1
+                //yield return new WaitForSeconds(3f);
+              
                 //Debug.Log("Se esta reproduciendo audio");
 
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
                     yield return new WaitForFixedUpdate();
                 }
+                yield return new WaitForSeconds(1f);
+                TareaCompletada(0);
                 break;//cuando se tiene todos los EPPS
-            case 1:// AQUI, esta en la parte 2 para usar el puente grua
+            case 1:
+                Tablero_Indicaciones[1].SetActive(true);//tablero de parte1
+                while (AudioManager.aSource.IsPlayingVoz() == true)
+                {
+                    yield return new WaitForFixedUpdate();
+                }
+                break;//cuando se sale del area intermedia
+            case 2:// AQUI, esta en la parte 2 para usar el puente grua
 
 
                 yield return new WaitForSeconds(.1f);
@@ -90,6 +100,8 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
                 Tablero_Indicaciones[3].SetActive(true);
                 Tablero_Indicaciones[4].SetActive(true);
                 ObjetosReferencias[2].SetActive(true);
+                ObjetosReferencias[3].SetActive(true);
+
                 Tablero_Indicaciones[1].SetActive(false);
                 //Debug.Log("Se esta reproduciendo audio");
 
@@ -98,14 +110,14 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
                     yield return new WaitForFixedUpdate();
                 }
                 break;//cuando se sale del area intermedia
-            case 2://INICIO DE MOD5 Conclusiones
+            case 3://INICIO DE MOD5 Conclusiones
                 //aSource.goFx("Bien");
                 //aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
-                aSource.altoFx("SiguienteModulo");
+                aSource.altoFx("Sgte_Area");
                 Tablero_Indicaciones[7].SetActive(false);
                 Tablero_Indicaciones[8].SetActive(false);
                 Tablero_Indicaciones[9].SetActive(true);
-                yield return new WaitForSeconds(12);
+                yield return new WaitForSeconds(14.7f);
                 UI_btn_Continuar_Panel.SetActive(true);
 
                 //ObjetosReferencias[0].SetActive(true);
@@ -116,7 +128,7 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
                     yield return new WaitForFixedUpdate();
                 }
                 break;
-            case 3:// Finde conclusiones
+            case 4:// Finde conclusiones
                 //aSource.VocesSourceCanal[aSource.VozCanalActual].Stop();
                 UI_btn_Reiniciar_Panel.SetActive(false);
                 UI_btn_Salir_Panel.SetActive(false);
@@ -138,7 +150,7 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
                     yield return new WaitForFixedUpdate();
                 }
                 break;
-            case 4:
+            case 5:
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
 
@@ -162,13 +174,17 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
                     }
                     else
                     {
+                        if (TareaActual == 1)
+                        {
                             aSource.goFx("Bien");
                             aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
                             murosConos[0].SetActive(false);
-                        Tablero_Indicaciones[2].SetActive(false);//fallido m0
-                        tiempoEsperaAux = 2;
-                        StartCoroutine(TiempoEsperaTarea(0));
-                        //TareaCompletada(0);//**********************************************************Tarea 1 Completada************
+                            Tablero_Indicaciones[2].SetActive(false);//fallido m0
+                            tiempoEsperaAux = 2;
+                            StartCoroutine(TiempoEsperaTarea(1));
+                            //TareaCompletada(0);//**********************************************************Tarea 1 Completada************
+                        }
+
                     }
                 }
                 else { Tablero_Indicaciones[2].SetActive(false); }
@@ -178,12 +194,12 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
                 {
                     if (Ctrl_Grua.corneta_presionada == true)
                     {
-                        ObjetosReferencias[0].SetActive(false);////dectector cornete
+                        ObjetosReferencias[0].SetActive(false);////detector cornete
                     }
                     else
                     {
                         aSource.goFx("Fallo");
-                        aSource.goFx("Locu_Fallo");//********************AGREGADO EL 27-08-24********************////////////
+                        aSource.goFx("Locu_Fallo");//********************AGREGADO EL 276-08-24********************////////////
                         Tablero_Indicaciones[5].SetActive(true);
                     }
                 }
@@ -244,10 +260,10 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
                     aSource.goFx("Bien");//*************************************************verificado/////07-08-24
                     aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
                     murosConos[2].SetActive(false);
-                    NombreAuxAudio = "SiguienteModulo";
+                    NombreAuxAudio = "Sgte_Area";
                     StartCoroutine(TiempoEsperaAudio(8));
-                    tiempoEsperaAux = 15;
-                    StartCoroutine(TiempoEsperaTarea(1));
+                    tiempoEsperaAux = 16;
+                    StartCoroutine(TiempoEsperaTarea(2));
                     contadorDetectorSgtMod = 1;
                     DetectorSgtM[1].SetActive(true);
                     //TareaCompletada(TareaActual);
@@ -265,11 +281,11 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
                     ObjetosReferencias[4].SetActive(false);//DESACTIVA ADVERTENCIA DE ERROR EN CASO CARGA ESTE MAL UBICADA
                     aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
                     aSource.goFx("Bien");
-                    NombreAuxAudio = "SiguienteModulo";
+                    NombreAuxAudio = "Sgte_Area";
                     murosConos[2].SetActive(false);
                     StartCoroutine(TiempoEsperaAudio(5));
-                    tiempoEsperaAux = 15;
-                    StartCoroutine(TiempoEsperaTarea(1));
+                    tiempoEsperaAux = 16;
+                    StartCoroutine(TiempoEsperaTarea(2));
                     contadorDetectorSgtMod = 1;
                     DetectorSgtM[1].SetActive(true);
                     //TareaCompletada(TareaActual);
@@ -277,14 +293,14 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
                 break;
             case 10:
                 aSource.goFx("Bien");
-                TareaCompletada(2);
+                TareaCompletada(3);
                 break;
             case 9://****Contacto de detector de cambio de modulos para emezar la siguiente tarea****
                 if (contacto_confirmado[confirmarContacto] == true)
                 {
 
                     Debug.Log("se detecto contacto con el detector" + contadorDetectorSgtMod);
-                    TareaCompletada(contadorDetectorSgtMod);
+                    TareaCompletada(contadorDetectorSgtMod+1);
                     DetectorSgtM[GlobalInt[0]].SetActive(false);
                     if (GlobalInt[0] == 0) { ObjetosReferencias[10].SetActive(false); }
 
@@ -396,6 +412,23 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
     public void ActiveObj(GameObject obj,bool si)
     {
         obj.SetActive(si);
+    }
+    public void activarCtrlBTN(bool on)
+    {
+        if (Ctrl_Grua.BTN_CTRL.Length != 0)
+        {
+            for (int i=0;i< Ctrl_Grua.BTN_CTRL.Length; i++) 
+            {
+                ActiveObj(Ctrl_Grua.BTN_CTRL[i], on);
+            }
+        }
+    }
+    public void ApagarSonidoGrua()
+    {
+        aSource.altoFx("Sirena_grua");
+        aSource.altoFx("Rieles_grua");
+        aSource.altoFx("Corneta_aviso");
+        aSource.altoFx("Ascenso_grua");
     }
 }
 

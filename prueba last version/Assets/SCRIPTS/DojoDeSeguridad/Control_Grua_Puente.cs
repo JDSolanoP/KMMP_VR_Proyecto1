@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Control_Grua_Puente : MonoBehaviour {
-  
+    [Header("Botones de Control_Grua")]
+    public GameObject[] BTN_CTRL;
     public int numMod;
     public bool usar_globalFuncion;
     public int BoolG;
@@ -17,7 +18,7 @@ public GameObject gancho;
     public bool[] btn_controlgrua;
     public int botonPresionado;
     public Vector3 velo;
-
+    
 public Transform LimitX1;
 public Transform LimitX2;
 public Transform LimitZ1;
@@ -128,12 +129,13 @@ public void press(int nB)
                 //StartCoroutine(move1);
                 Debug.Log("Hacia la adelante");//revisado 02-07-24 resto se usa el menor
             }
-            else
-            {
-                Debug.Log("Limite1 en x alcanzado bloqueo[0]="+bloqueo[0]);
-               // No_press();
-            }
-            break;
+                else
+                {
+                    Debug.Log("Limite1 en x alcanzado bloqueo[0]=" + bloqueo[0]);
+                    AudioManager.aSource.altoFxLoop("Sirena_grua");
+                    // No_press();
+                }
+                break;
         case 1:
             if (puente.transform.localPosition.x <= LimitesXYZ[1].localPosition.x && bloqueo[1] == false)
             {
@@ -143,12 +145,13 @@ public void press(int nB)
                     //StartCoroutine(move2);
                     Debug.Log("Hacia la atras");// sumo con respecto a la posicion local por lotanto es el mayor
             }
-            else
-            {
-                Debug.Log("Limite2 en x alcanzado bloqueo[1]=" + bloqueo[1]);
-                //No_press();
-            }
-            break;
+                else
+                {
+                    Debug.Log("Limite2 en x alcanzado bloqueo[1]=" + bloqueo[1]);
+                    AudioManager.aSource.altoFxLoop("Sirena_grua");
+                    //No_press();
+                }
+                break;
         case 2:
             if (grua.transform.localPosition.z >= LimitesXYZ[0].localPosition.z && bloqueo[2] == false)
             {
@@ -157,12 +160,13 @@ public void press(int nB)
                     //StartCoroutine(move3);
                     Debug.Log("Hacia izquierda grua");
             }
-            else
-            {
-                Debug.Log("Limite1 en z alcanzado bloqueo[2]=" + bloqueo[2]);
-                //No_press();
-            }
-            break;
+                else
+                {
+                    Debug.Log("Limite1 en z alcanzado bloqueo[2]=" + bloqueo[2]);
+                    AudioManager.aSource.altoFxLoop("Rieles_grua");
+                    //No_press();
+                }
+                break;
         case 3:
             if (grua.transform.localPosition.z <= LimitesXYZ[1].localPosition.z && bloqueo[3] == false)
             {
@@ -171,12 +175,13 @@ public void press(int nB)
                     //StartCoroutine(move4);
                     Debug.Log("Hacia derecha grua");
             }
-            else
-            {
-                Debug.Log("Limite2 en z alcanzado bloqueo[3]" + bloqueo[3]);
-                //No_press();
-            }
-            break;
+                else
+                {
+                    Debug.Log("Limite2 en z alcanzado bloqueo[3]" + bloqueo[3]);
+                    AudioManager.aSource.altoFxLoop("Rieles_grua");
+                    //No_press();
+                }
+                break;
         case 4:
             if (gancho.transform.localPosition.y <= LimitesXYZ[1].localPosition.y && bloqueo[4] == false)
             {
@@ -185,12 +190,13 @@ public void press(int nB)
                     //StartCoroutine(move5);
                     Debug.Log("Hacia arriba");
             }
-            else
-            {
+                else
+                {
                     Debug.Log("Limite1 en y alcanzado bloqueo[4]=" + bloqueo[4]);
-                //No_press();
-            }
-            break;
+                    AudioManager.aSource.altoFxLoop("Ascenso_grua");
+                    //No_press();
+                }
+                break;
         case 5:
             if (gancho.transform.localPosition.y >= LimitesXYZ[0].localPosition.y && bloqueo[5] == false)
             {
@@ -199,12 +205,13 @@ public void press(int nB)
                     //StartCoroutine(move6); 
                     Debug.Log("Hacia abajo");
             }
-            else
-            {
+                else
+                {
                     Debug.Log("Limite2 en y alcanzado bloqueo[5]=" + bloqueo[5]);
-                //No_press();
-            }
-            break;
+                    AudioManager.aSource.altoFxLoop("Ascenso_grua");
+                    //No_press();
+                }
+                break;
         case 6: enganchar = true; break;
 
 
@@ -278,7 +285,7 @@ public void paradaXbloqueo(int nMove)
                 if (bloqueo[0] == true)
                 {
                     AudioManager.aSource.goFx("4Puerta_Corrediza_Alto");//**************************Agregado 30-07-24****reemplazado el 31-07-24
-                    
+                    AudioManager.aSource.altoFxLoop("Sirena_grua");//***************************AGREGADO EL 02-08-24**************************
                     Debug.Log("alto puente (bloqueo[0]="+bloqueo[0]);
                     break;
                 }
@@ -301,7 +308,7 @@ public void paradaXbloqueo(int nMove)
                 if (bloqueo[1] == true)
                 {
                     AudioManager.aSource.goFx("4Puerta_Corrediza_Alto");//**************************Agregado 30-07-24****reemplazado el 31-07-24
-                    
+                    AudioManager.aSource.altoFxLoop("Sirena_grua");//***************************AGREGADO EL 02-08-24**************************
                     Debug.Log("alto puente grua bloqueo[1]=" + bloqueo[1]);
                     break;
                 }
@@ -405,7 +412,7 @@ public void paradaXbloqueo(int nMove)
                 {
                     AudioManager.aSource.goFx("4Puerta_Corrediza_Alto");//**************************Agregado 30-07-24****reemplazado el 31-07-24
                     Debug.Log("alto gancho bloqueo[4]=" + bloqueo[4]);
-                    
+                    AudioManager.aSource.altoFxLoop("Ascenso_grua");
                     break;
                 }
                 sentido = 1;
@@ -419,6 +426,7 @@ public void paradaXbloqueo(int nMove)
                 {
                     AudioManager.aSource.altoFxLoop("Ascenso_grua");
                     Debug.Log(sentido + "+Limite alcanzado gancho bloqueo[4]=" + bloqueo[4]);
+                    
                     break;
                 }
 
@@ -446,8 +454,6 @@ public void paradaXbloqueo(int nMove)
                     break;
                 }
             }
-        
-
         }
     }
 }

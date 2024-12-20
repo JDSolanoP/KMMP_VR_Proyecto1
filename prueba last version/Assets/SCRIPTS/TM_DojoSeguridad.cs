@@ -17,7 +17,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
     //public AudioManager aSource;
     [Header("Dojo_Seguridad")]
     public AccionPuertaDojo aP;
-    public GameObject[] Tablero_Indicaciones;
+    //public GameObject[] Tablero_Indicaciones;
     public GameObject[] murosConos;
     public GameObject[] DetectorSgtM;
     public int contadorDetectorSgtMod=0;
@@ -42,7 +42,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
     public bool Si_Mandil = false;
     public bool Si_Careta = false;
     public bool correctaTareaM2=false;
-    public bool[] contacto_confirmado;
+    //public bool[] contacto_confirmado;
     public float tiempoEspera;//para esperar el tiempo antes de activacion de otro evento
     public float tTemp=0;//recorrido del tiempo
     public bool amoladoraOn=false;
@@ -710,7 +710,8 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                             //Debug.Log("Perno" + (contactoV - 1) + "sacado en funcion Cronometro");
                             PernosMesh[contactoV-1].SetActive(false);
                             PernosRefe[contactoV-1].SetActive(false);
-                            PernosGrab[contactoV-1].SetActive(true);
+                            PernosGrab[contactoV - 1].SetActive(true);
+                            PernosGrab[contactoV - 1].GetComponent<Return_Pos0>().enabled = false;
                             PernosGrab[contactoV-1].transform.SetParent(PuntoPernoEnMaquina.transform);
                             PernosGrab[contactoV - 1].transform.localPosition = LocalPosPernoSpawn;
                             PernosGrab[contactoV - 1].transform.localEulerAngles = LocalRotPernoSpawn;
@@ -754,6 +755,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                             PernosMesh[contactoV - 1].SetActive(false);
                             PernosRefe[contactoV - 1].SetActive(false);
                             PernosGrab[contactoV - 1].SetActive(true);
+                            PernosGrab[contactoV - 1].GetComponent<Return_Pos0>().enabled = false;
                             PernosGrab[contactoV - 1].transform.SetParent(PuntoPernoEnMaquina.transform);
                             PernosGrab[contactoV - 1].transform.localPosition = LocalPosPernoSpawn;
                             PernosGrab[contactoV - 1].transform.localEulerAngles = LocalRotPernoSpawn;
@@ -793,6 +795,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                             PernosMesh[contactoV - 1].SetActive(false);
                             PernosRefe[contactoV - 1].SetActive(false);
                             PernosGrab[contactoV - 1].SetActive(true);
+                            PernosGrab[contactoV - 1].GetComponent<Return_Pos0>().enabled = false;
                             PernosGrab[contactoV - 1].transform.SetParent(PuntoPernoEnMaquina.transform);
                             PernosGrab[contactoV - 1].transform.localPosition = LocalPosPernoSpawn;
                             PernosGrab[contactoV - 1].transform.localEulerAngles = LocalRotPernoSpawn;
@@ -830,6 +833,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                             PernosMesh[contactoV - 1].SetActive(false);
                             PernosRefe[contactoV - 1].SetActive(false);
                             PernosGrab[contactoV - 1].SetActive(true);
+                            PernosGrab[contactoV - 1].GetComponent<Return_Pos0>().enabled = false;
                             PernosGrab[contactoV - 1].transform.SetParent(PuntoPernoEnMaquina.transform);
                             PernosGrab[contactoV - 1].transform.localPosition = LocalPosPernoSpawn;
                             PernosGrab[contactoV - 1].transform.localEulerAngles = LocalRotPernoSpawn;
@@ -1146,7 +1150,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
     {
         PernoEnDado=false;
         PernoEnMano[NpEnMano] = true;
-
+        PernosGrab[NpEnMano].GetComponent<Return_Pos0>().enabled = true;
         //PernosGrab[NpEnMano].transform.SetParent(PuntoDeRecepccionPernos.transform);
     }
     public void Si_PernoSoltado(int NpSoltado)

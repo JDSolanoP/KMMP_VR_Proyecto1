@@ -74,7 +74,7 @@ public class ImpactWrenchGunAccion : MonoBehaviour
                 AudioManager.aSource.altoFxLoop("IWG_Rot01");////////////////////////////////////////////
                 break;
                 }
-            if (velIniaux < 0)
+            if (velInicial < 0)
             {
                 AudioManager.aSource.altoFxLoop("IWG_Rot01");////////////////////////////////////////////
                 Cargada = false;
@@ -109,7 +109,7 @@ public class ImpactWrenchGunAccion : MonoBehaviour
                     ObjRot.transform.localEulerAngles = new Vector3(0,0, ObjRot.transform.localEulerAngles.z + velInicial - velDesaceleracion);
                 RoT0 = ObjRot.transform.localEulerAngles.z;
             }*/
-                velIniaux=velIniaux-Desaceaux*tiempo;
+                velInicial=velInicial-Desaceaux*tiempo;
             tiempo++;
             //Debug.Log("velInicial="+velInicial);
             //tiempo+=Time.deltaTime;
