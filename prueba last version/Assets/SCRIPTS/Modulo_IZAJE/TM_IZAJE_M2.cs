@@ -11,6 +11,7 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
     [Header("Modulo 2 de IZAJE")]
 
     public GameObject CtrlTotalBtn;
+    public GameObject[] Muros;
     public int contactoIntAux;
     public int contactoIntAux2;
     string NombreAuxAudio;
@@ -42,7 +43,7 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
     public float AnguloPerilla;//+90 grados;
     public bool si_perilla;
     public bool perilla_correcta=true;
-    public GameObject GanchoRotacion;
+    public GameObject ControlOBJ;
     public float velrot;
     
     [Header("Viento")]
@@ -109,15 +110,16 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                     yield return new WaitForFixedUpdate();
                 }
                 Tablero_Indicaciones[3].SetActive(true);
-                break;//cuando se tiene todos los EPPS
-            case 1:
+                break;
+            case 1://cuando presiona el btn conforme y todo esta bien
+                Muros[0].SetActive(false);//agregado 20-01-25
                 Tablero_Indicaciones[3].SetActive(false);
                 CtrlTotalBtn.SetActive(true);
                 perillaSelectGancho.SetActive(false);
                 Tablero_Indicaciones[4].SetActive(true);
                 ElementoPost[3].transform.SetParent(ElementoPost[2].transform);
                 ElementoPost[10].transform.SetParent(ElementoPost[2].transform);
-                
+                ElementoPost[18].SetActive(true);//flechas indicacion para mover la mt hacia el taller
                 ElementoPost[5].SetActive(true);
                 ElementoPost[5].transform.SetParent(ElementoPost[2].transform);
                 for (int i = 0; i < si_UsableEslinga.Length; i++) 
@@ -133,7 +135,7 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                     yield return new WaitForFixedUpdate();
                 }
                 break;
-            case 2:
+            case 2://cuando el mt esta en area interior del taller
                 ElementoPost[6].SetActive(true);//cable viento
                 ElementoPost[7].SetActive(true);//agarre viento IZq
                 ElementoPost[8].SetActive(true);//agarre viento der
@@ -143,7 +145,7 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                     yield return new WaitForFixedUpdate();
                 }
                 break;
-            case 3:
+            case 3://cuando la mt esta en su posicion final
                 ElementoPost[0].SetActive(false);//mt refe
                 //ElementoPost[1].SetActive(true);//mt colocada
                 //ElementoPost[3].SetActive(false);//mt colocada
@@ -151,21 +153,37 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 ElementoPost[6].SetActive(false);//cable viento
                 ElementoPost[7].SetActive(false);//agarre izq
                 ElementoPost[8].SetActive(false);//agarrea der
-                ElementoPost[11].SetActive(false);//detector de mt de lelgada
-                ElementoPost[12].SetActive(false);//detector de mt de lelgada
+                ElementoPost[11].SetActive(false);//detector1 de mt de lelgada
+                ElementoPost[12].SetActive(false);//detector2 de mt de lelgada
                 CtrlTotalBtn.SetActive(false);//apagar botones
+                ElementoPost[13].SetActive(true);//refe control llegada
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
 
                     yield return new WaitForFixedUpdate();
                 }
                 break;
-            case 4:
+            case 4://cuando se deja el control el refe
+                ControlOBJ.SetActive(false);//control de puentegrua obj desactivar
+                ElementoPost[13].SetActive(false);//refe control llegada
+                ElementoPost[14].SetActive(true);//control mesh llegada
+                Muros[1].SetActive(false);///muro de conos de concluciones
+
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
 
                     yield return new WaitForFixedUpdate();
                 }
+                break;
+            case 5://cuando se presiona el boton continuar
+                //Tablero_Indicaciones[5].SetActive(true);
+                ElementoPost[15].SetActive(true);//boton continuar
+                while (AudioManager.aSource.IsPlayingVoz() == true)
+                {
+
+                    yield return new WaitForFixedUpdate();
+                }
+                
                 break;
         }
     }
@@ -245,9 +263,12 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                     }
                 }
                 break;
-            case 5:
-                if (contacto_confirmado[confirmarContacto] == true)
+            case 5://***************cuando el jugador entra el taller**************en el detector de enMT, zona exterior al taller
+                if (contacto_confirmado[confirmarContacto] == false)
                 {
+                    Muros[0].SetActive(true);
+                    ControlOBJ.GetComponent<Return_Pos0>().Pos0 = new Vector3(-2.982f, 2.034668f, -5.226178f);
+                    ControlOBJ.GetComponent<Return_Pos0>().Rot0 = new Vector3(ControlOBJ.GetComponent<Return_Pos0>().Rot0.x, ControlOBJ.GetComponent<Return_Pos0>().Rot0.y+180f, ControlOBJ.GetComponent<Return_Pos0>().Rot0.z);
 
                 }
                  break;
