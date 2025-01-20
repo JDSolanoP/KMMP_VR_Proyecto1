@@ -9,7 +9,7 @@ public class TM_Oficina : Lista_Tareas_Controller
     public TMP_Text Panel_Txt;
     public TMP_Text Frase_Txt;
     public GameObject[] Paneles;
-    public bool[] contacto_confirmado;
+    
     public int auxcontacto;
     public GameObject[] muros;
     public GameObject[] flechas;

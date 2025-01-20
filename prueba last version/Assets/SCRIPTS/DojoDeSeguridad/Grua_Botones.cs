@@ -12,11 +12,13 @@ public class Grua_Botones : MonoBehaviour
     public int nB;
     public void onPress(int nboton)
     {
+        ctrl.disponiblesOtrosBTN(nboton, false);
         ctrl.on_press = true;
         ctrl.press(nboton);
     }
     public void OnPressExit(int nboton)
     {
+        ctrl.disponiblesOtrosBTN(nboton, true);
         ctrl.on_press = false;
     }
     private void OnTriggerEnter(Collider other)

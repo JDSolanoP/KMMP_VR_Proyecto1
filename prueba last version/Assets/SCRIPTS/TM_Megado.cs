@@ -9,7 +9,7 @@ using JetBrains.Annotations;
 public class TM_Megado : Lista_Tareas_Controller
 {
     // Start is called before the first frame update
-    public GameObject[] Tablero_Indicaciones;
+    
     public GameObject[] URefe;//Puntos que indica ubicacion de Referencia
     public GameObject[] ObjRefe;//Indican Objetos que interviene en la tarea de pinzas y/o empiezan o culminan una tarea
     public GameObject[] ObjRefeBotones;//Indican Objetos que interviene en la tarea donde intervienen botones  de Megometro y/o empiezan o culminan una tarea

@@ -75,9 +75,9 @@ public class Return_Pos0 : MonoBehaviour
     }
     public void reposicionObj()
     {
-        Debug.Log("REpos "+this.gameObject.name);
+        //Debug.Log("REpos "+this.gameObject.name);
         enPos0= true;
-        this.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        //this.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         this.gameObject.transform.position = Pos0;
         this.gameObject.transform.eulerAngles = Rot0;
         if (inGravKinec == true)

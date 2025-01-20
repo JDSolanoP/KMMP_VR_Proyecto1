@@ -13,6 +13,7 @@ public class DetectorOBJOBJIZAJEM2 : MonoBehaviour
     public int confirmarContacto;
     public int aux;
     public bool permiteReposDespues = false;
+    public bool permiteTmVerificar=true;
 
     void OnTriggerEnter(Collider other)
     {
@@ -25,7 +26,7 @@ public class DetectorOBJOBJIZAJEM2 : MonoBehaviour
                 {
                     tm_IZ_M2.contactoIntAux=aux;
                 }
-                Debug.Log(other.gameObject.name + " verificando contacto: " + confirmarContacto);
+                //Debug.Log(other.gameObject.name + " verificando contacto: " + confirmarContacto);
                 if (permiteReposDespues)
                 {
                     this.gameObject.GetComponent<Return_Pos0>().inGravKinec = true;
@@ -33,7 +34,11 @@ public class DetectorOBJOBJIZAJEM2 : MonoBehaviour
                     Debug.Log(other.gameObject.name + " repos return_pos0 " + confirmarContacto+ " contacto aux "+aux);
                 }
                 tm_IZ_M2.contacto_confirmado[confirmarContacto] = true;
-                tm_IZ_M2.verificarContacto(confirmarContacto);
+                if(permiteTmVerificar == true)
+                {
+                    tm_IZ_M2.verificarContacto(confirmarContacto);
+                }
+                
             }
         }
         else
@@ -51,7 +56,10 @@ public class DetectorOBJOBJIZAJEM2 : MonoBehaviour
                         this.gameObject.GetComponent<Return_Pos0>().reposicionObj();
                     }
                     tm_IZ_M2.contacto_confirmado[confirmarContacto] = true;
-                    tm_IZ_M2.verificarContacto(confirmarContacto);
+                    if (permiteTmVerificar == true)
+                    {
+                        tm_IZ_M2.verificarContacto(confirmarContacto);
+                    }
                     break;
                 }
             }
@@ -67,8 +75,11 @@ public class DetectorOBJOBJIZAJEM2 : MonoBehaviour
                 if (other.gameObject.name == n_obj)
                 {
                     tm_IZ_M2.contacto_confirmado[confirmarContacto] = true;
-                    tm_IZ_M2.verificarContacto(confirmarContacto);
-                    Debug.Log(other.gameObject.name + " verificando contacto: " + confirmarContacto);
+                    if (permiteTmVerificar == true)
+                    {
+                        tm_IZ_M2.verificarContacto(confirmarContacto);
+                        Debug.Log(other.gameObject.name + " verificando contacto: " + confirmarContacto);
+                    }
                 }
             }
             else
@@ -78,8 +89,11 @@ public class DetectorOBJOBJIZAJEM2 : MonoBehaviour
                     if (other.gameObject.name == nn_obj[i])
                     {
                         tm_IZ_M2.contacto_confirmado[confirmarContacto] = true;
-                        tm_IZ_M2.verificarContacto(confirmarContacto);
+                        if (permiteTmVerificar == true)
+                        {
+                            tm_IZ_M2.verificarContacto(confirmarContacto);
                             Debug.Log(other.gameObject.name + " verificando contacto: " + confirmarContacto + " entrando ala zona final desde el stay");
+                        }
                             break;
                     }
                 }
@@ -90,13 +104,20 @@ public class DetectorOBJOBJIZAJEM2 : MonoBehaviour
     }
     void OnTriggerExit(Collider other)
     {
+        if (permiteIntAux == true)
+        {
+            tm_IZ_M2.contactoIntAux = aux;
+        }
         if (Mas_de_1_Objeto == false)
         {
             if (other.gameObject.name == n_obj)
             {
                 tm_IZ_M2.contacto_confirmado[confirmarContacto] = false;
-                tm_IZ_M2.verificarContacto(confirmarContacto);
-                Debug.Log("verificando salida de contacto: " + confirmarContacto);
+                if (permiteTmVerificar == true)
+                {
+                    tm_IZ_M2.verificarContacto(confirmarContacto);
+                    Debug.Log("verificando salida de contacto: " + confirmarContacto);
+                }
             }
         }
         else
@@ -106,8 +127,11 @@ public class DetectorOBJOBJIZAJEM2 : MonoBehaviour
                 if (other.gameObject.name == nn_obj[i])
                 {
                     tm_IZ_M2.contacto_confirmado[confirmarContacto] = false;
-                    tm_IZ_M2.verificarContacto(confirmarContacto);
-                    Debug.Log(other.gameObject.name + " verificando contacto: " + confirmarContacto);
+                    if (permiteTmVerificar == true)
+                    {
+                        tm_IZ_M2.verificarContacto(confirmarContacto);
+                        Debug.Log(other.gameObject.name + " verificando contacto: " + confirmarContacto);
+                    }
                 }
             }
         }

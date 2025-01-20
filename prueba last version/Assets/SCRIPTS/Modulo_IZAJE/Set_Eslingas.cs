@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Set_Eslingas : MonoBehaviour//Creado el 01-0-2024
 {
+    public int numero_eslinga;
     [Header("Numero de Material")]
     public int Num_Material;
     public bool usable;//si cumple con todo lo necesario para utilizarse sin caer
@@ -18,6 +19,7 @@ public class Set_Eslingas : MonoBehaviour//Creado el 01-0-2024
     public Sprite[] etiqueta;//del 1 al 8
     [Header("Materiales")]
     public Material[] E_Material;
+    public GameObject MeshGameObj;
     
 
     void Start()
@@ -35,7 +37,7 @@ public class Set_Eslingas : MonoBehaviour//Creado el 01-0-2024
             {
                 E_Etiqueta.SetActive(false);
                 usable = false;
-                Debug.Log("Eslinga " + this.gameObject.name + " sin etiqueta, es usable : " + usable);
+              //  Debug.Log("Eslinga " + this.gameObject.name + " sin etiqueta, es usable : " + usable);
             }
             else
             {
@@ -46,7 +48,7 @@ public class Set_Eslingas : MonoBehaviour//Creado el 01-0-2024
                     
                     E_Etiqueta.transform.localPosition = new Vector3(pos_E.x, pos_E.y, pos_E.z);
                     E_Etiqueta.transform.localEulerAngles = new Vector3(-90,0, -90);
-                    Debug.Log("Eslinga " + this.gameObject.name + " etiqueta movida , es usable : " + usable);
+                 //   Debug.Log("Eslinga " + this.gameObject.name + " etiqueta movida , es usable : " + usable);
                 }
                 
             }
@@ -56,7 +58,7 @@ public class Set_Eslingas : MonoBehaviour//Creado el 01-0-2024
                 E_Partes[13].SetActive(false);//corecto
                 E_Partes[14].SetActive(true);//incorrecto
                 usable = false;
-                Debug.Log("Eslinga " + this.gameObject.name + " con corte, es usable : " + usable);
+                //Debug.Log("Eslinga " + this.gameObject.name + " con corte, es usable : " + usable);
             }
             else
             {
@@ -87,7 +89,7 @@ public class Set_Eslingas : MonoBehaviour//Creado el 01-0-2024
             }
         }
 
-        Debug.Log("Eslinga " + this.gameObject.name+" es usable : "+usable );
+       // Debug.Log("Eslinga " + this.gameObject.name+" es usable : "+usable );
     }
     public void set_Valores(int m,int r1,int r2, int r3, bool u)//del 1 al 7
     {
@@ -99,7 +101,7 @@ public class Set_Eslingas : MonoBehaviour//Creado el 01-0-2024
             {
                 E_Etiqueta.SetActive(false);
                 usable = false;
-                Debug.Log("Eslinga " + this.gameObject.name + " sin etiqueta, es usable : " + usable);
+               // Debug.Log("Eslinga " + this.gameObject.name + " sin etiqueta, es usable : " + usable);
             }
             else
             {
@@ -107,7 +109,7 @@ public class Set_Eslingas : MonoBehaviour//Creado el 01-0-2024
                 rnd = Random.Range(0, 2);//si reubicamos en la otra posicion
                 if (rnd == 0)
                 {
-                    Debug.Log("Eslinga " + this.gameObject.name + " etiqueta movida , es usable : " + usable);
+                 //   Debug.Log("Eslinga " + this.gameObject.name + " etiqueta movida , es usable : " + usable);
                     E_Etiqueta.transform.localPosition = new Vector3(pos_E.x, pos_E.y, pos_E.z);
                     E_Etiqueta.transform.localEulerAngles = new Vector3(-90, 0, -90);
                 }
@@ -120,13 +122,13 @@ public class Set_Eslingas : MonoBehaviour//Creado el 01-0-2024
                 E_Partes[13].SetActive(false);//correcto
                 E_Partes[14].SetActive(true);//incorrecto
                 usable = false;
-                Debug.Log("Eslinga " + this.gameObject.name + " con corte, es usable : " + usable);
+              //  Debug.Log("Eslinga " + this.gameObject.name + " con corte, es usable : " + usable);
             }
             else
             {
                 E_Partes[14].SetActive(false);
                 E_Partes[13].SetActive(true);
-                Debug.Log("Eslinga " + this.gameObject.name + " sin corte, es usable : " + usable);
+               // Debug.Log("Eslinga " + this.gameObject.name + " sin corte, es usable : " + usable);
             }
             rnd = r3;
             if (rnd == 0)//si quemadura
@@ -134,12 +136,12 @@ public class Set_Eslingas : MonoBehaviour//Creado el 01-0-2024
 
                 E_Etiqueta.GetComponent<SpriteRenderer>().sprite = etiqueta[8];//etiqueta de error
                 usable = false;
-                Debug.Log("Eslinga " + this.gameObject.name + " con quemadura, es usable : " + usable);
+              //  Debug.Log("Eslinga " + this.gameObject.name + " con quemadura, es usable : " + usable);
             }
             else
             {
                 E_Etiqueta.GetComponent<SpriteRenderer>().sprite = etiqueta[m];
-                Debug.Log("Eslinga " + this.gameObject.name + " con etiqueta "+m+" , usable : " + usable);
+               // Debug.Log("Eslinga " + this.gameObject.name + " con etiqueta "+m+" , usable : " + usable);
             }
             for (int i = 0; i < E_Partes.Length; i++)
             {
@@ -147,7 +149,7 @@ public class Set_Eslingas : MonoBehaviour//Creado el 01-0-2024
             }
             Debug.Log("SE colocaron los valores " + r1 + " " + r2 + " " + r3 + " que son correctos en Set_eslingas");
             usable=true;
-            Debug.Log("Eslinga " + this.gameObject.name + " es usable : " + usable);
+            //Debug.Log("Eslinga " + this.gameObject.name + " es usable : " + usable);
         }
         else
         {//pintar referencia 8
@@ -169,19 +171,36 @@ public class Set_Eslingas : MonoBehaviour//Creado el 01-0-2024
     {
         transform.localEulerAngles = rot0;
         transform.localPosition = pos0;
-        this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
         this.gameObject.GetComponent<Rigidbody>().useGravity = false;
-        this.gameObject.SetActive(false);
-        Debug.Log("SE recoloco eslinga "+this.gameObject.name);
+        this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+        
+        this.gameObject.SetActive(true);
+        //Debug.Log("SE recoloco eslinga "+this.gameObject.name);
     }
     public void activarFisicas()
     {
         this.gameObject.GetComponent<Rigidbody>().isKinematic = false;
         this.gameObject.GetComponent<Rigidbody>().useGravity = true;
-        Debug.Log("SE activo fisicas en eslinga " + this.gameObject.name);
+        //Debug.Log("SE activo fisicas en eslinga " + this.gameObject.name);
     }
     public void Si_EslingaPick(bool si)
     {
         En_Mano = si;
+    }
+    public void ActivarMeshEslingas(bool act)
+    {
+        MeshGameObj.SetActive(act);
+    }
+    void OnCollisionStay(Collision col)
+    {
+        //Debug.Log(col.gameObject.tag);
+        if (col.gameObject.tag == "Ground")
+        {
+            ActivarMeshEslingas(false);
+            reUbicarEslingas();
+            this.gameObject.SetActive(true);
+            //Debug.Log("colision con el suelo de eslinga="+gameObject.name);
+
+        }
     }
 }
