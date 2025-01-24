@@ -17,7 +17,7 @@ public class Lista_Tareas_Controller : MonoBehaviour
     public float[] GlobalFloat;
     [Header("Transiciones_Elementos")]
     public bool SiFadeActivo;
-    public Renderer rend;
+    public Renderer rend;//Renderimg Mode => Fade
     public Color fadeColor;
     public float fadeTiempo = 2;
     public bool IniciaFade = true;
@@ -147,7 +147,7 @@ public class Lista_Tareas_Controller : MonoBehaviour
         newColor2.a = alfaOut;
         rend.material.SetColor("_Color",newColor2);
     }
-    //*********************************CAMBO DE ESCENA CON FADE*********************************
+    //*********************************CAMBiO DE ESCENA CON FADE*********************************
     public void IrEscenaAsincron(int escena)
     {
         StartCoroutine(GoEscenaAsincro(escena));

@@ -16,10 +16,10 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
     public int contactoIntAux2;
     string NombreAuxAudio;
     float tiempoEsperaAux;
-   
+   /*
     public GameObject[] guantesComplementos;
     public GameObject[] manosXR;
-    public Material[] manosXRMaterial;
+    public Material[] manosXRMaterial;*/
 
     [Header("ESLINGAS")]
     public Set_Eslingas[] sE;
@@ -50,6 +50,7 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
     public bool[] agarreViento;
     public int sentido;
     public GruaGanchoRot GGR;
+    Vector3[] pos0AgarreViento = null;
     [Header("Elementos Post Verificacion")]
     public GameObject[] ElementoPost;
     public bool contactLockerEslingaRefe;
@@ -72,15 +73,16 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
         switch (tarea)
         {//Agregar notaciones de tareas en cada caso
             case 0:// AQUI, Colocando todos los componentes
-
+                Tablero_Indicaciones[6].transform.SetParent(ElementoPost[3].transform);
                 /*   //audioManager de bienvenida
 
                 yield return new WaitForSeconds(0.5f);
                 manosXR[0].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[1];
                 manosXR[1].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[1];
-
-                aSource.MusicaVol(0.5f);//**************************************Sonido Musica Inicial*************
-                //aSource.FxVol(1);*/
+                */
+                aSource.PlayMusica(aSource.MusicaSonidos[0].nombre, 0.75f, true);
+                //aSource.MusicaVol(0.75f);//**************************************Sonido Musica Inicial*************
+                aSource.FxVol(1);
                 CtrlTotalBtn.SetActive(false);
                 for (int i = 0; i < Tablero_Indicaciones.Length; i++)
                 {
@@ -90,7 +92,7 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 {
                     int rnd = Random.Range(0, 8);
                     sE[i].set_Valores(rnd);
-                    sE[i].Num_Material=rnd;
+                    sE[i].Num_Material = rnd;
                 }
                 for (int i = 0; i < sE.Length; i++)//crear eslingas referencias 06-01-25
                 {
@@ -101,7 +103,8 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 Saber_Eslinga_Correcta();
                 colocar_Eslinga();
                 yield return new WaitForSeconds(1f);
-
+                yield return new WaitForSeconds(5f);
+                Tablero_Indicaciones[3].SetActive(true);//panel de conformidad
                 //Debug.Log("Se esta reproduciendo audio");
 
                 while (AudioManager.aSource.IsPlayingVoz() == true)
@@ -109,20 +112,22 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
 
                     yield return new WaitForFixedUpdate();
                 }
-                Tablero_Indicaciones[3].SetActive(true);
+                
                 break;
             case 1://cuando presiona el btn conforme y todo esta bien
+                aSource.goFx("Bien");
                 Muros[0].SetActive(false);//agregado 20-01-25
                 Tablero_Indicaciones[3].SetActive(false);
                 CtrlTotalBtn.SetActive(true);
                 perillaSelectGancho.SetActive(false);
                 Tablero_Indicaciones[4].SetActive(true);
+                Tablero_Indicaciones[5].SetActive(true);
                 ElementoPost[3].transform.SetParent(ElementoPost[2].transform);
                 ElementoPost[10].transform.SetParent(ElementoPost[2].transform);
                 ElementoPost[18].SetActive(true);//flechas indicacion para mover la mt hacia el taller
                 ElementoPost[5].SetActive(true);
                 ElementoPost[5].transform.SetParent(ElementoPost[2].transform);
-                for (int i = 0; i < si_UsableEslinga.Length; i++) 
+                for (int i = 0; i < si_UsableEslinga.Length; i++)
                 {
                     if (si_UsableEslinga[i] == true)
                     {
@@ -136,9 +141,15 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 }
                 break;
             case 2://cuando el mt esta en area interior del taller
-                ElementoPost[6].SetActive(true);//cable viento
+                Tablero_Indicaciones[4].SetActive(false);
+                Tablero_Indicaciones[5].SetActive(true);
+                /*ElementoPost[6].SetActive(true);//cable viento
                 ElementoPost[7].SetActive(true);//agarre viento IZq
                 ElementoPost[8].SetActive(true);//agarre viento der
+                ElementoPost[7].transform.localPosition = pos0AgarreViento[0];
+                ElementoPost[8].transform.localPosition = pos0AgarreViento[1];
+                verificarContacto(5);*/
+                aSource.goFx("Bien");
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
 
@@ -146,13 +157,14 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 }
                 break;
             case 3://cuando la mt esta en su posicion final
+                aSource.goFx("Bien");
                 ElementoPost[0].SetActive(false);//mt refe
                 //ElementoPost[1].SetActive(true);//mt colocada
                 //ElementoPost[3].SetActive(false);//mt colocada
-
-                ElementoPost[6].SetActive(false);//cable viento
+                verificarContacto(5);
+                /*ElementoPost[6].SetActive(false);//cable viento
                 ElementoPost[7].SetActive(false);//agarre izq
-                ElementoPost[8].SetActive(false);//agarrea der
+                ElementoPost[8].SetActive(false);//agarrea der*/
                 ElementoPost[11].SetActive(false);//detector1 de mt de lelgada
                 ElementoPost[12].SetActive(false);//detector2 de mt de lelgada
                 CtrlTotalBtn.SetActive(false);//apagar botones
@@ -164,26 +176,44 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 }
                 break;
             case 4://cuando se deja el control el refe
+                Tablero_Indicaciones[7].SetActive(true);
+                aSource.goFx("Bien");
                 ControlOBJ.SetActive(false);//control de puentegrua obj desactivar
                 ElementoPost[13].SetActive(false);//refe control llegada
                 ElementoPost[14].SetActive(true);//control mesh llegada
                 Muros[1].SetActive(false);///muro de conos de concluciones
-
+                yield return new WaitForSeconds(5);
+                ElementoPost[20].SetActive(true);//detector conclusiones
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
 
                     yield return new WaitForFixedUpdate();
                 }
                 break;
-            case 5://cuando se presiona el boton continuar
-                //Tablero_Indicaciones[5].SetActive(true);
+            case 5://cuando acerca el jugador a area de contacto 
+                Tablero_Indicaciones[8].SetActive(true);//panel conclusiones
+                yield return new WaitForSeconds(5);
+                ElementoPost[20].SetActive(false);//detector conclusiones
                 ElementoPost[15].SetActive(true);//boton continuar
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
 
                     yield return new WaitForFixedUpdate();
                 }
-                
+                break;
+            case 6://cuando se presiona el boton continuar
+                Muros[2].SetActive(false);
+                Tablero_Indicaciones[8].SetActive(false);//panel conclusiones
+                Tablero_Indicaciones[9].SetActive(true);//panel final
+                yield return new WaitForSeconds(5);
+                ElementoPost[16].SetActive(true);//boton reset-reinicion
+                yield return new WaitForSeconds(5);
+                ElementoPost[17].SetActive(true);//boton quit-salir
+                while (AudioManager.aSource.IsPlayingVoz() == true)
+                {
+
+                    yield return new WaitForFixedUpdate();
+                }
                 break;
         }
     }
@@ -238,16 +268,16 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
             case 2://*****MT sale del area esxterior al taller
                 if (contacto_confirmado[confirmarContacto] == false)
                 {
-                    ElementoPost[9].SetActive(false);
-
+                    
+                    verificarContacto(5);
                     TareaCompletada(1);//completa la tarea 1
-
+                    
                 }
                 break;
             case 3://MT en posicion de llegada final de la base
                 if (contacto_confirmado[confirmarContacto] == true)
                 {
-                    if(contacto_confirmado[4] == true) {
+                    if(contacto_confirmado[4] == true&&TareaActual==2) {
                         TareaCompletada(2);
                     }
                 
@@ -257,7 +287,7 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
             case 4://MT en posicion de llegada final posterio
                 if (contacto_confirmado[confirmarContacto] == true)
                 {
-                    if (contacto_confirmado[3] == true)
+                    if (contacto_confirmado[3] == true && TareaActual == 2)
                     {
                         TareaCompletada(2);
                     }
@@ -266,12 +296,92 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
             case 5://***************cuando el jugador entra el taller**************en el detector de enMT, zona exterior al taller
                 if (contacto_confirmado[confirmarContacto] == false)
                 {
-                    Muros[0].SetActive(true);
-                    ControlOBJ.GetComponent<Return_Pos0>().Pos0 = new Vector3(-2.982f, 2.034668f, -5.226178f);
-                    ControlOBJ.GetComponent<Return_Pos0>().Rot0 = new Vector3(ControlOBJ.GetComponent<Return_Pos0>().Rot0.x, ControlOBJ.GetComponent<Return_Pos0>().Rot0.y+180f, ControlOBJ.GetComponent<Return_Pos0>().Rot0.z);
-
+                    if (TareaActual > 1 && contacto_confirmado[2]==false)
+                    {
+                        ElementoPost[9].SetActive(false);
+                        ControlOBJ.GetComponent<Return_Pos0>().Pos0 = new Vector3(-2.982f, 2.034668f, -5.226178f);
+                        ControlOBJ.GetComponent<Return_Pos0>().Rot0 = new Vector3(ControlOBJ.GetComponent<Return_Pos0>().Rot0.x, ControlOBJ.GetComponent<Return_Pos0>().Rot0.y+180, ControlOBJ.GetComponent<Return_Pos0>().Rot0.z);
+                        Muros[0].SetActive(true);
+                    }
                 }
                  break;
+            case 6://se dejo el control en la referencia sobre el cajon
+                if (contacto_confirmado[confirmarContacto] == true)
+                {
+                    if (TareaActual == 3)
+                    {
+                        TareaCompletada(3);
+                    }
+                    
+                }
+                break;
+            case 12://se dejo el control en la referencia sobre el cajon
+                if (contacto_confirmado[confirmarContacto] == true)
+                {
+                    if (TareaActual == 4)
+                    {
+                        TareaCompletada(4);
+                    }
+                }
+                break;
+            case 7://se agarro el boton continuar
+                if (contacto_confirmado[confirmarContacto] == true)
+                {
+                    TareaCompletada(5);
+                }
+                    
+                break;
+            case 8://boton reinicio
+                IrEscenaAsincron(0);
+                break;
+            case 9://boton SALIR
+                Application.Quit();
+                break;
+            case 10://verifica si mt contancto con detector de corneta presionada
+                
+                if (contacto_confirmado[confirmarContacto] == true)
+                {
+                        if (ControlOBJ.GetComponent<Control_Grua_Puente>().corneta_presionada == false)
+                        {
+                        Debug.Log("no corneta " + confirmarContacto);
+                        
+                        Tablero_Indicaciones[6].SetActive(true);
+                            aSource.goFx("Fallo");
+                            aSource.goFx("Locu_Fallo");
+                        }
+                        else
+                        {
+                        Debug.Log("si corneta " + confirmarContacto);
+                        Tablero_Indicaciones[6].SetActive(false);//tablero de error corneta
+                            ElementoPost[19].SetActive(false);//detectores de corneta
+                        ElementoPost[21].SetActive(false);//collider bloqueo de corneta
+                        for (int i = 0; i < 6; i++)
+                        {
+                            ControlOBJ.GetComponent<Control_Grua_Puente>().bloqueo[i] = false;
+                        }
+                        
+                        
+                    }
+                }
+                    break;
+            case 11://en el boton corneta
+                if (contacto_confirmado[confirmarContacto] == true)
+                {
+                    Debug.Log("si corneta " + confirmarContacto);
+                    ControlOBJ.GetComponent<Control_Grua_Puente>().corneta_presionada = true;
+                    ElementoPost[19].SetActive(false);//detectores de corneta
+                    ElementoPost[21].SetActive(false);//collider bloqueo de corneta
+                    for (int i = 0; i < 6; i++)
+                    {
+                        ControlOBJ.GetComponent<Control_Grua_Puente>().bloqueo[i] = false;
+                    }
+                    if (Tablero_Indicaciones[6].activeInHierarchy)
+                    {
+                        Tablero_Indicaciones[6].SetActive(false);
+
+                    }
+                }
+                break;
         }
     }
     //*********************************Parte 1 Verificacion de eslinga correcta***********************
@@ -339,6 +449,8 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
         aSource.goFx("Boton");
         if (Si_HayEslingaColocada == false)
         {
+            Tablero_Indicaciones[2].SetActive(false);//si gancho correcta
+            Tablero_Indicaciones[1].SetActive(false);//si eslinga es incorrecta o dañada
             Tablero_Indicaciones[0].SetActive(true);//si no detecta ninguna eslinga
             aSource.goFx("Locu_Fallo");
             aSource.goFx("Fallo");
@@ -355,6 +467,7 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                     //Debug.Log("error eslinga no usable" + Si_HayEslingaColocada + " - TodoCorrecto : " + TodoCorrecto + " ->" + Si_EslingaColocadaUsable + " " + si_perilla);
                     Tablero_Indicaciones[2].SetActive(false);//si gancho correcta
                     Tablero_Indicaciones[1].SetActive(true);//si eslinga es incorrecta o dañada
+                    Tablero_Indicaciones[10].SetActive(true);//Advertencia sobre mesa si eslinga es incorrecta o dañada
                     EslingasObj[numEslingaColocada].SetActive(true);
                     EslingasObj[numEslingaColocada].transform.localPosition = new Vector3(pos_enMesa_Revision.localPosition.x, pos_enMesa_Revision.localPosition.y, pos_enMesa_Revision.localPosition.z);
                     EslingasObj[numEslingaColocada].transform.localEulerAngles = new Vector3(pos_enMesa_Revision.localEulerAngles.x, pos_enMesa_Revision.localEulerAngles.y, pos_enMesa_Revision.localEulerAngles.z);
@@ -478,6 +591,6 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
         {
             GGR.GiroActivo = false;
         }
-
+        ElementoPost[7 + nV].transform.localPosition = pos0AgarreViento[nV];
     }
 }

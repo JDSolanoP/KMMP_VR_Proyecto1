@@ -26,7 +26,7 @@ public class DetectorOBJOBJIZAJEM2 : MonoBehaviour
                 {
                     tm_IZ_M2.contactoIntAux=aux;
                 }
-                //Debug.Log(other.gameObject.name + " verificando contacto: " + confirmarContacto);
+                Debug.Log(other.gameObject.name + " verificando contacto: " + confirmarContacto+" este obj :"+this.gameObject.name);
                 if (permiteReposDespues)
                 {
                     this.gameObject.GetComponent<Return_Pos0>().inGravKinec = true;

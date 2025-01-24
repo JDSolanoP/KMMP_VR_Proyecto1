@@ -80,10 +80,12 @@ public class Return_Pos0 : MonoBehaviour
         //this.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         this.gameObject.transform.position = Pos0;
         this.gameObject.transform.eulerAngles = Rot0;
-        if (inGravKinec == true)
+        this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+        this.gameObject.GetComponent<Rigidbody>().useGravity = false;
+        if (inGravKinec == false)
         {
-            this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
-            this.gameObject.GetComponent<Rigidbody>().useGravity = false;
+            this.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+            this.gameObject.GetComponent<Rigidbody>().useGravity = true;
         }
         
     }

@@ -12,6 +12,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: RGB_178-0-178
+    second: {fileID: -6397280900630745571, guid: 5cf9f7cfab7a83340b1132f231575698, type: 3}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: RGB_255-255-0
     second: {fileID: -6397280900630745571, guid: 5cf9f7cfab7a83340b1132f231575698, type: 3}
   materials:
