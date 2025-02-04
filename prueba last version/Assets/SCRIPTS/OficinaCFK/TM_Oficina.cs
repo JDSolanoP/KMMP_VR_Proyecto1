@@ -9,7 +9,7 @@ public class TM_Oficina : Lista_Tareas_Controller
     public TMP_Text Panel_Txt;
     public TMP_Text Frase_Txt;
     public GameObject[] Paneles;
-    
+    public TM_Lobby tml;
     public int auxcontacto;
     public GameObject[] muros;
     public GameObject[] flechas;
@@ -158,7 +158,7 @@ public class TM_Oficina : Lista_Tareas_Controller
                                 if (nCifras > 1)
                                 {
                                     int aux = numero % 10;
-                                    Debug.Log("numero actual : " + aux);
+                                    //Debug.Log("numero actual : " + aux);
                                     numero -= aux;
                                     numero = numero / 10;
                                 }
@@ -172,21 +172,30 @@ public class TM_Oficina : Lista_Tareas_Controller
                         }
                         else
                         {
-                        if (contacto_confirmado[confirmarContacto] == true)
-                                {
+                            if (contacto_confirmado[confirmarContacto] == true)
+                            {
+                                Debug.Log(numero+" dni de prueba mandado");
+                                //
+                                //string sRn;
+                                
                                     if (numero == rN)
                                     {
                                         Frase_Txt.text = "¡¡¡Bien Hecho!!!";
-                                    TareaCompletada(0);
+                                    //TareaCompletada(0);
                                     }
                                     else
                                     {
-                                    aSource.goFx("Fallo");
+                                    //aSource.goFx("Fallo");
                                     Frase_Txt.text = "¡¡¡Fallo!!!";
                                     }
-                                }
+                                tml.cargarDni("" + numero);
+                                aSource.goFx("Bien");
+                            }
+                            
                         }
+                        
                     }
+                    
                 }
 
             break;
@@ -251,9 +260,9 @@ public class TM_Oficina : Lista_Tareas_Controller
 
         }
     }
-    public void DarRandomNum()
+    public void DarRandomNum()//Cambio de limite para prueba
     {
-        rN=Random.Range(100, 999);
+        rN=Random.Range(10000000, 99999999);// de 3 digitos a 8
         NumPizarron.text = rN.ToString();
     }
 

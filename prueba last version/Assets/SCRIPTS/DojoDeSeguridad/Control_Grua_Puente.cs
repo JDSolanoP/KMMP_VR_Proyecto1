@@ -61,7 +61,11 @@ public class Control_Grua_Puente : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        angulo = ganchoRot.transform.localEulerAngles.y;
+        if (ganchoRot != null)
+        {
+            angulo = ganchoRot.transform.localEulerAngles.y;
+        }
+        
         //LimitesXYZ = new Transform[2];
         bloqueo = new bool[6];
         LimitY0 = LimitY1.localPosition.y;

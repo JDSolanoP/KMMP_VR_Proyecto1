@@ -48,7 +48,7 @@ public class D_BtnOficina : MonoBehaviour
 
                     Oficina.contacto_confirmado[confirmarContacto] = true;
                     Oficina.verificarContacto(confirmarContacto);
-                    Debug.Log(other.gameObject.name + " verificando contacto: " + confirmarContacto + " entrando ala zona final");
+                    //Debug.Log(other.gameObject.name + " verificando contacto: " + confirmarContacto + " entrando ala zona final");
                 }
             }
         }
