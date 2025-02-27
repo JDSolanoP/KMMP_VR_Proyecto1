@@ -18,6 +18,10 @@ public class Return_Pos0 : MonoBehaviour
     public bool inGravKinec = false;
     public bool ActivarMargenMov = false;
     public Vector3 margenDemovimiento;
+    public bool si_otroSfx;
+    public string nombreSfx;
+    public bool Agarrable=false;//si dicho objeto se puede agarrar con mano
+
     
 
     void Start()
@@ -35,8 +39,12 @@ public class Return_Pos0 : MonoBehaviour
 
     void Update()
     {
-        if (this.gameObject.transform.position.y >= margenDemovimiento.y|| this.gameObject.transform.position.y <= -margenDemovimiento.y) {
-            reposicionObj();
+        if (ActivarMargenMov)
+        {
+            if (this.gameObject.transform.position.y >= margenDemovimiento.y || this.gameObject.transform.position.y <= -margenDemovimiento.y)
+            {
+                reposicionObj();
+            }
         }
     }
     void OnCollisionStay(Collision col)
@@ -44,8 +52,9 @@ public class Return_Pos0 : MonoBehaviour
         //Debug.Log(col.gameObject.tag);
         if (col.gameObject.tag == "Ground")
         {
-            AudioManager.aSource.goFx("Fallo");
+            
             reposicionObj();
+            AudioManager.aSource.goFx("Fallo");
             en_piso = false;
            
             /*if (contador >= tiempoDeEspera)
@@ -57,14 +66,27 @@ public class Return_Pos0 : MonoBehaviour
         else
         {
             en_piso = false;
-            
         }
     }
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Ground"))
         {
-            AudioManager.aSource.goFx("Fallo");
+            if(other.GetComponent<BoxCollider>().isTrigger==true)
+            {
+                if (si_otroSfx)
+                {
+                    AudioManager.aSource.goFx(nombreSfx);
+                }
+                else
+                {
+                    AudioManager.aSource.goFx("Fallo");
+                }
+            }
+            else
+            {
+                AudioManager.aSource.goFx("Fallo");
+            }
             reposicionObj();
             en_piso = false;
         }

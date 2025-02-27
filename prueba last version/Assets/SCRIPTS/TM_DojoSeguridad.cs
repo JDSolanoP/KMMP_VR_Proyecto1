@@ -205,6 +205,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 }
                 break;//Fin puente grua
             case 5:// Da pase a la siguiente area PISTOLA NEUMATICA
+                TM_Lobby.lb.AgregarNota(2, TM_Lobby.lb.auxNotas[2]);
                 iwg.DetectorPerno.SetActive(false);
                 //aSource.goFx("Bien");
                 //aSource.goFx("Devolver_Epps");//********************AGREGADO EL 27-08-24********************////////////
@@ -242,6 +243,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 }
                 break;
             case 7:// Finde conclusiones
+                TM_Lobby.lb.moverPanelFinal();
                 //aSource.VocesSourceCanal[aSource.VozCanalActual].Stop();
                 UI_btn_Reiniciar_Panel.SetActive(false);
                 UI_btn_Salir_Panel.SetActive(false);
@@ -259,7 +261,6 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 //Debug.Log("Se esta reproduciendo audio");
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
-
                     yield return new WaitForFixedUpdate();
                 }
                 break;
@@ -342,6 +343,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                         aSource.goFx("Fallo");
                         aSource.goFx("Locu_Fallo");//********************AGREGADO EL 27-08-24********************////////////
                         Tablero_Indicaciones[3].SetActive(true);
+                        TM_Lobby.lb.auxNotas[0]++;
                     }
                     else
                     {
@@ -351,6 +353,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                             aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
                             aSource.MusicaVol(0.9f);
                             aP.aperturaDojo(false);
+                            TM_Lobby.lb.AgregarNota(0, TM_Lobby.lb.auxNotas[0]); ;//********************AGREGADO EL 24-02-25********************////////////
                         }
                         //audio de bienvenido;
                     }
@@ -391,7 +394,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                     aSource.goFx("Locu_Fallo");//********************AGREGADO EL 27-08-24********************////////////
                     Tablero_Indicaciones[7].SetActive(true);
                     ObjetosReferencias[7].SetActive(true);
-                    //if()
+                    TM_Lobby.lb.auxNotas[2]++;//*********************************AGREGADO EL 24-02-25********************////////////
                 }
                 break;
             case 5://si coloca la carga en el lugar adecuado
@@ -557,6 +560,8 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 case 14 ://coloca la IWP en el cajon
                 if (contacto_confirmado[confirmarContacto] == true)
                 {
+                    TM_Lobby.lb.AgregarNota(3, TM_Lobby.lb.auxNotas[3]);//********************AGREGADO EL 24-02-25********************////////////
+                    TM_Lobby.lb.GuardarNotasTotales();
                     IWP_Refe.SetActive(false);
                     IWP_Mesh.SetActive(true);
                     IWP_OBJ.SetActive(false);
@@ -648,6 +653,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                                     Tablero_Indicaciones[1].SetActive(true);
                                     M_1[2].GetComponent<Collider>().enabled = false;
                                     M_1[2].SetActive(true);//activar careta de referencia
+                                    TM_Lobby.lb.auxNotas[1]++;//----------------------------aumenta notas para ejercicio 1-----24-02-25
                                 }
                                 else
                                 {
@@ -657,6 +663,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                                         Tablero_Indicaciones[5].SetActive(true);
                                         M_1[5].GetComponent<Collider>().enabled = false;//DEACTIVA EL COLLIDER DE LA REFERENCIA A MANDIL
                                         M_1[5].SetActive(true);//activar MANDIL de referencia
+                                        TM_Lobby.lb.auxNotas[1]++;//----------------------------aumenta notas para ejercicio 1-----24-02-25
                                     }
                                 }
                                 
@@ -678,8 +685,9 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                     {
                         tTemp = 0;
                         tiempoEsperaAux = 2;
+
                         StartCoroutine(TiempoEsperaTarea(2));
-                        
+                        TM_Lobby.lb.AgregarNota(1, TM_Lobby.lb.auxNotas[1]);
                         //TareaCompletada(2);//*********************************************Completar TAREA 2*****************
                     }
                 }
@@ -1120,6 +1128,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
             aSource.goFx("Fallo");
             aSource.goFx("Locu_Fallo");//********************AGREGADO EL 27-08-24********************////////////
             Debug.Log("Desconexion incorrecta");
+            TM_Lobby.lb.auxNotas[3]++;
         }
         
     }

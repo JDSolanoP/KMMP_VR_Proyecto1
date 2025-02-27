@@ -11,6 +11,7 @@ public class Lista_Tareas_Controller : MonoBehaviour
     public int TareaActual;
     public int totalTareas;
     public bool tutorial = true;
+    public bool si_login=false;
     public GameObject[] aros_indicadores;
     public bool[] GlobalBool;
     public int[] GlobalInt;
@@ -49,6 +50,8 @@ public class Lista_Tareas_Controller : MonoBehaviour
         if (IniciaFade) FadeIn();
         Debug.Log("Inicia herencia del Start");
         //totalTareas = aSource.VocesSonidos.Length;
+
+        
         StartCoroutine(InicioDeNivel());
     }
 
@@ -100,6 +103,14 @@ public class Lista_Tareas_Controller : MonoBehaviour
     }
     IEnumerator InicioDeNivel()
     {
+        if (si_login)
+        {
+            //audio inicial
+            while (TM_Lobby.lb.si_inicioModulo == false)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+        }
         yield return new WaitForSeconds(0.5f);
         //tiempo de espera del audio inicial(tarea = 0)
         StartCoroutine(CargarReproducir_Clip());

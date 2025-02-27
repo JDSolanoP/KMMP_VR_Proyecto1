@@ -55,6 +55,7 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
     public GameObject[] ElementoPost;
     public bool contactLockerEslingaRefe;
     public Transform pos_enMesa_Revision;
+    public bool si_mt_enTaller;
     
 
     public override void Start()
@@ -80,6 +81,7 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 manosXR[0].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[1];
                 manosXR[1].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[1];
                 */
+                ElementoPost[5].SetActive(false);
                 aSource.PlayMusica(aSource.MusicaSonidos[0].nombre, 0.75f, true);
                 //aSource.MusicaVol(0.75f);//**************************************Sonido Musica Inicial*************
                 aSource.FxVol(1);
@@ -142,7 +144,7 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 break;
             case 2://cuando el mt esta en area interior del taller
                 Tablero_Indicaciones[4].SetActive(false);
-                Tablero_Indicaciones[5].SetActive(true);
+                
                 /*ElementoPost[6].SetActive(true);//cable viento
                 ElementoPost[7].SetActive(true);//agarre viento IZq
                 ElementoPost[8].SetActive(true);//agarre viento der
@@ -157,6 +159,7 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 }
                 break;
             case 3://cuando la mt esta en su posicion final
+                Tablero_Indicaciones[5].SetActive(false);
                 aSource.goFx("Bien");
                 ElementoPost[0].SetActive(false);//mt refe
                 //ElementoPost[1].SetActive(true);//mt colocada
@@ -171,7 +174,6 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 ElementoPost[13].SetActive(true);//refe control llegada
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
-
                     yield return new WaitForFixedUpdate();
                 }
                 break;
@@ -202,6 +204,7 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 }
                 break;
             case 6://cuando se presiona el boton continuar
+                Muros[1].SetActive(true);///muro de conos de concluciones
                 Muros[2].SetActive(false);
                 Tablero_Indicaciones[8].SetActive(false);//panel conclusiones
                 Tablero_Indicaciones[9].SetActive(true);//panel final
@@ -266,7 +269,7 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 }
                 break;
             case 2://*****MT sale del area esxterior al taller
-                if (contacto_confirmado[confirmarContacto] == false)
+                if (contacto_confirmado[confirmarContacto] == false&&TareaActual==1)
                 {
                     
                     verificarContacto(5);
@@ -359,8 +362,6 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                         {
                             ControlOBJ.GetComponent<Control_Grua_Puente>().bloqueo[i] = false;
                         }
-                        
-                        
                     }
                 }
                     break;
@@ -378,7 +379,6 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                     if (Tablero_Indicaciones[6].activeInHierarchy)
                     {
                         Tablero_Indicaciones[6].SetActive(false);
-
                     }
                 }
                 break;
@@ -440,6 +440,7 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
             Gruas[0].SetActive(false);
             Gruas[1].SetActive(true);
         }
+        AudioManager.aSource.goFx("Boton");
         SiTodoCorrecto();
         //VerificarTodoCorrecto();
     }

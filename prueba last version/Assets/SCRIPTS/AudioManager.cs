@@ -274,11 +274,34 @@ public class AudioManager : MonoBehaviour
                     StartCoroutine(CheckingPlayVoz());//************************************************************07-08-24
                     break;
                 }
-                Debug.Log("playVoz en canal " + VozCanalActual);
-                VozCanalActual++;
-                if (VozCanalActual >= VocesSourceCanal.Length) { VozCanalActual = 0; }
-                Debug.Log("playVoz en canal a usar " + VozCanalActual);
+                else {
+                    if (VocesSourceCanal[VozCanalActual].isPlaying == true)
+                    {
+                        if (VozCanalActual == 0)
+                        {
+                            VocesSourceCanal[1].clip = s.clip;
+                            VocesSourceCanal[1].Play();
+                            isVozPlay = true;
+                            Debug.Log("Forzado playVoz en canal " + VozCanalActual + " para sonido " + s.nombre);
+                            StartCoroutine(CheckingPlayVoz());//************************************************************07-08-24
+                            break;
+                        }
+                        else
+                        {
+                            VocesSourceCanal[0].clip = s.clip;
+                            VocesSourceCanal[0].Play();
+                            isVozPlay = true;
+                            Debug.Log("Forzado playVoz en canal 0 para sonido " + s.nombre);
+                            StartCoroutine(CheckingPlayVoz());//************************************************************07-08-24
+                            break;
+                        }
+                    }
+                }
             }
+            Debug.Log("playVoz en canal " + VozCanalActual);
+            VozCanalActual++;
+            if (VozCanalActual >= VocesSourceCanal.Length) { VozCanalActual = 0; }
+            Debug.Log("playVoz en canal a usar " + VozCanalActual);
         }
     }
     /*public void playFxLoop(string nombre)

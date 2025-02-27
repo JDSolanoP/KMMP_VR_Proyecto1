@@ -8,11 +8,26 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: RGB_0-0-178
-    second: {fileID: 46701251979410085, guid: 3d5526b62ff1bd44cbaffa09b5de90fb, type: 3}
+    second: {fileID: -6397280900630745571, guid: 5cf9f7cfab7a83340b1132f231575698, type: 3}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RGB_0-178-178
+    second: {fileID: -6397280900630745571, guid: 5cf9f7cfab7a83340b1132f231575698, type: 3}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: RGB_178-0-178
+    second: {fileID: 2063694829907381626, guid: 3d5526b62ff1bd44cbaffa09b5de90fb, type: 3}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RGB_190-188-186
+    second: {fileID: -6397280900630745571, guid: 5cf9f7cfab7a83340b1132f231575698, type: 3}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RGB_235-235-235
     second: {fileID: -6397280900630745571, guid: 5cf9f7cfab7a83340b1132f231575698, type: 3}
   - first:
       type: UnityEngine:Material

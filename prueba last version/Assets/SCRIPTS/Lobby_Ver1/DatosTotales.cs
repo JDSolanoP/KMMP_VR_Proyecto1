@@ -7,6 +7,10 @@ public class DatosTotales
 {
     public List<DatosUsuarios> DUs=null;
     public DateTime ultimaSesion;
+    public string ultimoUsuario;
+    public float notaMin;
+    public float notaMax;
+    public List<string> ListaSupervisores=null;
     public DatosTotales() 
     {
         //DUs = new List<DatosUsuarios>();
@@ -18,5 +22,7 @@ public class DatosTotales
             DUs.Add(usu);
         }
         ultimaSesion = DateTime.Now;
+        notaMin = tmo.notaMinAprobatoria;
+        notaMax = tmo.notaMaxAprobatoria;
     }
 }
