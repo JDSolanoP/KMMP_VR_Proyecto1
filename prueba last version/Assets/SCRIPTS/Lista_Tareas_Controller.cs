@@ -11,7 +11,7 @@ public class Lista_Tareas_Controller : MonoBehaviour
     public int TareaActual;
     public int totalTareas;
     public bool tutorial = true;
-    public bool si_login=false;
+    public bool si_login=false;//01-03-25//espera la pausa
     public GameObject[] aros_indicadores;
     public bool[] GlobalBool;
     public int[] GlobalInt;

@@ -238,7 +238,6 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 //Debug.Log("Se esta reproduciendo audio");
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
-
                     yield return new WaitForFixedUpdate();
                 }
                 break;

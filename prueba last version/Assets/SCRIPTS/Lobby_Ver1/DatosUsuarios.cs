@@ -10,12 +10,16 @@ public class DatosUsuarios
     public DateTime anteriorSesion;//cuando se da a login en una anterior vez
     public DateTime inicioSesion;//cuando se da a login
     public DateTime ultimaSesion;//ultima ves desarrollado el modulo
+    public string fechaAnteriorSesion;
+    public string fechaInicioSesion;
     public string fechaUltimaSesion;
     public float[] notas;//segunda fase
     public bool si_Supervisor;//verifica si tiene acceso a buscar resultados de otros usuarios
     public DatosUsuarios(TM_Lobby tmo) 
     {
-        fechaUltimaSesion= inicioSesion.ToString("dd-MM-yyyy  HH:mm");
+        fechaAnteriorSesion= anteriorSesion.ToString("dd-MM-yyyy  HH:mm");
+        fechaInicioSesion = inicioSesion.ToString("dd-MM-yyyy  HH:mm");
+        fechaUltimaSesion = ultimaSesion.ToString("dd-MM-yyyy  HH:mm");
         notas =new float[tmo.nTareas];
         for(int i = 0; i < tmo.nTareas; i++)
         {
@@ -24,6 +28,7 @@ public class DatosUsuarios
         DNIs = tmo.auxDU.DNIs;
         ultimaSesion = tmo.auxDU.ultimaSesion;
         inicioSesion=tmo.auxDU.inicioSesion;
+        anteriorSesion = tmo.auxDU.anteriorSesion;
         nombres = tmo.auxDU.nombres;
     }public DatosUsuarios(string dni, string nombre,bool supervisor,int nt)
     {
