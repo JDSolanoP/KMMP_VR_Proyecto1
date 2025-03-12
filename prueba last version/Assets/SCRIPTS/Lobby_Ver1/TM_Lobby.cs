@@ -168,16 +168,24 @@ public class TM_Lobby : MonoBehaviour
                 {
                     if (primeracontada == false)
                     {
-                        if (du.inicioSesion.ToString("dd-MM-yyyy") != du.anteriorSesion.ToString("dd-MM-yyyy"))//distinto dia de inicio
+                        /*if (du.inicioSesion.ToString("dd-MM-yyyy") != du.anteriorSesion.ToString("dd-MM-yyyy"))//distinto dia de inicio
                         {
                             auxDU.anteriorSesion = du.inicioSesion;
+                        Debug.Log("guardado fecha de sesion anterior - "+ du.anteriorSesion.ToString("dd-MM-yyyy"));
                         }
                         else
                         {
-                            auxDU.anteriorSesion = du.anteriorSesion;
-                        }
-                        auxDU.inicioSesion = DateTime.Now;
+                            
+                        }*/
+                    auxDU.anteriorSesion = du.anteriorSesion;
+                    auxDU.fechaAnteriorSesion = du.anteriorSesion.ToString("dd-MM-yyyy");
+                    auxDU.fechaInicioSesion = du.inicioSesion.ToString("dd-MM-yyyy");
+                    auxDU.fechaUltimaSesion = du.ultimaSesion.ToString("dd-MM-yyyy");
+                    auxDU.inicioSesion = DateTime.Now;
                     auxDU.ultimaSesion = DateTime.Now;
+                    auxDU.fechaAnteriorSesion = du.anteriorSesion.ToString("dd-MM-yyyy");
+                    auxDU.fechaInicioSesion = du.inicioSesion.ToString("dd-MM-yyyy");
+                    auxDU.fechaUltimaSesion = du.ultimaSesion.ToString("dd-MM-yyyy");
                     auxDU = du;//
                         auxDU.DNIs = du.DNIs;
                         auxDU.nombres = du.nombres;
@@ -272,6 +280,9 @@ public class TM_Lobby : MonoBehaviour
                 dni.anteriorSesion= auxDU.anteriorSesion;
                 dni.inicioSesion = auxDU.inicioSesion;
                 dni.ultimaSesion = auxDU.ultimaSesion;
+               dni.fechaAnteriorSesion = auxDU.fechaAnteriorSesion;
+                dni.fechaInicioSesion = auxDU.fechaInicioSesion;
+                dni.fechaUltimaSesion = auxDU.fechaUltimaSesion;
                 for (int i = 0; i < nota.Length; i++)
                 {
                     dni.notas[i] = auxDU.notas[i];
@@ -288,7 +299,11 @@ public class TM_Lobby : MonoBehaviour
     public void CargarDatos(TM_Lobby slm)
     {
         DTs = GestionUsuariosManager.CargarDatosUsuarios(this);
-        
+        if (DU != null)
+        {
+            Debug.Log("Limpiando DU");
+            DU.Clear();
+        }
         foreach (DatosUsuarios du in DTs.DUs)
         {
             DU.Add(du);
@@ -309,7 +324,7 @@ public class TM_Lobby : MonoBehaviour
         infoTotalExport+="\nFecha de Reporte : "+DateTime.Now+
             "\n\n***RESULTADOS***\n";
         Debug.Log("Creando Reporte");
-        foreach (DatosUsuarios du in DTs.DUs)
+        foreach (DatosUsuarios du in DU)
         {
             if (du.nombres != "admin")
             {
@@ -521,6 +536,7 @@ public class TM_Lobby : MonoBehaviour
                         
                         GuardarDatos();
                         actualizarSupervisor();
+                        CargarDatos(this);
                         CreaReporte();
                         GestionUsuariosManager.exportTxt(NombreProyecto, infoTotalExport);
                         break;
@@ -613,13 +629,11 @@ public class TM_Lobby : MonoBehaviour
                         contadorMostrarUsuario = 0;
                         break;
                     case 8://asignar nuevo nivel de acceso
-                        if (auxDU.si_Supervisor) 
-                        {
                             auxDU.si_Supervisor=!auxDU.si_Supervisor;
-                        }
                         Frase_Txt.text = "Usuario : "+auxUsuario+"\nNivel de Acceso Cambiado";
                         GuardarDatos(auxUsuario);
                         actualizarSupervisor();
+                        CargarDatos(this);
                         foreach (DatosUsuarios du in DU)
                         {
                             if (auxUsuario == du.DNIs)
@@ -644,6 +658,9 @@ public class TM_Lobby : MonoBehaviour
             {
                 auxDU = du;
                 auxDU.ultimaSesion = DateTime.Now;
+                auxDU.fechaAnteriorSesion = du.anteriorSesion.ToString("dd-MM-yyyy");
+                auxDU.fechaInicioSesion = du.inicioSesion.ToString("dd-MM-yyyy");
+                auxDU.fechaUltimaSesion = du.ultimaSesion.ToString("dd-MM-yyyy");
             }
         }
         GuardarDatos(ActualUsuario);
@@ -944,17 +961,17 @@ public class TM_Lobby : MonoBehaviour
         bool encontrado=false;
         foreach (DatosUsuarios du in DU)
         {
-            if (du.DNIs == d)
+            if (du.DNIs == d&&du.nombres!="admin")
             {
                 encontrado = true;
                 auxUsuario = d;
                 auxDU = du;
-                Frase_Txt.text = "auxDU :"+auxDU.DNIs+" Usuario Encontrado : \n" + d;
+                Frase_Txt.text = "Busqueda exitosa\n"+auxDU.DNIs+" : Usuario Encontrado";
             }
         }
         if (encontrado == false)
         {
-            Frase_Txt.text = "No se encontro Usuario : \n" + d;
+            Frase_Txt.text = "No se encontro Usuario:\n" + d;
         }
         return encontrado;
     }
