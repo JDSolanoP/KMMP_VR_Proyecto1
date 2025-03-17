@@ -754,11 +754,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e5b2022c51c3614e92d83fe227141df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nombre_funcion: 
   aSource: {fileID: 0}
   TareaActual: 0
   totalTareas: 10
   tutorial: 1
+  si_login: 0
   aros_indicadores: []
+  GlobalBool: 
+  GlobalInt: 
+  GlobalFloat: []
   SiFadeActivo: 0
   rend: {fileID: 770245577}
   fadeColor: {r: 0, g: 0, b: 0, a: 0}
@@ -773,6 +778,7 @@ MonoBehaviour:
   - {fileID: 1301734541}
   - {fileID: 1610147915}
   - {fileID: 1224807397}
+  contacto_confirmado: 
   URefe: []
   ObjRefe:
   - {fileID: 815409433}
@@ -1000,7 +1006,7 @@ Transform:
   m_GameObject: {fileID: 145895769}
   serializedVersion: 2
   m_LocalRotation: {x: 0.22070788, y: -0.10085368, z: -0.030775141, w: 0.9696234}
-  m_LocalPosition: {x: 1.6705, y: 0.2406, z: -0.1759}
+  m_LocalPosition: {x: 1.6669, y: 0.2333, z: -0.1606}
   m_LocalScale: {x: 0.015, y: 0.04, z: 0.02}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4898,6 +4904,9 @@ MonoBehaviour:
   inGravKinec: 0
   ActivarMargenMov: 0
   margenDemovimiento: {x: 0, y: 0, z: 0}
+  si_otroSfx: 0
+  nombreSfx: 
+  Agarrable: 0
 --- !u!135 &641964063
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -5651,6 +5660,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3057548168057557262, guid: ef3aa766e001df64687f0a9ec8cf0138, type: 3}
+      propertyPath: m_Radius
+      value: 0.045
+      objectReference: {fileID: 0}
     - target: {fileID: 3430811796798898455, guid: ef3aa766e001df64687f0a9ec8cf0138, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.157
@@ -5792,6 +5805,9 @@ MonoBehaviour:
   inGravKinec: 0
   ActivarMargenMov: 0
   margenDemovimiento: {x: 0, y: 0, z: 0}
+  si_otroSfx: 0
+  nombreSfx: 
+  Agarrable: 0
 --- !u!135 &781387119
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -9418,7 +9434,7 @@ Transform:
   m_GameObject: {fileID: 1129696372}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7027001, y: -0.07882031, z: 0.68427384, w: -0.17823991}
-  m_LocalPosition: {x: -2.3769, y: -1.4668, z: 1.6808}
+  m_LocalPosition: {x: -2.377, y: -1.504, z: 1.362}
   m_LocalScale: {x: 0.33333334, y: 0.33333337, z: 0.33333334}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9972,15 +9988,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f678ae2a699b259498da373251990e88, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.3769
+      value: -2.377
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f678ae2a699b259498da373251990e88, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.4668
+      value: -1.504
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f678ae2a699b259498da373251990e88, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.6808
+      value: 1.362
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f678ae2a699b259498da373251990e88, type: 3}
       propertyPath: m_LocalRotation.w
@@ -11501,15 +11517,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f678ae2a699b259498da373251990e88, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.0590012
+      value: -2.059
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f678ae2a699b259498da373251990e88, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.7681026
+      value: -1.7286
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f678ae2a699b259498da373251990e88, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.1001027
+      value: 2.7983
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f678ae2a699b259498da373251990e88, type: 3}
       propertyPath: m_LocalRotation.w
@@ -13619,7 +13635,7 @@ Transform:
   m_GameObject: {fileID: 1694380597}
   serializedVersion: 2
   m_LocalRotation: {x: 0.99496305, y: -4.547473e-13, z: 2.2737365e-13, w: 0.10024215}
-  m_LocalPosition: {x: -2.0590012, y: -1.7681013, z: 3.1001015}
+  m_LocalPosition: {x: -2.059, y: -1.7286, z: 2.7983}
   m_LocalScale: {x: 0.33333334, y: 0.33333337, z: 0.33333334}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -14774,37 +14790,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6990219147026735634, guid: 9ad2d57e0ab8bc04bac45f0ead565393, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.181
+      objectReference: {fileID: 0}
     - target: {fileID: 6990219147115412550, guid: 9ad2d57e0ab8bc04bac45f0ead565393, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.345
+      value: -0.406
       objectReference: {fileID: 0}
     - target: {fileID: 6990219147115412550, guid: 9ad2d57e0ab8bc04bac45f0ead565393, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.737
+      value: -0.664
       objectReference: {fileID: 0}
     - target: {fileID: 6990219147115412550, guid: 9ad2d57e0ab8bc04bac45f0ead565393, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.066
+      value: -0.081
       objectReference: {fileID: 0}
     - target: {fileID: 6990219147697333401, guid: 9ad2d57e0ab8bc04bac45f0ead565393, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.089
+      value: -0.15
       objectReference: {fileID: 0}
     - target: {fileID: 6990219147697333401, guid: 9ad2d57e0ab8bc04bac45f0ead565393, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.733
+      value: -0.66
       objectReference: {fileID: 0}
     - target: {fileID: 6990219147697333401, guid: 9ad2d57e0ab8bc04bac45f0ead565393, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.05
+      value: -0.065
       objectReference: {fileID: 0}
     - target: {fileID: 6990219147884064026, guid: 9ad2d57e0ab8bc04bac45f0ead565393, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.208
+      value: 1.313
       objectReference: {fileID: 0}
     - target: {fileID: 6990219147884064026, guid: 9ad2d57e0ab8bc04bac45f0ead565393, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6.004
+      value: 5.973
       objectReference: {fileID: 0}
     - target: {fileID: 7197419795768680132, guid: 9ad2d57e0ab8bc04bac45f0ead565393, type: 3}
       propertyPath: m_Name
@@ -14981,6 +15001,18 @@ PrefabInstance:
     - target: {fileID: 7388302773716325486, guid: 9ad2d57e0ab8bc04bac45f0ead565393, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7388302773827129473, guid: 9ad2d57e0ab8bc04bac45f0ead565393, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7388302773827129473, guid: 9ad2d57e0ab8bc04bac45f0ead565393, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7388302773827129473, guid: 9ad2d57e0ab8bc04bac45f0ead565393, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.012
       objectReference: {fileID: 0}
     - target: {fileID: 7388302773827129477, guid: 9ad2d57e0ab8bc04bac45f0ead565393, type: 3}
       propertyPath: m_Enabled
@@ -15507,8 +15539,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.009, y: 0.005000199, z: 0.0075000986}
-  m_Center: {x: -4.656613e-10, y: -0.0000000018626451, z: -0.0033486013}
+  m_Size: {x: 0.009, y: 0.004546808, z: 0.007500099}
+  m_Center: {x: -3.973643e-10, y: -0.00022669818, z: -0.0033486013}
 --- !u!114 &1808423408
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15533,6 +15565,9 @@ MonoBehaviour:
   inGravKinec: 0
   ActivarMargenMov: 0
   margenDemovimiento: {x: 0, y: 0, z: 0}
+  si_otroSfx: 0
+  nombreSfx: 
+  Agarrable: 0
 --- !u!1 &1810724868
 GameObject:
   m_ObjectHideFlags: 0
@@ -15894,6 +15929,9 @@ MonoBehaviour:
   inGravKinec: 0
   ActivarMargenMov: 0
   margenDemovimiento: {x: 0, y: 0, z: 0}
+  si_otroSfx: 0
+  nombreSfx: 
+  Agarrable: 0
 --- !u!1 &1896969729
 GameObject:
   m_ObjectHideFlags: 0
@@ -17009,6 +17047,9 @@ MonoBehaviour:
   inGravKinec: 0
   ActivarMargenMov: 0
   margenDemovimiento: {x: 0, y: 0, z: 0}
+  si_otroSfx: 0
+  nombreSfx: 
+  Agarrable: 0
 --- !u!1 &2067720367
 GameObject:
   m_ObjectHideFlags: 0

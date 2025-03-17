@@ -311,7 +311,6 @@ public class TM_Lobby : MonoBehaviour
         Transferir_Usuarios();//***Desde el txt a lista auxiliar
         Debug.Log("Datos Cargados");
     }
-
     public void CreaReporte()//***Crea report en txt de TODOS los usuario//***********25-02-25*********
     {
         infoTotalExport = "*****Reporte de Usuarios del Módulo "
