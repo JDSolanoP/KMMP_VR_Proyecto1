@@ -6,7 +6,9 @@ using UnityEngine;
 public class Return_Pos0 : MonoBehaviour
 {
     public Vector3 Pos0;
+    public Vector3 auxPos0;
     public Vector3 Rot0;
+    public Vector3 auxRot0;
     public Vector3 LocalPos0;
     public Vector3 LocalRot0;
     public bool enPos0=true;
@@ -15,6 +17,7 @@ public class Return_Pos0 : MonoBehaviour
     public float tiempoDeEspera =500;
     public float contador;
     GameObject NivelDeReferencia;
+    public bool usarAuxPos0=false;
     public bool inGravKinec = false;
     public bool ActivarMargenMov = false;
     public Vector3 margenDemovimiento;
@@ -31,8 +34,8 @@ public class Return_Pos0 : MonoBehaviour
             margenDemovimiento = new Vector3(100,100,100);
         }
         //NivelDeReferencia = GameObject.FindGameObjectWithTag("Ground");
-        Pos0=this.gameObject.transform.position;
-        Rot0=this.gameObject.transform.eulerAngles;
+        auxPos0=Pos0=this.gameObject.transform.position;
+        auxRot0=Rot0 = this.gameObject.transform.eulerAngles;
         LocalPos0 = this.gameObject.transform.localPosition;
         LocalRot0 = this.gameObject.transform.localEulerAngles;
     }
@@ -100,8 +103,16 @@ public class Return_Pos0 : MonoBehaviour
         //Debug.Log("REpos "+this.gameObject.name);
         enPos0= true;
         //this.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        this.gameObject.transform.position = Pos0;
-        this.gameObject.transform.eulerAngles = Rot0;
+        if (usarAuxPos0 == false) {
+            this.gameObject.transform.position = Pos0;
+            this.gameObject.transform.eulerAngles = Rot0;
+        }
+        else
+        {
+            this.gameObject.transform.position = auxPos0;
+            this.gameObject.transform.eulerAngles = auxRot0;
+        }
+        
         this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
         this.gameObject.GetComponent<Rigidbody>().useGravity = false;
         if (inGravKinec == false)

@@ -13,6 +13,7 @@ public class TM_Lobby : MonoBehaviour
     public static TM_Lobby lb;
 
     public Lista_Tareas_Controller ltc;
+    public bool ParaPC=false;
     public string NombreProyecto;
     public bool[] contacto_confirmado;
     public GameObject[] objs;
@@ -70,6 +71,7 @@ public class TM_Lobby : MonoBehaviour
     //***************FIN DE DATOS DE USUARIOS*********************************
 
 
+
     private void Awake()
     {
         if (lb != null && lb != this)
@@ -99,7 +101,7 @@ public class TM_Lobby : MonoBehaviour
     }
     private void Start()
     {
-        //GUI_Panel[4].SetActive(false);//panel de informacion
+        StartCoroutine(Locu_Lobby());
         for(int i = 0; i < btnPanel.Length; i++)
         {
             btnPanel[i].SetActive(false);
@@ -122,15 +124,16 @@ public class TM_Lobby : MonoBehaviour
         foreach (DatosUsuarios du in DTs.DUs)
         {
             listaDni.Add(du.DNIs);
-            du.fechaUltimaSesion= du.ultimaSesion.ToString("dd-MM-yyyy  HH:mm");
-            du.fechaInicioSesion = du.inicioSesion.ToString("dd-MM-yyyy  HH:mm");
-            du.fechaAnteriorSesion = du.anteriorSesion.ToString("dd-MM-yyyy  HH:mm");
+            du.fechaUltimaSesion= du.ultimaSesion.ToString("dd-MM-yyyy HH:mm");
+            du.fechaInicioSesion = du.inicioSesion.ToString("dd-MM-yyyy HH:mm");
+            du.fechaAnteriorSesion = du.anteriorSesion.ToString("dd-MM-yyyy HH:mm");
+            du.fechaDesarrolloSesion = du.desarrolloSesion.ToString("dd-MM-yyyy HH:mm");
             nUsuariosTotal++;
             if (du.si_Supervisor == true)
             {
                 listaSupervisores.Add(du.DNIs);
             }
-            Debug.Log("dni: " + du.DNIs + " -fecha: " + du.ultimaSesion.ToString("dd-MM-yyyy  HH:mm")+""+du.si_Supervisor);
+            Debug.Log("dni: " + du.DNIs + " -fecha: " + du.ultimaSesion.ToString("dd-MM-yyyy HH:mm")+""+du.si_Supervisor);
             // mostrarNotas(du.DNIs);
             //CreaReporte();
             int a = listaDni.Count;
@@ -178,14 +181,14 @@ public class TM_Lobby : MonoBehaviour
                             
                         }*/
                     auxDU.anteriorSesion = du.anteriorSesion;
-                    auxDU.fechaAnteriorSesion = du.anteriorSesion.ToString("dd-MM-yyyy");
-                    auxDU.fechaInicioSesion = du.inicioSesion.ToString("dd-MM-yyyy");
-                    auxDU.fechaUltimaSesion = du.ultimaSesion.ToString("dd-MM-yyyy");
+                    auxDU.fechaAnteriorSesion = du.anteriorSesion.ToString("dd-MM-yyyy HH:mm");
+                    auxDU.fechaInicioSesion = du.inicioSesion.ToString("dd-MM-yyyy HH:mm");
+                    auxDU.fechaUltimaSesion = du.ultimaSesion.ToString("dd-MM-yyyy HH:mm");
                     auxDU.inicioSesion = DateTime.Now;
                     auxDU.ultimaSesion = DateTime.Now;
-                    auxDU.fechaAnteriorSesion = du.anteriorSesion.ToString("dd-MM-yyyy");
-                    auxDU.fechaInicioSesion = du.inicioSesion.ToString("dd-MM-yyyy");
-                    auxDU.fechaUltimaSesion = du.ultimaSesion.ToString("dd-MM-yyyy");
+                    auxDU.fechaAnteriorSesion = du.anteriorSesion.ToString("dd-MM-yyyy HH:mm");
+                    auxDU.fechaInicioSesion = du.inicioSesion.ToString("dd-MM-yyyy HH:mm");
+                    auxDU.fechaUltimaSesion = du.ultimaSesion.ToString("dd-MM-yyyy HH:mm");
                     auxDU = du;//
                         auxDU.DNIs = du.DNIs;
                         auxDU.nombres = du.nombres;
@@ -229,7 +232,17 @@ public class TM_Lobby : MonoBehaviour
         btnPanel[3].SetActive(true);
         if (auxDU.si_Supervisor == true)
         {
-            btnPanel[4].SetActive(true);
+            if (ParaPC == true)
+            {
+                btnPanel[4].SetActive(true);//exportar
+                btnPanel[12].SetActive(false);//borrar datos
+            }
+            else
+            {
+                btnPanel[12].SetActive(true);//borrar datos
+                btnPanel[4].SetActive(false);//exportar
+            }
+            //btnPanel[4].SetActive(true);
             btnPanel[5].SetActive(true);
             btnPanel[6].SetActive(true);
             btnPanel[7].SetActive(false);
@@ -280,9 +293,11 @@ public class TM_Lobby : MonoBehaviour
                 dni.anteriorSesion= auxDU.anteriorSesion;
                 dni.inicioSesion = auxDU.inicioSesion;
                 dni.ultimaSesion = auxDU.ultimaSesion;
-               dni.fechaAnteriorSesion = auxDU.fechaAnteriorSesion;
+                dni.desarrolloSesion = auxDU.desarrolloSesion;
+                dni.fechaAnteriorSesion = auxDU.fechaAnteriorSesion;
                 dni.fechaInicioSesion = auxDU.fechaInicioSesion;
                 dni.fechaUltimaSesion = auxDU.fechaUltimaSesion;
+                dni.fechaDesarrolloSesion = auxDU.fechaDesarrolloSesion;//Agregado el 18-03-25
                 for (int i = 0; i < nota.Length; i++)
                 {
                     dni.notas[i] = auxDU.notas[i];
@@ -311,7 +326,7 @@ public class TM_Lobby : MonoBehaviour
         Transferir_Usuarios();//***Desde el txt a lista auxiliar
         Debug.Log("Datos Cargados");
     }
-    public void CreaReporte()//***Crea report en txt de TODOS los usuario//***********25-02-25*********
+     public void CreaReporte()//***Crea report en txt de TODOS los usuario//***********25-02-25*********
     {
         infoTotalExport = "*****Reporte de Usuarios del Módulo "
             +NombreProyecto+"*****\n***Credits***\n" +
@@ -327,8 +342,8 @@ public class TM_Lobby : MonoBehaviour
         {
             if (du.nombres != "admin")
             {
-                infoTotalExport += "\nDNI : " + du.DNIs;
-                du.fechaUltimaSesion = du.ultimaSesion.ToString("dd-MM-yyyy  HH:mm");
+                infoTotalExport += "\nIdentificación : " + du.DNIs;
+                du.fechaUltimaSesion = du.ultimaSesion.ToString("dd-MM-yyyy HH:mm");
                  if (du.si_Supervisor)
                 {
                     infoTotalExport += "\nNivel de Acceso : Supervisor";
@@ -346,24 +361,35 @@ public class TM_Lobby : MonoBehaviour
                 {
                     infoTotalExport += "\nAnterior Fecha de Sesión : No accedió anteriormente";
                 }
-                infoTotalExport += "\nÚltima Fecha de Desarrollo de Módulo : " + du.ultimaSesion.ToString("dd-MM-yyyy HH:mm");
-                infoTotalExport += "\nCalificaciones:";
-            
-                //Debug.Log("dni: " + du.DNIs + " -fecha: " + du.ultimaSesion.ToString("dd-MM-yyyy  HH:mm"));
-                for (int i = 0; i < nTareas; i++)
+                infoTotalExport += "\nÚltima Sesión de Módulo : " + du.ultimaSesion.ToString("dd-MM-yyyy HH:mm");
+                
+                if(du.desarrolloSesion != null && du.desarrolloSesion.ToString("dd-MM-yyyy HH:mm") != "01-01-0001 00:00")
                 {
-                    if (si_binario)
+                    infoTotalExport += "\nÚltima Fecha de Desarrollo de Módulo : " + du.desarrolloSesion.ToString("dd-MM-yyyy HH:mm");
+                    infoTotalExport += "\nCalificaciones:";
+
+                    //Debug.Log("dni: " + du.DNIs + " -fecha: " + du.ultimaSesion.ToString("dd-MM-yyyy  HH:mm"));
+                    for (int i = 0; i < nTareas; i++)
                     {
-                        if (du.notas[i] == 0) { infoTotalExport += "\nEjercicio "+(i+1)+" : Aprobado"; }
+                        if (si_binario)
+                        {
+                            if (du.notas[i] == 0) { infoTotalExport += "\nEjercicio " + (i + 1) + " : Aprobado"; }
+                            else
+                            {
+                                infoTotalExport += "\nEjercicio " + (i + 1) + " : Desaprobado";
+                            }
+                        }
                         else
                         {
-                            infoTotalExport += "\nEjercicio " + (i+1) + " : Desaprobado";
+                            infoTotalExport += "\nnota " + (i + 1) + " : " + du.notas[i];
                         }
                     }
-                    else {
-                        infoTotalExport += "\nnota " + (i+1) + " : " + du.notas[i];
-                    }
                 }
+                else
+                {
+                    infoTotalExport += "\nÚltima Fecha de Desarrollo de Módulo : No se desarrollo el módulo anteriormente";
+                }
+                
                 infoTotalExport += "\n";
             }
         }
@@ -501,10 +527,12 @@ public class TM_Lobby : MonoBehaviour
                 }
                 else
                 {
-                    GuardarDatos(ActualUsuario);
+                    if (ActualUsuario != null && ActualUsuario != "")
+                    {
+                        GuardarDatos(ActualUsuario);
+                    }
                     Application.Quit();
                 }
-
                 break;
             case 2://ver notas y iniciar
                 if (auxcontacto == 0)//iniciar
@@ -540,15 +568,24 @@ public class TM_Lobby : MonoBehaviour
                         GestionUsuariosManager.exportTxt(NombreProyecto, infoTotalExport);
                         break;
                     case 1://**borra data
+                        GUI_Panel[4].SetActive(false);
+                        GUI_Panel[2].SetActive(false);
                         GestionUsuariosManager.BorrarDatosUsuarios(this);
+                        Ya_Existen_Datos=false;
+                        ltc.IrEscenaAsincron(0);
                         break;
                     case 2://**Buscar
+                        GUI_Panel[4].SetActive(false);
                         Frase_Txt.text = "Ingrese identificación de usuario a Buscar:";
+                        CodigoAcceso = "";
+                        Panel_Txt.text = CodigoAcceso;
+                        GUI_Panel[2].SetActive(false);
+                        GUI_Panel[3].SetActive(false);
                         btnPanel[0].SetActive(true);//panel numerico
                         btnPanel[2].SetActive(false);//iniciar
                         btnPanel[3].SetActive(false);//ver notas
                         btnPanel[8].SetActive(true);//cancelar
-                        btnPanel[4].SetActive(false);//btn exportar
+                        btnPanel[12].SetActive(false);//borrar datos
                         btnPanel[5].SetActive(false);//buscar
                         btnPanel[9].SetActive(false);//buscar usuario
                         btnPanel[6].SetActive(false);//mostrar todo
@@ -560,7 +597,8 @@ public class TM_Lobby : MonoBehaviour
                         {
                             mostrarGUI(auxDU);
                             GUI_Panel[2].SetActive(true);
-                            btnPanel[7].SetActive(true);
+                            if (ParaPC == true)
+                                btnPanel[7].SetActive(true);
                         }
                         actualizarSupervisor();
                         foreach (DatosUsuarios du in DU)
@@ -583,14 +621,25 @@ public class TM_Lobby : MonoBehaviour
                         btnPanel[2].SetActive(true);//iniciar
                         btnPanel[3].SetActive(true);//ver notas
                         btnPanel[1].SetActive(false);//login
-                        btnPanel[4].SetActive(true);//btn exportar
+                        if (ParaPC == true)
+                        {
+                            btnPanel[4].SetActive(true);//exportar
+                            btnPanel[12].SetActive(false);//borrar datos
+                        }
+                        else
+                        {
+                            btnPanel[12].SetActive(true);//borrar datos
+                            btnPanel[4].SetActive(false);//exportar
+                        }
                         btnPanel[5].SetActive(true);//buscar usuario
                         btnPanel[9].SetActive(false);//accion buscar
                         btnPanel[6].SetActive(true);//mostrar todo
                         btnPanel[7].SetActive(false);//actualizar
                         GUI_Panel[2].SetActive(false);//panel total de notas canvas
+                        GUI_Panel[4].SetActive(false);//panel BORRAR DATOS canvas
                         btnPanel[10].SetActive(false);//anterior
                         btnPanel[11].SetActive(false);//siguiente
+                        actualizarSupervisor();
                         break;
                     case 5://atras
                         contadorMostrarUsuario--;
@@ -645,6 +694,52 @@ public class TM_Lobby : MonoBehaviour
                         Debug.Log(auxUsuario + " - " + auxDU.DNIs);
                         mostrarGUI(auxDU);
                         break;
+                        case 9:
+                            GUI_Panel[4].SetActive(true);
+                            GUI_Panel[2].SetActive(false);
+                        Frase_Txt.text = "BORRADO TOTAL DE DATOS DEL MÓDULO";
+                        GUI_Panel[2].SetActive(false);
+                        GUI_Panel[3].SetActive(false);
+                        btnPanel[0].SetActive(false);//panel numerico
+                        btnPanel[2].SetActive(false);//iniciar
+                        btnPanel[3].SetActive(false);//ver notas
+                        btnPanel[8].SetActive(true);//cancelar
+                        btnPanel[12].SetActive(false);//borrar datos
+                        btnPanel[5].SetActive(false);//buscar
+                        btnPanel[9].SetActive(false);//buscar usuario
+                        btnPanel[6].SetActive(false);//mostrar todo
+                        btnPanel[7].SetActive(false);//actualizar
+
+                        break;
+                    case 10:
+                        GUI_Panel[4].SetActive(false);
+                        Frase_Txt.text = "Bienvenido :\n" + ActualUsuario;
+                        btnPanel[8].SetActive(false);//btn atras
+                        GuardarDatos(ActualUsuario);
+                        btnPanel[0].SetActive(false);//panel numerico
+                        btnPanel[2].SetActive(true);//iniciar
+                        btnPanel[3].SetActive(true);//ver notas
+                        btnPanel[1].SetActive(false);//login
+                        if (ParaPC == true)
+                        {
+                            btnPanel[4].SetActive(true);//exportar
+                            btnPanel[12].SetActive(false);//borrar datos
+                        }
+                        else
+                        {
+                            btnPanel[12].SetActive(true);//borrar datos
+                            btnPanel[4].SetActive(false);//exportar
+                        }
+                        btnPanel[5].SetActive(true);//buscar usuario
+                        btnPanel[9].SetActive(false);//accion buscar
+                        btnPanel[6].SetActive(true);//mostrar todo
+                        btnPanel[7].SetActive(false);//actualizar
+                        GUI_Panel[2].SetActive(false);//panel total de notas canvas
+                        GUI_Panel[4].SetActive(false);//panel BORRAR DATOS canvas
+                        btnPanel[10].SetActive(false);//anterior
+                        btnPanel[11].SetActive(false);//siguiente
+                        actualizarSupervisor();
+                        break;
                 }
                 break;
         }
@@ -657,9 +752,11 @@ public class TM_Lobby : MonoBehaviour
             {
                 auxDU = du;
                 auxDU.ultimaSesion = DateTime.Now;
-                auxDU.fechaAnteriorSesion = du.anteriorSesion.ToString("dd-MM-yyyy");
-                auxDU.fechaInicioSesion = du.inicioSesion.ToString("dd-MM-yyyy");
-                auxDU.fechaUltimaSesion = du.ultimaSesion.ToString("dd-MM-yyyy");
+                auxDU.fechaAnteriorSesion = du.anteriorSesion.ToString("dd-MM-yyyy HH:mm");
+                auxDU.fechaInicioSesion = du.inicioSesion.ToString("dd-MM-yyyy HH:mm");
+                auxDU.fechaUltimaSesion = du.ultimaSesion.ToString("dd-MM-yyyy HH:mm");
+                auxDU.fechaDesarrolloSesion = du.desarrolloSesion.ToString("dd-MM-yyyy HH:mm");
+                auxDU.si_Supervisor=true;
             }
         }
         GuardarDatos(ActualUsuario);
@@ -906,53 +1003,51 @@ public class TM_Lobby : MonoBehaviour
     }
     public void mostrarGUI(DatosUsuarios du)//mostra resultado a nivel de usuario
     {
-        datosU_panel[0].text = "DNI : "+du.DNIs;
-        datosU_panel[1].text = "Fecha de último acceso : \nNo tiene registro";
-        if (du.fechaUltimaSesion != "")
+        datosU_panel[0].text = "Identificación : "+du.DNIs;
+        datosU_panel[1].text = "Fecha de último desarrollo : \nNo tiene registro";
+        GUI_Panel[3].SetActive(false);
+        if (du.fechaDesarrolloSesion != "01-01-0001 00:00")
         {
-            GUI_Panel[3].SetActive(true);
             string auxNota = "Desaprobado";
-            if (du.anteriorSesion!=null&&du.anteriorSesion.ToString("dd-MM-yyyy HH:mm")!="01-01-0001 00:00")
+            if (du.desarrolloSesion!=null&&du.desarrolloSesion.ToString("dd-MM-yyyy HH:mm")!="01-01-0001 00:00")
             {
-                auxNota = du.anteriorSesion.ToString("dd-MM-yyyy HH:mm");
-                Debug.Log(auxNota+" anterior");
-            }
-            else
-            {
-                auxNota = du.ultimaSesion.ToString("dd-MM-yyyy HH:mm");
-                Debug.Log(auxNota + " ultima");
-            }
-            datosU_panel[1].text = "Fecha de último acceso : \n" + auxNota;
-            if (si_binario == false)
-            {
-                for (int i = 0; i < nTareas; i++)
+                auxNota = du.desarrolloSesion.ToString("dd-MM-yyyy HH:mm");
+                datosU_panel[1].text = "Fecha de último desarrollo : \n" + auxNota;
+                GUI_Panel[3].SetActive(true);
+                Debug.Log(auxNota+" desarrollo");
+                if (si_binario == false)
                 {
-                    auxNota = "Desaprobado";
-                    datosU_panel[i + 2].text = " Nota " + (i + 1) + " : " + du.notas[i];
-                    img_bg_nota[i].GetComponent<RawImage>().color = new Color32(255, 0, 28, 255);//color Rojo
-                    if (du.notas[i] >= notaMinAprobatoria)
+                    for (int i = 0; i < nTareas; i++)
                     {
-                        img_bg_nota[i].GetComponent<RawImage>().color = new Color32(73, 168, 80, 255);//color verde
-                        auxNota = "Aprobado";
+                        auxNota = "Desaprobado";
+                        datosU_panel[i + 2].text = " Nota " + (i + 1) + " : " + du.notas[i];
+                        img_bg_nota[i].GetComponent<RawImage>().color = new Color32(255, 0, 28, 255);//color Rojo
+                        if (du.notas[i] >= notaMinAprobatoria)
+                        {
+                            img_bg_nota[i].GetComponent<RawImage>().color = new Color32(73, 168, 80, 255);//color verde
+                            auxNota = "Aprobado";
+                        }
+                        Notas_Txt[i].text = auxNota;//se ve en el recuadro
                     }
-                    Notas_Txt[i].text = auxNota;//se ve en el recuadro
+                }
+                else//*****Metodo de acumulacion de errores: 0 => bien ;mayor A 0 => DESAPROBADO
+                {
+                    for (int i = 0; i < nTareas; i++)
+                    {
+                        auxNota = "Desaprobado";
+                        img_bg_nota[i].GetComponent<RawImage>().color = new Color32(255, 0, 28, 255);//color Rojo
+                        if (du.notas[i] == 0)//cuando no  hay errores
+                        {
+                            img_bg_nota[i].GetComponent<RawImage>().color = new Color32(73, 168, 80, 255);//color verde
+                            auxNota = "Aprobado";
+                        }
+                        datosU_panel[i + 2].text = " Ejercicio " + (i + 1) + " : ";
+                        Notas_Txt[i].text = auxNota;//se ve en el recuadro
+                    }
                 }
             }
-            else//*****Metodo de acumulacion de errores: 0 => bien ;mayor A 0 => DESAPROBADO
-            {
-                for (int i = 0; i < nTareas; i++)
-                {
-                    auxNota = "Desaprobado";
-                    img_bg_nota[i].GetComponent<RawImage>().color = new Color32(255, 0, 28, 255);//color Rojo
-                    if (du.notas[i] == 0)//cuando no  hay errores
-                    {
-                        img_bg_nota[i].GetComponent<RawImage>().color = new Color32(73, 168, 80, 255);//color verde
-                        auxNota = "Aprobado";
-                    }
-                    datosU_panel[i + 2].text = " Ejercicio " + (i + 1) + " : ";
-                    Notas_Txt[i].text = auxNota;//se ve en el recuadro
-                }
-            }
+            
+            
         }
     }
     public bool buscarUsuario(string d)
@@ -965,7 +1060,7 @@ public class TM_Lobby : MonoBehaviour
                 encontrado = true;
                 auxUsuario = d;
                 auxDU = du;
-                Frase_Txt.text = "Busqueda exitosa\n"+auxDU.DNIs+" : Usuario Encontrado";
+                Frase_Txt.text = "Busqueda exitosa\n"+auxDU.DNIs+ "\nUsuario Encontrado";
             }
         }
         if (encontrado == false)
@@ -986,6 +1081,8 @@ public class TM_Lobby : MonoBehaviour
             auxDU.notas[i]=auxNotas[i];
         }
         auxDU.ultimaSesion = DateTime.Now;
+        auxDU.desarrolloSesion = DateTime.Now;
+        auxDU.fechaDesarrolloSesion = auxDU.desarrolloSesion.ToString("dd-MM-yyyy HH:mm");
         auxDU.fechaUltimaSesion = auxDU.ultimaSesion.ToString("dd-MM-yyyy HH:mm");
         actualizarUsuario(ActualUsuario);
     }
@@ -996,5 +1093,15 @@ public class TM_Lobby : MonoBehaviour
         GUI_Panel[2].transform.localPosition = Vector3.zero;
         mostrarGUI(auxDU);
         Debug.Log("moviendo panel de notas");
+    }
+    public IEnumerator Locu_Lobby() 
+    {
+        AudioManager.aSource.goFx("Locu_Lobby",1,false,false);
+        if (Ya_Existen_Datos == false)
+        {
+            yield return new WaitForSeconds(11.25f);
+            AudioManager.aSource.goFx("Locu_Lobby_1", 1, false, false);
+        }
+        
     }
 }

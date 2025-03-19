@@ -715,7 +715,9 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                         if (tiempoEspera <= PernosTiempo[contactoV -1])//cumplido el tiempo de espera
                         {
                             //Debug.Log("Perno" + (contactoV - 1) + "sacado en funcion Cronometro");
+                            iwg.DetectorPerno.SetActive(false);
                             PernosMesh[contactoV-1].SetActive(false);
+                            contacto_confirmado[contactoV + 7] = false;
                             PernosRefe[contactoV-1].SetActive(false);
                             PernosGrab[contactoV - 1].SetActive(true);
                             PernosGrab[contactoV - 1].GetComponent<Return_Pos0>().enabled = false;
@@ -759,7 +761,9 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                         if (tiempoEspera <= PernosTiempo[contactoV-1])//cumplido el tiempo de espera
                         {
                             //Debug.Log("Perno" + (contactoV - 1) + "sacado en funcion Cronometro");
+                            iwg.DetectorPerno.SetActive(false);
                             PernosMesh[contactoV - 1].SetActive(false);
+                            contacto_confirmado[contactoV + 7] = false;
                             PernosRefe[contactoV - 1].SetActive(false);
                             PernosGrab[contactoV - 1].SetActive(true);
                             PernosGrab[contactoV - 1].GetComponent<Return_Pos0>().enabled = false;
@@ -799,7 +803,9 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                         if (tiempoEspera <= PernosTiempo[contactoV-1])//cumplido el tiempo de espera
                         {
                             //Debug.Log("Perno" + (contactoV - 1) + "sacado en funcion Cronometro");
+                            iwg.DetectorPerno.SetActive(false);
                             PernosMesh[contactoV - 1].SetActive(false);
+                            contacto_confirmado[contactoV + 7] = false;
                             PernosRefe[contactoV - 1].SetActive(false);
                             PernosGrab[contactoV - 1].SetActive(true);
                             PernosGrab[contactoV - 1].GetComponent<Return_Pos0>().enabled = false;
@@ -836,8 +842,11 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                         PernosTiempo[1] = 0;
                         if (TiempoPernos <= PernosTiempo[contactoV-1])//cumplido el tiempo de espera
                         {
+
                             //Debug.Log("Perno" + (contactoV - 1) + "sacado en funcion Cronometro");
+                            iwg.DetectorPerno.SetActive(false);
                             PernosMesh[contactoV - 1].SetActive(false);
+                            contacto_confirmado[contactoV + 7] = false;
                             PernosRefe[contactoV - 1].SetActive(false);
                             PernosGrab[contactoV - 1].SetActive(true);
                             PernosGrab[contactoV - 1].GetComponent<Return_Pos0>().enabled = false;

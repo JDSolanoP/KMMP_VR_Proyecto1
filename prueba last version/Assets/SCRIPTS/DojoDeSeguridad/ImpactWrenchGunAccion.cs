@@ -128,7 +128,11 @@ public class ImpactWrenchGunAccion : MonoBehaviour
         {
             if (Cargada == true)
             {
-                DetectorPerno.SetActive(true);
+                if (TmDojo.PernoEnDado == false)
+                {
+                    DetectorPerno.SetActive(true);
+                }
+                
                 AudioManager.aSource.goFx("IWG_Rot01", 1, true, false);///////////////////////////////////////////////////02-08-24
             }
             
