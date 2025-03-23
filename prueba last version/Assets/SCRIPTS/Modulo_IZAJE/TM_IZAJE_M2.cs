@@ -16,7 +16,7 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
     public int contactoIntAux;
     public int contactoIntAux2;
     string NombreAuxAudio;
-    float tiempoEsperaAux;
+    public float tiempoEsperaAux=2;
     /*
      public GameObject[] guantesComplementos;
      public GameObject[] manosXR;
@@ -106,25 +106,27 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 }
                 Saber_Eslinga_Correcta();
                 colocar_Eslinga();
-                yield return new WaitForSeconds(1f);
-                yield return new WaitForSeconds(5f);
-                Tablero_Indicaciones[3].SetActive(true);//panel de conformidad
-                //Debug.Log("Se esta reproduciendo audio");
-
+                //yield return new WaitForSeconds(1f);
+                //yield return new WaitForSecondsRealtime(23f);
+                
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
 
                     yield return new WaitForFixedUpdate();
                 }
-
+                yield return new WaitForSecondsRealtime(23f);
+                Tablero_Indicaciones[3].SetActive(true);//panel de conformidad
+                //Debug.Log("Se esta reproduciendo audio");
+                aSource.goFx("IM2_Locu01");
                 break;
             case 1://cuando presiona el btn conforme y todo esta bien
-                aSource.goFx("Bien");
+                //aSource.goFx("Bien");
+                //aSource.goFx("Locu_Bien");
                 Muros[0].SetActive(false);//agregado 20-01-25
-                Tablero_Indicaciones[3].SetActive(false);
+                
                 CtrlTotalBtn.SetActive(true);
                 perillaSelectGancho.SetActive(false);
-                Tablero_Indicaciones[4].SetActive(true);
+                
                 Tablero_Indicaciones[5].SetActive(true);
                 ElementoPost[3].transform.SetParent(ElementoPost[2].transform);
                 ElementoPost[10].transform.SetParent(ElementoPost[2].transform);
@@ -163,6 +165,8 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 break;
             case 3://cuando la mt esta en su posicion final
                 Tablero_Indicaciones[5].SetActive(false);
+                ElementoPost[22].SetActive(false);
+                Tablero_Indicaciones[7].SetActive(true);
                 aSource.goFx("Bien");
                 ElementoPost[0].SetActive(false);//mt refe
                 //ElementoPost[1].SetActive(true);//mt colocada
@@ -182,6 +186,7 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 break;
             case 4://cuando se deja el control el refe, pedir desmontado de eslinga
                 Tablero_Indicaciones[7].SetActive(true);
+                ElementoPost[22].SetActive(true);
                 aSource.goFx("Bien");
                 ControlOBJ.SetActive(false);//control de puentegrua obj desactivar
                 ElementoPost[13].SetActive(false);//refe control llegada
@@ -194,6 +199,9 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 }
                 break;
             case 5://se devolvio la eslinga a su lugar
+                aSource.goFx("Bien");
+                //aSource.goFx("Locu_Bien");
+                Tablero_Indicaciones[7].SetActive(false);
                 Muros[1].SetActive(false);///muro de conos de concluciones
                 //yield return new WaitForSeconds(5);
                 ElementoPost[20].SetActive(true);//detector conclusiones
@@ -204,7 +212,7 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 break;
             case 6://cuando acerca el jugador a area de contacto 
                 Tablero_Indicaciones[8].SetActive(true);//panel conclusiones
-                yield return new WaitForSeconds(5);
+                yield return new WaitForSeconds(13);
                 ElementoPost[20].SetActive(false);//detector conclusiones
                 ElementoPost[15].SetActive(true);//boton continuar
                 while (AudioManager.aSource.IsPlayingVoz() == true)
@@ -213,13 +221,15 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 }
                 break;
             case 7://cuando se presiona el boton continuar
+                aSource.goFx("fanfarrias");
+                aSource.goFx("aplausos");
                 Muros[1].SetActive(true);///muro de conos de concluciones
                 Muros[2].SetActive(false);
                 Tablero_Indicaciones[8].SetActive(false);//panel conclusiones
                 Tablero_Indicaciones[9].SetActive(true);//panel final
-                yield return new WaitForSeconds(5);
+                yield return new WaitForSeconds(8);
                 ElementoPost[16].SetActive(true);//boton reset-reinicion
-                yield return new WaitForSeconds(5);
+                yield return new WaitForSeconds(4);
                 ElementoPost[17].SetActive(true);//boton quit-salir
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
@@ -518,6 +528,7 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                         //Debug.Log("error Gancho incorrecto : Si eslinga =" + Si_HayEslingaColocada + " - TodoCorrecto : " + TodoCorrecto + " ->" + Si_EslingaColocadaUsable + " " + si_perilla);
                         //aSource.goFx("Locu_Fallo");
                         //aSource.goFx("Fallo");
+
                         Tablero_Indicaciones[2].SetActive(true);//si gancho incorrecta
                         Tablero_Indicaciones[1].SetActive(false);//si eslinga es correcta
                     }
@@ -529,13 +540,17 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 Tablero_Indicaciones[0].SetActive(false);//si no detecta ninguna eslinga
                 Tablero_Indicaciones[2].SetActive(false);//si gancho incorrecta
                 Tablero_Indicaciones[1].SetActive(false);//si eslinga es correcta
+                Tablero_Indicaciones[3].SetActive(false);
                 aSource.goFx("Locu_Bien");
                 aSource.goFx("Bien");
-                Tablero_Indicaciones[3].SetActive(true);//si todo es correcto
+                Tablero_Indicaciones[3].SetActive(false);//si todo es correcto
                 ElementoPost[4].SetActive(false);
                 ElementoPost[0].SetActive(true);
+                Tablero_Indicaciones[4].SetActive(true);
                 CtrlTotalBtn.SetActive(true);
-                TareaCompletada(0);
+                StartCoroutine(TiempoEsperaTarea(0));
+                //TiempoEsperaTarea(0);
+                //TareaCompletada(0);
             }
         }
     }
@@ -643,5 +658,49 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
             Eslinga_Colocada_MT [i].SetActive(false);
         }
         ElementoPost[24].GetComponent<BoxCollider>().enabled=false;
+    }
+    //************************************************DETALLES DE INTERFACE DE USUARIO - AGREGADO PARA LOS AUDIOS DE LOCUCION ****************************
+    public IEnumerator TiempoEsperaAudio(float t)//*******************************************Agregado el 04-09-24***************************************
+    {
+        string nAudioAux = NombreAuxAudio;
+        int auxTarea = TareaActual;
+        if (tutorial)
+        {
+            yield return new WaitForSeconds(t + 1);
+            Debug.Log("Se espero " + t + "segundos - AuxAudio : " + NombreAuxAudio);
+            while (auxTarea == TareaActual)
+            {
+                if (NombreAuxAudio != nAudioAux)
+                {
+                    aSource.goFx(NombreAuxAudio);
+                    Debug.Log("Se espero y se reprodujo el audio " + NombreAuxAudio + " por seguir en la tarea auxiliar : " + auxTarea);
+                    break;
+                }
+                else
+                {
+                    yield return new WaitForSeconds(5);
+                    if (auxTarea != TareaActual)
+                    {
+                        NombreAuxAudio = "";
+                        break;
+                    }
+                    aSource.goFx(NombreAuxAudio);
+                }
+                yield return new WaitForSeconds(10);
+            }
+            NombreAuxAudio = "";
+        }
+
+    }
+    public IEnumerator TiempoEsperaTarea(int tarea)//*******************************************Agregado el 04-09-24***************************************
+    {
+        yield return new WaitForSeconds(tiempoEsperaAux + 1);
+        Debug.Log("Se espero por la tarea " + tarea + "- tiempoEsperaAux : " + tiempoEsperaAux);
+        if (TareaActual == tarea)
+        {
+            Debug.Log("Se completo la tarea " + tarea + "- dentro del tiempo tiempoEsperaAux : " + tiempoEsperaAux);
+            TareaCompletada(tarea);
+        }
+
     }
 }

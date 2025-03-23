@@ -121,7 +121,7 @@ public class TM_Lobby : MonoBehaviour
     }
     public void Transferir_Usuarios()//*******transfiere datos desde DTs(el guardado) a DU lista auxiliar***********
     {
-        foreach (DatosUsuarios du in DTs.DUs)
+        foreach (DatosUsuarios du in DU)
         {
             listaDni.Add(du.DNIs);
             du.fechaUltimaSesion= du.ultimaSesion.ToString("dd-MM-yyyy HH:mm");
@@ -181,9 +181,10 @@ public class TM_Lobby : MonoBehaviour
                             
                         }*/
                     auxDU.anteriorSesion = du.anteriorSesion;
-                    auxDU.fechaAnteriorSesion = du.anteriorSesion.ToString("dd-MM-yyyy HH:mm");
-                    auxDU.fechaInicioSesion = du.inicioSesion.ToString("dd-MM-yyyy HH:mm");
-                    auxDU.fechaUltimaSesion = du.ultimaSesion.ToString("dd-MM-yyyy HH:mm");
+                    auxDU.inicioSesion = du.inicioSesion;
+                    auxDU.ultimaSesion = du.ultimaSesion;
+                    auxDU.desarrolloSesion = du.desarrolloSesion;
+                    auxDU.fechaDesarrolloSesion=du.desarrolloSesion.ToString("dd-MM-yyyy HH:mm");
                     auxDU.inicioSesion = DateTime.Now;
                     auxDU.ultimaSesion = DateTime.Now;
                     auxDU.fechaAnteriorSesion = du.anteriorSesion.ToString("dd-MM-yyyy HH:mm");
@@ -209,7 +210,8 @@ public class TM_Lobby : MonoBehaviour
             {//**************************Registro nuevo usuario**********************
                 auxDU.inicioSesion = DateTime.Now;
                 auxDU.ultimaSesion = DateTime.Now;
-                auxDU.DNIs = d;
+            
+            auxDU.DNIs = d;
                 DU.Add(auxDU);//agrego usuario
                 listaDni.Add(auxDU.DNIs);
                 
@@ -230,18 +232,20 @@ public class TM_Lobby : MonoBehaviour
         btnPanel[1].SetActive(false);
         btnPanel[2].SetActive(true);
         btnPanel[3].SetActive(true);
+        
         if (auxDU.si_Supervisor == true)
         {
             if (ParaPC == true)
             {
                 btnPanel[4].SetActive(true);//exportar
-                btnPanel[12].SetActive(false);//borrar datos
+                
             }
             else
             {
-                btnPanel[12].SetActive(true);//borrar datos
+                
                 btnPanel[4].SetActive(false);//exportar
             }
+            btnPanel[12].SetActive(true);//borrar datos
             //btnPanel[4].SetActive(true);
             btnPanel[5].SetActive(true);
             btnPanel[6].SetActive(true);
@@ -352,7 +356,7 @@ public class TM_Lobby : MonoBehaviour
                 {
                     infoTotalExport += "\nNivel de Acceso : Usuario";
                 }
-                infoTotalExport += "\nÚltima Fecha de Sesión : " + du.inicioSesion.ToString("dd-MM-yyyy HH:mm");
+                /*infoTotalExport += "\nÚltima Fecha de Sesión : " + du.inicioSesion.ToString("dd-MM-yyyy HH:mm");
                 if (du.anteriorSesion != null && du.anteriorSesion.ToString("dd-MM-yyyy HH:mm") != "01-01-0001 00:00")
                 {
                     infoTotalExport += "\nAnterior Fecha de Sesión : " + du.anteriorSesion.ToString("dd-MM-yyyy HH:mm");
@@ -361,7 +365,7 @@ public class TM_Lobby : MonoBehaviour
                 {
                     infoTotalExport += "\nAnterior Fecha de Sesión : No accedió anteriormente";
                 }
-                infoTotalExport += "\nÚltima Sesión de Módulo : " + du.ultimaSesion.ToString("dd-MM-yyyy HH:mm");
+                infoTotalExport += "\nÚltima Sesión de Módulo : " + du.ultimaSesion.ToString("dd-MM-yyyy HH:mm");*/
                 
                 if(du.desarrolloSesion != null && du.desarrolloSesion.ToString("dd-MM-yyyy HH:mm") != "01-01-0001 00:00")
                 {
@@ -531,6 +535,7 @@ public class TM_Lobby : MonoBehaviour
                     {
                         GuardarDatos(ActualUsuario);
                     }
+                    Debug.Log("Se salio");
                     Application.Quit();
                 }
                 break;
@@ -579,13 +584,17 @@ public class TM_Lobby : MonoBehaviour
                         Frase_Txt.text = "Ingrese identificación de usuario a Buscar:";
                         CodigoAcceso = "";
                         Panel_Txt.text = CodigoAcceso;
+                        nCifras = 0;
                         GUI_Panel[2].SetActive(false);
                         GUI_Panel[3].SetActive(false);
                         btnPanel[0].SetActive(true);//panel numerico
                         btnPanel[2].SetActive(false);//iniciar
                         btnPanel[3].SetActive(false);//ver notas
                         btnPanel[8].SetActive(true);//cancelar
-                        btnPanel[12].SetActive(false);//borrar datos
+                        
+                            btnPanel[4].SetActive(false);//exportar
+                            btnPanel[12].SetActive(false);//borrar datos
+                        
                         btnPanel[5].SetActive(false);//buscar
                         btnPanel[9].SetActive(false);//buscar usuario
                         btnPanel[6].SetActive(false);//mostrar todo
@@ -597,8 +606,8 @@ public class TM_Lobby : MonoBehaviour
                         {
                             mostrarGUI(auxDU);
                             GUI_Panel[2].SetActive(true);
-                            if (ParaPC == true)
-                                btnPanel[7].SetActive(true);
+                            //if (ParaPC == true)
+                                ///btnPanel[7].SetActive(true);//actualizar
                         }
                         actualizarSupervisor();
                         foreach (DatosUsuarios du in DU)
@@ -621,14 +630,15 @@ public class TM_Lobby : MonoBehaviour
                         btnPanel[2].SetActive(true);//iniciar
                         btnPanel[3].SetActive(true);//ver notas
                         btnPanel[1].SetActive(false);//login
+                        btnPanel[12].SetActive(true);//borrar datos
                         if (ParaPC == true)
                         {
                             btnPanel[4].SetActive(true);//exportar
-                            btnPanel[12].SetActive(false);//borrar datos
+                            
                         }
                         else
                         {
-                            btnPanel[12].SetActive(true);//borrar datos
+                            
                             btnPanel[4].SetActive(false);//exportar
                         }
                         btnPanel[5].SetActive(true);//buscar usuario
@@ -709,6 +719,7 @@ public class TM_Lobby : MonoBehaviour
                         btnPanel[9].SetActive(false);//buscar usuario
                         btnPanel[6].SetActive(false);//mostrar todo
                         btnPanel[7].SetActive(false);//actualizar
+                        btnPanel[4].SetActive(false);//exportar
 
                         break;
                     case 10:
@@ -720,14 +731,15 @@ public class TM_Lobby : MonoBehaviour
                         btnPanel[2].SetActive(true);//iniciar
                         btnPanel[3].SetActive(true);//ver notas
                         btnPanel[1].SetActive(false);//login
+                        btnPanel[12].SetActive(true);//borrar datos
                         if (ParaPC == true)
                         {
                             btnPanel[4].SetActive(true);//exportar
-                            btnPanel[12].SetActive(false);//borrar datos
+                            
                         }
                         else
                         {
-                            btnPanel[12].SetActive(true);//borrar datos
+                           
                             btnPanel[4].SetActive(false);//exportar
                         }
                         btnPanel[5].SetActive(true);//buscar usuario
@@ -1099,7 +1111,7 @@ public class TM_Lobby : MonoBehaviour
         AudioManager.aSource.goFx("Locu_Lobby",1,false,false);
         if (Ya_Existen_Datos == false)
         {
-            yield return new WaitForSeconds(11.25f);
+            yield return new WaitForSecondsRealtime(11.15f);
             AudioManager.aSource.goFx("Locu_Lobby_1", 1, false, false);
         }
         
