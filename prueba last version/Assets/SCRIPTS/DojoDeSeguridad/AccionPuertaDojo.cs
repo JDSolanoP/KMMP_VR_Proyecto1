@@ -166,7 +166,7 @@ public class AccionPuertaDojo : MonoBehaviour
                     break;
                 }
             }
-            yield return new WaitForSeconds(0.025f);
+            yield return new WaitForSecondsRealtime(0.025f);
         }
     }
             

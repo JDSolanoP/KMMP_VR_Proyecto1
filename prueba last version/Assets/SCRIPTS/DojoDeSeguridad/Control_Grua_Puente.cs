@@ -326,7 +326,7 @@ public class Control_Grua_Puente : MonoBehaviour
                 {
                     //Debug.Log("moviendo "+sentido);
                     puente.transform.localPosition = new Vector3(puente.transform.localPosition.x + velo.x * sentido, puente.transform.localPosition.y, puente.transform.localPosition.z);
-                    yield return new WaitForSeconds(0.01f);
+                    yield return new WaitForSecondsRealtime(0.01f);
                 }
                 else
                 {
@@ -364,7 +364,7 @@ public class Control_Grua_Puente : MonoBehaviour
                 {
                     //Debug.Log("moviendo "+sentido);
                     puente.transform.localPosition = new Vector3(puente.transform.localPosition.x + velo.x * sentido, puente.transform.localPosition.y, puente.transform.localPosition.z);
-                    yield return new WaitForSeconds(0.01f);
+                    yield return new WaitForSecondsRealtime(0.01f);
                 }
                 else
                 {
@@ -418,7 +418,7 @@ public class Control_Grua_Puente : MonoBehaviour
                 {
                     //Debug.Log("moviendo " +sentido);
                     grua.transform.localPosition = new Vector3(grua.transform.localPosition.x, grua.transform.localPosition.y, grua.transform.localPosition.z + velo.z * sentido);
-                    yield return new WaitForSeconds(0.01f);
+                    yield return new WaitForSecondsRealtime(0.01f);
                 }
                 else
                 {
@@ -461,7 +461,7 @@ public class Control_Grua_Puente : MonoBehaviour
 
                     //Debug.Log("moviendo "+sentido);
                     grua.transform.localPosition = new Vector3(grua.transform.localPosition.x, grua.transform.localPosition.y, grua.transform.localPosition.z + velo.z * sentido);
-                    yield return new WaitForSeconds(0.01f);
+                    yield return new WaitForSecondsRealtime(0.01f);
                 }
                 else
                 {
@@ -499,7 +499,7 @@ public class Control_Grua_Puente : MonoBehaviour
                 {
                     //Debug.Log("moviendo");
                     gancho.transform.localPosition = new Vector3(gancho.transform.localPosition.x, gancho.transform.localPosition.y + velo.y * sentido, gancho.transform.localPosition.z);
-                    yield return new WaitForSeconds(0.01f);
+                    yield return new WaitForSecondsRealtime(0.01f);
                 }
                 else
                 {
@@ -525,7 +525,7 @@ public class Control_Grua_Puente : MonoBehaviour
 
                     //Debug.Log("moviendo");
                     gancho.transform.localPosition = new Vector3(gancho.transform.localPosition.x, gancho.transform.localPosition.y + velo.y * sentido, gancho.transform.localPosition.z);
-                    yield return new WaitForSeconds(0.01f);
+                    yield return new WaitForSecondsRealtime(0.01f);
                 }
                 else
                 {

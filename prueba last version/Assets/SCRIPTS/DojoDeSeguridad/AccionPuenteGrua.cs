@@ -55,7 +55,7 @@ public class AccionPuenteGrua : MonoBehaviour//esta en el control de la grua
                 }
                 Debug.Log("moviendo");
                 puenteGrua.transform.localPosition = new Vector3(puenteGrua.transform.localPosition.x + velocidad.x * sentido, puenteGrua.transform.localPosition.y, puenteGrua.transform.localPosition.z);
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSecondsRealtime(0.1f);
             }
             
         }
@@ -79,7 +79,7 @@ public class AccionPuenteGrua : MonoBehaviour//esta en el control de la grua
                 }
                 Debug.Log("moviendo");
                 grua.transform.localPosition = new Vector3(puenteGrua.transform.localPosition.x, puenteGrua.transform.localPosition.y, puenteGrua.transform.localPosition.z + velocidad.x * sentido);
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSecondsRealtime(0.1f);
             }
         }
     }
@@ -102,7 +102,7 @@ public class AccionPuenteGrua : MonoBehaviour//esta en el control de la grua
                 }
                 Debug.Log("moviendo");
                 gancho.transform.localPosition = new Vector3(puenteGrua.transform.localPosition.x, puenteGrua.transform.localPosition.y + velocidad.x * sentido, puenteGrua.transform.localPosition.z + velocidad.x * sentido);
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSecondsRealtime(0.1f);
             }
         }
     }

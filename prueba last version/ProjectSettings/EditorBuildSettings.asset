@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/IzajeM2.ver2.unity
-    guid: e9bf2f92533d3744d854623314642041
+    path: Assets/Scenes/Dojo_Lite.unity
+    guid: 94a52a95b1468214a975934ef1f50007
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 82ede1403d5ed634bbbdffe5939ce53f, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 5ab34495fba3c874e903e79afffe8ebf, type: 2}
