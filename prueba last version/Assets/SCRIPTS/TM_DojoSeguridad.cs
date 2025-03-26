@@ -184,6 +184,8 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 //aSource.goFx("Bien");
                 //aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
                 aSource.altoFx("SiguienteModulo");
+                Tablero_Indicaciones[4].SetActive(false);
+                Tablero_Indicaciones[5].SetActive(false);
                 Tablero_Indicaciones[6].SetActive(true);
                 Tablero_Indicaciones[15].SetActive(true);
                 ObjetosReferencias[0].SetActive(true);
@@ -201,6 +203,8 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 //aSource.goFx("Devolver_Epps");//********************AGREGADO EL 27-08-24********************////////////
                 aSource.altoFx("SiguienteModulo");
                 Tablero_Indicaciones[15].SetActive(false);
+                Tablero_Indicaciones[9].SetActive(false);
+                Tablero_Indicaciones[6].SetActive(false);
                 Tablero_Indicaciones[10].SetActive(true);
                 RefeinterruptorCompresora.SetActive(true);
                 Flecha_Indi.SetActive(true);
