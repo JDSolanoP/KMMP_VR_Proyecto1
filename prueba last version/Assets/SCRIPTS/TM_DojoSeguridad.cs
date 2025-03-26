@@ -119,7 +119,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 //Tablero_Indicaciones[0].SetActive(true);
                 //audioManager de bienvenida
                 
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSecondsRealtime(0.5f);
                 manosXR[0].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[1];
                 manosXR[1].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[1];
                 for (int i = 0; i < PernosGrab.Length; i++)
@@ -128,20 +128,17 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 }
                 aSource.MusicaVol(0.5f);//**************************************Sonido Musica Inicial*************
                 //aSource.FxVol(1);
-                for(int i = 0; i < Tablero_Indicaciones.Length; i++)
+                /*for(int i = 0; i < Tablero_Indicaciones.Length; i++)
                 {
                     Tablero_Indicaciones[i].SetActive(false);
-                }
-                yield return new WaitForSeconds(2f);
+                }*/
+                yield return new WaitForSecondsRealtime(2f);
                 Tablero_Indicaciones[16].SetActive(true);
                 aSource.goFx(aSource.FxSonidos[0].nombre, 0.5f, true, false);
                 aSource.goFx(aSource.FxSonidos[1].nombre, 0.2f, true, false);
                 aSource.goFx(aSource.FxSonidos[2].nombre, 0.2f, true, false);
-                yield return new WaitForSeconds(1f);
-                //Tablero_Indicaciones[16].SetActive(true);
-                /*aSource.PlayFx(aSource.FxSonidos[0].nombre,0.5f,true);
-                aSource.PlayFx(aSource.FxSonidos[1].nombre, 0.5f, true);
-                aSource.PlayFx(aSource.FxSonidos[2].nombre, 0.5f, true);*/
+                yield return new WaitForSecondsRealtime(1f);
+                
                 //Debug.Log("Se esta reproduciendo audio");
 
                 while (AudioManager.aSource.IsPlayingVoz()==true)
