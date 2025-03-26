@@ -116,17 +116,10 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
         switch (tarea)
         {//Agregar notaciones de tareas en cada caso
             case 0:// AQUI, llegada delante del dojo
-                //Tablero_Indicaciones[0].SetActive(true);
-                //audioManager de bienvenida
-                
                 yield return new WaitForSecondsRealtime(0.5f);
                 manosXR[0].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[1];
                 manosXR[1].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[1];
-                for (int i = 0; i < PernosGrab.Length; i++)
-                {
-                    PernosGrab[i].SetActive(false);
-                }
-                aSource.MusicaVol(0.5f);//**************************************Sonido Musica Inicial*************
+                //aSource.MusicaVol(0.5f);//**************************************Sonido Musica Inicial*************
                 //aSource.FxVol(1);
                 /*for(int i = 0; i < Tablero_Indicaciones.Length; i++)
                 {
