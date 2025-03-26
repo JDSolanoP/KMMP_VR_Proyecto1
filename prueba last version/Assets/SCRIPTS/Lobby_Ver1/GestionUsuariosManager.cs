@@ -94,7 +94,7 @@ public static class GestionUsuariosManager
     {
         string direccion = Application.persistentDataPath + "/VR_" + NombreProyecto + "_Usuarios_Info.txt";
         File.WriteAllText(direccion, info);
-        UnityEditor.EditorUtility.RevealInFinder(direccion);
-        UnityEditor.EditorUtility.OpenWithDefaultApp(direccion);
+        //UnityEditor.EditorUtility.RevealInFinder(direccion);
+        //UnityEditor.EditorUtility.OpenWithDefaultApp(direccion);
     }
 }
