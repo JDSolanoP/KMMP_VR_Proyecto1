@@ -5,6 +5,8 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEditor;
+
 
 public static class GestionUsuariosManager
 {
@@ -96,5 +98,6 @@ public static class GestionUsuariosManager
         File.WriteAllText(direccion, info);
         //UnityEditor.EditorUtility.RevealInFinder(direccion);
         //UnityEditor.EditorUtility.OpenWithDefaultApp(direccion);
+        
     }
 }

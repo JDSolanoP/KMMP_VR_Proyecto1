@@ -121,10 +121,15 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
                 manosXR[1].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[1];
                 //aSource.MusicaVol(0.5f);//**************************************Sonido Musica Inicial*************
                 //aSource.FxVol(1);
-                /*for(int i = 0; i < Tablero_Indicaciones.Length; i++)
+                for(int i = 0; i < Tablero_Indicaciones.Length; i++)
                 {
                     Tablero_Indicaciones[i].SetActive(false);
-                }*/
+                }
+                for (int i = 0; i < PernosGrab.Length; i++)
+                {
+                    PernosGrab[i].SetActive(false);
+                }
+                
                 yield return new WaitForSecondsRealtime(2f);
                 Tablero_Indicaciones[16].SetActive(true);
                 aSource.goFx(aSource.FxSonidos[0].nombre, 0.5f, true, false);

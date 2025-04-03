@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Security.Policy;
+//using System.Security.Policy;
 using Unity.VisualScripting;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEditor;
 public class TM_Lobby : MonoBehaviour
 {/*Creado por Julio Solano:03-02-25*/
     public static TM_Lobby lb;
