@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine;
 
 public class GestionInfoManager : Editor
-{
+{ 
     public static void GuardarDatosUsuarios(TM_Lobby slm)
     {
         Debug.Log("copiando2 Datos");
