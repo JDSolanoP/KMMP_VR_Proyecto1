@@ -1,0 +1,14 @@
+# Made in Blockbench 3.2.1
+newmtl 1
+map_Kd black10.png 
+newmtl 2
+map_Kd gray01.png 
+newmtl 4
+map_Kd coal_block.png 
+newmtl 5
+map_Kd dark_gray.png 
+newmtl 6
+map_Kd emergency_exit_by_rder.png 
+newmtl texture
+map_Kd iron_block.png 
+newmtl none
