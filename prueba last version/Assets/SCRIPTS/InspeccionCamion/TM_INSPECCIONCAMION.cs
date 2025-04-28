@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
 {
-    [Header("Muros")]
+    [Header("Elementos")]
     public GameObject[] Muros;
+    public GameObject[] Fechas;
     public override void Start()
     {
         base.Start();
