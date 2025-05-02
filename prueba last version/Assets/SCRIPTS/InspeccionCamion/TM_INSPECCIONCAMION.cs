@@ -158,7 +158,7 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 break;
             case 9:////ARO_07
                 Muros[8].SetActive(true);
-                aros_indicadores[8].SetActive(false);
+                //aros_indicadores[8].SetActive(false);
                 auxContacto++;
                 Debug.Log(TareaActual + " Nuevo AuxContacto aumentado en Tarea==" + auxContacto);
                 Tablero_Indicaciones[TareaActual + 2].SetActive(true);//Locucion para panel intro de P1
@@ -172,7 +172,7 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 break;
             case 10://CONTINUAR DE PANEL DE CONCLUSIONES
                 Tablero_Indicaciones[12].SetActive(true);//Locucion para panel intro de P1
-                Muros[8].SetActive(false);
+                Muros[9].SetActive(false);
                 auxContacto++;
                 Debug.Log(TareaActual + " Nuevo AuxContacto aumentado en Tarea==" + auxContacto);
                 Tablero_Indicaciones[TareaActual + 2].SetActive(true);//Locucion para panel intro de P1
@@ -206,6 +206,13 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 }
                 TareaCompletada(auxContacto);
                 break;
+            case 1:
+                aSource.goFx("Bien");
+                Debug.Log("confirmarContacto=" +confirmarcontacto);
+                aros_indicadores[8].SetActive(false);
+                Flechas[8].SetActive(false);
+                TareaCompletada(8);
+                break;
         }
     }
     public void activacionXR(int contacto) //contacto con manos
@@ -234,8 +241,9 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                     Tablero_Indicaciones[auxContacto + 1].SetActive(false);
                     Tablero_Indicaciones[auxContacto + 2].SetActive(true);
                 }
-                else
+                else 
                 {
+
                     Tablero_Indicaciones[auxContacto + 2].SetActive(false);
                 }
                 if (auxContacto == 7)
@@ -243,13 +251,10 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                     Muros[7].SetActive(false);
                     Tablero_Indicaciones[6].SetActive(false);
                     TareaCompletada(TareaActual);
+                    Muros[8].SetActive(true);
                 }
-                if (auxContacto == 9)
-                {
-                    Muros[7].SetActive(false);
-                    Tablero_Indicaciones[6].SetActive(false);
-                    TareaCompletada(TareaActual);
-                }
+                
+                
                 break;
         }
     }
