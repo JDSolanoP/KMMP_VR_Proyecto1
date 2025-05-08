@@ -9,10 +9,12 @@ public class PuertasManijjaFix : MonoBehaviour
     public GameObject[] Manijas;
     public bool activar;
     Vector3 pos0;
+    Vector3 rot0;
 
     public void Start()
     {
-        pos0 = objPrincipal.transform.localPosition;
+        pos0 = this.transform.localPosition;
+        rot0 = transform.localEulerAngles;
     }
     public void desactivar(bool activar)
     {
@@ -23,6 +25,11 @@ public class PuertasManijjaFix : MonoBehaviour
             if (Manijas[i].gameObject.name != this.gameObject.name)
             {
                 Manijas[i].gameObject.SetActive(activar);
+                if (activar == true)
+                {
+                    this.gameObject.transform.localPosition = pos0;
+                    this.gameObject.transform.localEulerAngles = rot0;
+                }
             }
         }
         //pararRb();

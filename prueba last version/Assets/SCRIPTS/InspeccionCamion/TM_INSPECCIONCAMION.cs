@@ -37,6 +37,7 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 {
                     BtnContinue[i].SetActive(false);
                 }
+                yield return new WaitForSecondsRealtime(0.5f);
                 Tablero_Indicaciones[0].SetActive(true);//panel de bienvenido
                 /*   //audioManager de bienvenida
 
@@ -158,7 +159,7 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 break;
             case 9:////ARO_07
                 Muros[8].SetActive(true);
-                //aros_indicadores[8].SetActive(false);
+                aros_indicadores[7].SetActive(false);
                 auxContacto++;
                 Debug.Log(TareaActual + " Nuevo AuxContacto aumentado en Tarea==" + auxContacto);
                 Tablero_Indicaciones[TareaActual + 2].SetActive(true);//Locucion para panel intro de P1
@@ -171,20 +172,21 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 }
                 break;
             case 10://CONTINUAR DE PANEL DE CONCLUSIONES
+                Tablero_Indicaciones[11].SetActive(false);//Locucion para panel intro de P1
                 Tablero_Indicaciones[12].SetActive(true);//Locucion para panel intro de P1
                 Muros[9].SetActive(false);
                 auxContacto++;
                 Debug.Log(TareaActual + " Nuevo AuxContacto aumentado en Tarea==" + auxContacto);
-                Tablero_Indicaciones[TareaActual + 2].SetActive(true);//Locucion para panel intro de P1
+                //Tablero_Indicaciones[TareaActual + 2].SetActive(true);//Locucion para panel intro de P1
                 yield return new WaitForSecondsRealtime(5);
-                BtnContinue[TareaActual - 1].SetActive(true);
+                BtnContinue[8].SetActive(true);
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
 
                     yield return new WaitForFixedUpdate();
                 }
                 yield return new WaitForSecondsRealtime(5);
-                BtnContinue[TareaActual].SetActive(true);
+                BtnContinue[9].SetActive(true);
                 break;
         }
     }
@@ -208,8 +210,9 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 break;
             case 1:
                 aSource.goFx("Bien");
+                Debug.Log(confirmarcontacto+" auxcontacto=" + auxContacto);
                 Debug.Log("confirmarContacto=" +confirmarcontacto);
-                aros_indicadores[8].SetActive(false);
+                aros_indicadores[7].SetActive(false);
                 Flechas[8].SetActive(false);
                 TareaCompletada(8);
                 break;
@@ -253,8 +256,6 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                     TareaCompletada(TareaActual);
                     Muros[8].SetActive(true);
                 }
-                
-                
                 break;
         }
     }
