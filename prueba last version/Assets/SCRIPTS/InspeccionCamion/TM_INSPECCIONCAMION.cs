@@ -28,7 +28,7 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 {
                     Tablero_Indicaciones[i].SetActive(false);
                 }
-                for (int i = 0; i < Flechas.Length; i++)
+                for (int i = 0; i < aros_indicadores.Length; i++)
                 {
                     Flechas[i].SetActive(false);
                     aros_indicadores[i].SetActive(false);
@@ -58,7 +58,7 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
 
                     yield return new WaitForFixedUpdate();
                 }
-                yield return new WaitForSecondsRealtime(10f);
+                yield return new WaitForSecondsRealtime(5f);
                 Tablero_Indicaciones[1].SetActive(true);//Locucion para panel intro de P1
                 Flechas[0].SetActive(true);
                 aros_indicadores[0].SetActive(true);
@@ -150,7 +150,7 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 Debug.Log(TareaActual + " Nuevo AuxContacto aumentado en Tarea==" + auxContacto);
                 Tablero_Indicaciones[TareaActual + 2].SetActive(true);//PANEL DE VICTORIA
                 yield return new WaitForSecondsRealtime(5);
-                BtnContinue[TareaActual - 1].SetActive(true);
+                //BtnContinue[TareaActual - 1].SetActive(true);
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
 
@@ -164,7 +164,7 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 Debug.Log(TareaActual + " Nuevo AuxContacto aumentado en Tarea==" + auxContacto);
                 Tablero_Indicaciones[TareaActual + 2].SetActive(true);//Locucion para panel intro de P1
                 yield return new WaitForSecondsRealtime(5);
-                BtnContinue[TareaActual - 1].SetActive(true);
+                BtnContinue[TareaActual - 2].SetActive(true);
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
 
@@ -257,11 +257,21 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                     Muros[8].SetActive(true);
                 }
                 break;
+            case 1://boton reinicio
+                IrEscenaAsincron(0);
+                break;
+            case 2://boton SALIR
+                Application.Quit();
+                break;
         }
     }
     public IEnumerator ActiveContinue(GameObject obj)
     {
         yield return new WaitForSecondsRealtime(5);
         obj.SetActive(true);
+    }
+    public void activarItem(bool on)
+    {
+        Flechas[8].SetActive(on);
     }
 }
