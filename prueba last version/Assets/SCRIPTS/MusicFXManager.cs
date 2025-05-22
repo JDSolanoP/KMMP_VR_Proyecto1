@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 public class MusicFXManager : MonoBehaviour
 {
-    public static MusicFXManager MFXM;
+    /*public static MusicFXManager MFXM;
 
     public Sonido[] musica, sfx;
     public AudioSource MusicaSource; 
@@ -74,5 +74,5 @@ public class MusicFXManager : MonoBehaviour
         {
             SfxSource[Canalactual].Stop();
         }
-    }
+    }*/
 }
