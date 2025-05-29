@@ -10,7 +10,9 @@ public class Lista_Tareas_Controller : MonoBehaviour
     public AudioManager aSource;
     public int TareaActual;
     public int totalTareas;
-    public bool tutorial = true;
+    [Header("*****Opciones de Desarrollador*****")]
+    public bool EnPruebas = true;
+    [Header("EnPruebas=false->Para Pruebas de todas las tareas y animaciones")]
     public bool si_login=false;//01-03-25//espera la pausa
     public GameObject[] aros_indicadores;
     public bool[] GlobalBool;

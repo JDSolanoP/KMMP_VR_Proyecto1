@@ -1209,7 +1209,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
     public IEnumerator TiempoEsperaAudio(float t)//*******************************************Agregado el 04-09-24***************************************
     {string nAudioAux=NombreAuxAudio;
         int auxTarea = TareaActual;
-        if (tutorial)
+        if (!EnPruebas)
         {
             yield return new WaitForSeconds(t+1);
             Debug.Log("Se espero " + t + "segundos - AuxAudio : " + NombreAuxAudio);

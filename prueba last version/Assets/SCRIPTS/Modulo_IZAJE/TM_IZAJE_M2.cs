@@ -642,7 +642,6 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
     }
     public void DesmontarEslinga()
     {
-
         EslingasRefe[numEslingaColocada].GetComponent<Set_Eslingas>().MeshGameObj.SetActive(true);
         ElementoPost[22].SetActive(false);
         EslingasObj[numEslingaColocada].GetComponent<Rigidbody>().isKinematic = true;
@@ -664,7 +663,7 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
     {
         string nAudioAux = NombreAuxAudio;
         int auxTarea = TareaActual;
-        if (tutorial)
+        if (!EnPruebas)
         {
             yield return new WaitForSeconds(t + 1);
             Debug.Log("Se espero " + t + "segundos - AuxAudio : " + NombreAuxAudio);
@@ -690,7 +689,6 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
             }
             NombreAuxAudio = "";
         }
-
     }
     public IEnumerator TiempoEsperaTarea(int tarea)//*******************************************Agregado el 04-09-24***************************************
     {
@@ -701,6 +699,5 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
             Debug.Log("Se completo la tarea " + tarea + "- dentro del tiempo tiempoEsperaAux : " + tiempoEsperaAux);
             TareaCompletada(tarea);
         }
-
     }
 }

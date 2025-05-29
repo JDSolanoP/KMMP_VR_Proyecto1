@@ -369,7 +369,7 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
     {
         string nAudioAux = NombreAuxAudio;
         int auxTarea = TareaActual;
-        if (tutorial)
+        if (!EnPruebas)
         {
             yield return new WaitForSeconds(t);
             Debug.Log("Se espero " + t + "segundos - AuxAudio : " + NombreAuxAudio);
