@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class TM_BloqueoC930E5 : Lista_Tareas_Controller
 {
@@ -11,6 +12,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     [Header("ElementosEscenario")]
     public GameObject PJ;
     public Transform[] posPJ;
+    public GameObject[] NPC;
     public GameObject CamionAnim;
     public GameObject CamionC930;
     public GameObject[] Muros;
@@ -20,13 +22,18 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     public GameObject[] Palancas;//caja de bloqueo
     public GameObject[] LucesLEDCaja;
     public GameObject[] Items;//LOTO
-    float[] rotPalancas;
+    public float[] rotPalancas;
     int nPalancasOff=0;
-    bool[] si_TacoColocado;
+    bool si_LlaveEnMano;
 
     public override void Start()
     {
         base.Start();
+        if (si_login == true)
+        {
+            PJ.transform.position = posPJ[0].position;
+        }
+        
         StartCoroutine(ListaTareas(TareaActual));
     }
     public override void TareaCompletada(int TareaSiguiente)
@@ -36,13 +43,31 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     }
     IEnumerator ListaTareas(int tarea)
     {
+        
+        if (si_login == true)
+        {
+            yield return new WaitForSecondsRealtime(0.1f);
+        }
+        else { 
         switch (tarea)
         {//Agregar notaciones de tareas en cada caso
             case 0:// AQUI, Colocando todos los componentes
+                for(int i = 0; i < NPC.Length; i++)
+                {
+                    if (i < 3)
+                    {
+                        NPC[i].SetActive(false);
+                    }
+                    else
+                    {
+                        NPC[i].SetActive(true);
+                    }
+                }
                 for (int i = 0; i < Tablero_Indicaciones.Length; i++)
                 {
                     Tablero_Indicaciones[i].SetActive(false);
                 }
+                
                 /*for (int i = 0; i < aros_indicadores.Length; i++)
                 {
                     Flechas[i].SetActive(false);
@@ -56,8 +81,9 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 aSource.PlayMusica(aSource.MusicaSonidos[0].nombre, 0.75f, true);
                 if (!EnPruebas)
                 {
+                    CamionAnim.SetActive(true);
                     CamionC930.SetActive(false);
-                    PJ.transform.position = posPJ[0].position;
+                    
                     yield return new WaitForSecondsRealtime(47f);//**********************fin de animacion de entrada a camion********
                     FadeOut();
                     yield return new WaitForSecondsRealtime(2f);
@@ -70,7 +96,6 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 yield return new WaitForSecondsRealtime(2f);
                 //*****************Ubicacion de palancas de caja de bloqueo*************
                 rotPalancas = new float[3];
-                si_TacoColocado = new bool[2];
                 rotPalancas[0] = Palancas[0].transform.localEulerAngles.x;// captura de Rotacion
                 rotPalancas[1] = Palancas[2].transform.localEulerAngles.x;
                 rotPalancas[2] = Palancas[4].transform.localEulerAngles.x;
@@ -80,6 +105,10 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 Palancas[1].SetActive(false);
                 Palancas[3].SetActive(false);
                 Palancas[5].SetActive(false);
+                LucesLEDCaja[0].SetActive(true);
+                LucesLEDCaja[2].SetActive(true);
+                LucesLEDCaja[4].SetActive(true);
+                LucesLEDCaja[6].SetActive(true);
                 Tablero_Indicaciones[0].SetActive(true);//panel de bienvenido
                 /*   //audioManager de bienvenida
 
@@ -116,6 +145,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 break;
             case 2://LOTO
                 Tablero_Indicaciones[3].SetActive(true);//P2
+                Items[0].SetActive(true);//candadoAmarillo refe
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
                     yield return new WaitForFixedUpdate();
@@ -128,6 +158,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 }
                 break;
         }
+        }
     }
     //**********************VERIFICAR CONTACTO OBJETO A OBJETO****************************************
     public void verificarContacto(int confirmarcontacto)
@@ -136,7 +167,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
         {
            case 0://contactoTacoGRab00
                 Debug.Log("confirmarcontacto : 0 auxcontacto=" + auxContacto);
-                if (contacto_confirmado[0] == true)
+                if (contacto_confirmado[confirmarcontacto] == true)
                 {
                     Tacos[0].SetActive(false);
                     Tacos[contactoIntAux + 2].SetActive(false);
@@ -155,9 +186,9 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     }
                 }
                 break;
-            case 1://contactoTacograb01
+           case 1://contactoTacograb01
                 Debug.Log("confirmarcontacto 1 : auxcontacto=" + auxContacto);
-                if (contacto_confirmado[1] == true)
+                if (contacto_confirmado[confirmarcontacto] == true)
                 {
                     Tacos[1].SetActive(false);
                     Tacos[contactoIntAux + 2].SetActive(false);
@@ -176,6 +207,36 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     }
                 }
                 break;
+           case 2://candado amarillo obj->caobj
+                Debug.Log("confirmarcontacto 1 : auxcontacto=" + auxContacto);
+                if (contacto_confirmado[confirmarcontacto] == true)
+                {
+                    Items[0].SetActive (false);//refe ca
+                    Items[1].SetActive(false);//caobj
+                    Items[2].SetActive(true);//CAMesh
+                    Items[3].SetActive(true);//refe tarjeta amarillo->ta
+                    Items[8].SetActive(true);//llave TA mesh
+                }
+                    break;
+            case 3://colocar ta
+                Debug.Log("confirmarcontacto 1 : auxcontacto=" + auxContacto);
+                if (contacto_confirmado[confirmarcontacto] == true)
+                {
+                    Items[3].SetActive(false);//refe ta
+                    Items[4].SetActive(false);//taobj
+                    Items[5].SetActive(true);//TAMesh
+                    Items[6].SetActive(true);//refe llave
+                    Items[7].SetActive(true);//llave ta obj
+                }
+                break;
+            case 4://dejar llave en caja
+                if (contacto_confirmado[confirmarcontacto] == true)
+                {
+                    Items[7].GetComponent<XRGrabInteractable>().enabled = false;
+                    Items[9].SetActive(true);//candado personal refe -> pl
+                }
+                break;
+
         }
     }
     public void activacionXR(int contacto) //contacto con manos
@@ -186,8 +247,8 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 switch (auxContacto)
                 {
                     case 0://propel
-                        Palancas[auxContacto+1].SetActive (false);
-                        Palancas[auxContacto].transform.eulerAngles = new Vector3(rotPalancas[auxContacto], Palancas[auxContacto].transform.localEulerAngles.y, Palancas[auxContacto].transform.localEulerAngles.z);
+                        Palancas[2*auxContacto+1].SetActive (false);
+                        Palancas[auxContacto].transform.localEulerAngles = new Vector3(rotPalancas[auxContacto], Palancas[auxContacto].transform.localEulerAngles.y, Palancas[auxContacto].transform.localEulerAngles.z);
                         LucesLEDCaja[auxContacto].SetActive(false);
                         LucesLEDCaja[auxContacto+1].SetActive(true);
                         nPalancasOff++;
@@ -199,10 +260,10 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                         }
                         break;
                     case 1://starter
-                        Palancas[auxContacto + 1].SetActive(false);
-                        Palancas[auxContacto].transform.eulerAngles = new Vector3(rotPalancas[auxContacto], Palancas[auxContacto].transform.localEulerAngles.y, Palancas[auxContacto].transform.localEulerAngles.z);
-                        LucesLEDCaja[auxContacto].SetActive(false);
-                        LucesLEDCaja[auxContacto + 1].SetActive(true);
+                        Palancas[2*auxContacto + 1].SetActive(false);
+                        Palancas[2*auxContacto].transform.localEulerAngles = new Vector3(rotPalancas[auxContacto], Palancas[2 * auxContacto].transform.localEulerAngles.y, Palancas[2 * auxContacto].transform.localEulerAngles.z);
+                        LucesLEDCaja[2 * auxContacto].SetActive(false);
+                        LucesLEDCaja[2*auxContacto + 1].SetActive(true);
                         nPalancasOff++;
                         if (nPalancasOff == 3)
                         {
@@ -212,10 +273,10 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                         }
                         break;
                     case 2://Master
-                        Palancas[auxContacto + 1].SetActive(false);
-                        Palancas[auxContacto].transform.eulerAngles = new Vector3(rotPalancas[auxContacto], Palancas[auxContacto].transform.localEulerAngles.y, Palancas[auxContacto].transform.localEulerAngles.z);
-                        LucesLEDCaja[auxContacto].SetActive(false);
-                        LucesLEDCaja[auxContacto + 1].SetActive(true);
+                        Palancas[2 * auxContacto + 1].SetActive(false);
+                        Palancas[2*auxContacto].transform.localEulerAngles = new Vector3(rotPalancas[auxContacto], Palancas[2 * auxContacto].transform.localEulerAngles.y, Palancas[2*auxContacto].transform.localEulerAngles.z);
+                        LucesLEDCaja[2*auxContacto].SetActive(false);
+                        LucesLEDCaja[2*auxContacto + 1].SetActive(true);
                         LucesLEDCaja[1].SetActive(false);
                         LucesLEDCaja[3].SetActive(false);
                         nPalancasOff++;
@@ -227,6 +288,10 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                         }
                         break;
                 }
+                break;
+            case 1:
+                Items[8].SetActive(false);//llave TA mesh
+                Items[6].SetActive(false);//refe llave
                 break;
             case 8://boton reinicio
                 IrEscenaAsincron(0);
@@ -242,11 +307,13 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     }
     public IEnumerator ActivarObjxTiempo(GameObject obj)
     {
+        Debug.Log("en 5s Activando obj ="+obj.name);
         yield return new WaitForSecondsRealtime(5);
         obj.SetActive(true);
     }
     public IEnumerator DeactivarObjxTiempo(GameObject obj)
     {
+        Debug.Log("en 5s Deactivando obj =" + obj.name);
         yield return new WaitForSecondsRealtime(5);
         obj.SetActive(false);
     }
@@ -300,5 +367,19 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
             Debug.Log("Se completo la tarea " + tarea + "- dentro del tiempo tiempoEsperaAux : " + tiempoEsperaAux);
             TareaCompletada(tarea);
         }
+    }
+    public void OnOffBoxCollider(bool onOff)//ACTivar y DEactivar boxcollider//requiere dar AUXCONTACTO***03-06-25**************
+    {
+        Items[auxContacto].GetComponent<BoxCollider>().enabled = onOff;
+    }
+    public void pernosRGBDActived(bool si)//cuando agarra el perno
+    {
+        Debug.Log("ITEM " + (auxContacto) + "agarrado de activo el toggles de Rigidbody en funcion PernosRGBDActived");
+
+        //Items[n].transform.SetParent(PuntoDeRecepccionPernos.transform);
+        Items[auxContacto].GetComponent<BoxCollider>().enabled = si;
+        Items[auxContacto].GetComponent<Rigidbody>().isKinematic = !si;
+        Items[auxContacto].GetComponent<Rigidbody>().useGravity = si;
+        si_LlaveEnMano = si;
     }
 }

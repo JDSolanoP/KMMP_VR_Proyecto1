@@ -14,6 +14,7 @@ public class TM_Lobby : MonoBehaviour
     public static TM_Lobby lb;
 
     public Lista_Tareas_Controller ltc;
+    public bool SoloTiempoPrevio;//solo para ganar tiempo antes de empezar tareas
     public bool ParaPC=false;
     public string NombreProyecto;
     public bool[] contacto_confirmado;
@@ -75,50 +76,62 @@ public class TM_Lobby : MonoBehaviour
 
     private void Awake()
     {
-        if (lb != null && lb != this)
+        
+            if (lb != null && lb != this)
+            {
+                Destroy(this);
+            }
+            else
+            {
+                lb = this;
+                DontDestroyOnLoad(this);
+            }
+        if (SoloTiempoPrevio == false)
         {
-            Destroy(this);
+            //CargarDatos();
+            if (File.Exists(Application.persistentDataPath + "/VR_" + NombreProyecto + "_Usuarios.txt"))
+            {
+                CargarDatos(this);//************************************cargar  datos desde la lista
+                if (DTs.DUs != null && DTs.DUs.Count != 0)
+                {
+                    Ya_Existen_Datos = true;
+                    DU = DTs.DUs;
+                }
+            }
+            else
+            {
+                Debug.Log("NO HAY DATOS, agregado admin");
+            }
+            admin = new DatosUsuarios(admin.DNIs, admin.nombres, admin.si_Supervisor, nTareas);
+            DU.Add(admin);
+            //SesionAnterior = UltimaSesion.ToString("dd-MM-yyyy  HH:mm");
         }
-        else
-        {
-            lb = this;
-            DontDestroyOnLoad(this);
-        }
-        //CargarDatos();
-        if (File.Exists(Application.persistentDataPath + "/VR_"+ NombreProyecto + "_Usuarios.txt"))
-        {
-            CargarDatos(this);//************************************cargar  datos desde la lista
-            if (DTs.DUs != null&&DTs.DUs.Count!=0) {
-                Ya_Existen_Datos = true;
-                DU = DTs.DUs; }
-        }
-        else
-        {
-            Debug.Log("NO HAY DATOS, agregado admin");
-        }
-        admin = new DatosUsuarios(admin.DNIs,admin.nombres,admin.si_Supervisor,nTareas);
-        DU.Add(admin);
-        //SesionAnterior = UltimaSesion.ToString("dd-MM-yyyy  HH:mm");
+
     }
     private void Start()
     {
-        StartCoroutine(Locu_Lobby());
-        for(int i = 0; i < btnPanel.Length; i++)
-        {
-            btnPanel[i].SetActive(false);
-        }
         GUI_Panel[0].SetActive(true);
-        GUI_Panel[1].SetActive(false);//gui llogin
-        GUI_Panel[2].SetActive(false);//canvas de notas
-        //img_bg_nota.GetComponent<RawImage>().color = new Color32(73, 168, 80, 255);
-        auxNotas = new float[nTareas];
-        nota = new float[nTareas];
-        auxDU.notas = new float[nTareas];
-        if (!Ya_Existen_Datos)//****************************resgistra primer usuario como supervisor
+        if (SoloTiempoPrevio == false)
         {
-            Frase_Txt.text = "Registre identificación de Supervisor:";
-            auxDU.si_Supervisor=true;
+            StartCoroutine(Locu_Lobby());
+            for (int i = 0; i < btnPanel.Length; i++)
+            {
+                btnPanel[i].SetActive(false);
+            }
+
+            GUI_Panel[1].SetActive(false);//gui llogin
+            GUI_Panel[2].SetActive(false);//canvas de notas
+                                          //img_bg_nota.GetComponent<RawImage>().color = new Color32(73, 168, 80, 255);
+            auxNotas = new float[nTareas];
+            nota = new float[nTareas];
+            auxDU.notas = new float[nTareas];
+            if (!Ya_Existen_Datos)//****************************resgistra primer usuario como supervisor
+            {
+                Frase_Txt.text = "Registre identificación de Supervisor:";
+                auxDU.si_Supervisor = true;
+            }
         }
+        
     }
     public void Transferir_Usuarios()//*******transfiere datos desde DTs(el guardado) a DU lista auxiliar***********
     {
@@ -531,10 +544,13 @@ public class TM_Lobby : MonoBehaviour
                     //img_bg_not[].GetComponent<RawImage>().color = new Color(73,168,80,255);
                 }
                 else
-                {
-                    if (ActualUsuario != null && ActualUsuario != "")
+                {//salir
+                    if (SoloTiempoPrevio == false)
                     {
-                        GuardarDatos(ActualUsuario);
+                        if (ActualUsuario != null && ActualUsuario != "")
+                        {
+                            GuardarDatos(ActualUsuario);
+                        }
                     }
                     Debug.Log("Se salio");
                     Application.Quit();
@@ -543,9 +559,21 @@ public class TM_Lobby : MonoBehaviour
             case 2://ver notas y iniciar
                 if (auxcontacto == 0)//iniciar
                 {
-                    btnPanel[0].transform.SetParent(GUI_Panel[1].transform);
                     si_inicioModulo = true;
-                    objs[1].SetActive(false);
+                    ltc.si_login = false;
+                    if (SoloTiempoPrevio == false)
+                    {
+                        btnPanel[0].transform.SetParent(GUI_Panel[1].transform);
+                        objs[1].SetActive(false);
+                    }
+                    else
+                    {
+                        
+                        GUI_Panel[0].SetActive(false);
+                        ltc.Start();
+                    }
+                    
+                    
                 }
                 else//ver notas
                 {

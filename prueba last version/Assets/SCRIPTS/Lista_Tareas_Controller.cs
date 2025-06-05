@@ -125,7 +125,8 @@ public class Lista_Tareas_Controller : MonoBehaviour
     
     public void FadeIn()
     {
-        Fade(1, 0);
+        if (fadeColor.a == 1) { Fade(1, 0); } else { Fade(0,1);Fade(1,0); }
+        
     }
     public void FadeIn(float tiempo)
     {
