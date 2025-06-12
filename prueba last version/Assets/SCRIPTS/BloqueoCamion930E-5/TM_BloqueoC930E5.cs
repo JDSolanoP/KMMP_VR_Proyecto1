@@ -25,7 +25,9 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     public float[] rotPalancas;
     int nPalancasOff=0;
     bool si_LlaveEnMano;
-
+    [Header("*****ElementosPropioDeCamión*****")]
+    public bool si_PuertaCabinaCerrada;
+    public bool si_PJEnCabina;
     public override void Start()
     {
         base.Start();
@@ -95,16 +97,20 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 Muros[0].SetActive(false);
                 yield return new WaitForSecondsRealtime(2f);
                 //*****************Ubicacion de palancas de caja de bloqueo*************
-                rotPalancas = new float[3];
+                /*rotPalancas = new float[3];
                 rotPalancas[0] = Palancas[0].transform.localEulerAngles.x;// captura de Rotacion
                 rotPalancas[1] = Palancas[2].transform.localEulerAngles.x;
-                rotPalancas[2] = Palancas[4].transform.localEulerAngles.x;
+                rotPalancas[2] = Palancas[4].transform.localEulerAngles.x;*/
                 Palancas[0].transform.localEulerAngles = new Vector3(Palancas[1].transform.localEulerAngles.x, Palancas[1].transform.localEulerAngles.y, Palancas[1].transform.localEulerAngles.z);//colocacion de rot de prendido
-                Palancas[2].transform.localEulerAngles = new Vector3(Palancas[3].transform.localEulerAngles.x, Palancas[3].transform.localEulerAngles.y, Palancas[3].transform.localEulerAngles.z);
-                Palancas[4].transform.localEulerAngles = new Vector3(Palancas[5].transform.localEulerAngles.x, Palancas[5].transform.localEulerAngles.y, Palancas[5].transform.localEulerAngles.z);
+                Palancas[2].transform.localEulerAngles = new Vector3(Palancas[2].transform.localEulerAngles.x, Palancas[3].transform.localEulerAngles.y, rotPalancas[1]);
+                Palancas[4].transform.localEulerAngles = new Vector3(Palancas[3].transform.localEulerAngles.x, Palancas[5].transform.localEulerAngles.y, rotPalancas[2]);
                 Palancas[1].SetActive(false);
                 Palancas[3].SetActive(false);
                 Palancas[5].SetActive(false);
+                    for (int i = 0; i < LucesLEDCaja.Length; i++)
+                    {
+                        LucesLEDCaja[i].SetActive(false);
+                    }
                 LucesLEDCaja[0].SetActive(true);
                 LucesLEDCaja[2].SetActive(true);
                 LucesLEDCaja[4].SetActive(true);
@@ -136,15 +142,14 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 Tablero_Indicaciones[3].SetActive(true);//P2
                 Palancas[1].SetActive(true);
                 Palancas[3].SetActive(true);
-                StartCoroutine(ActivarObjxTiempo(Palancas[5]));
-                StartCoroutine( DeactivarObjxTiempo(LucesLEDCaja[6]));
+                
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
                     yield return new WaitForFixedUpdate();
                 }
                 break;
             case 2://LOTO
-                Tablero_Indicaciones[3].SetActive(true);//P2
+                Tablero_Indicaciones[5].SetActive(true);//P2
                 Items[0].SetActive(true);//candadoAmarillo refe
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
@@ -236,7 +241,64 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     Items[9].SetActive(true);//candado personal refe -> pl
                 }
                 break;
+            case 5://caja bloqueo cerrada
+                if (contacto_confirmado[confirmarcontacto] == true)
+                {
+                    Items[7].GetComponent<XRGrabInteractable>().enabled = false;
+                    Items[9].SetActive(true);//candado personal refe -> pl
+                }
+                break;
+            case 13://sonido Puerta Cabina
+                if (contacto_confirmado[confirmarcontacto] == true)
+                {
+                    if (si_PuertaCabinaCerrada == false)//cerrando
+                    {
+                        Debug.Log(confirmarcontacto + " auxcontacto=" + auxContacto + " cerrando");
+                        /*perillaPuertaCabinaOBJ[0].GetComponent<Transform>().Equals(pos0PerillasPCabina[0]);
+                        perillaPuertaCabinaOBJ[1].GetComponent<Transform>().Equals(pos0PerillasPCabina[1]);*/
+                        aSource.goFx("PuertaCabinaCerrando");
+                        si_PuertaCabinaCerrada = true;
+                        if (si_PJEnCabina == true)
+                        {
+                            aSource.MusicaVol(0.1f);
+                        }
+                        else
+                        {
+                            aSource.MusicaVol(0.75f);
+                        }
+                    }
+                }
+                else
+                {
+                    if (si_PuertaCabinaCerrada == true)//abriendo
+                    {
+                        /*perillaPuertaCabinaOBJ[0].GetComponent<Transform>().Equals(pos0PerillasPCabina[0]);
+                        perillaPuertaCabinaOBJ[1].GetComponent<Transform>().Equals(pos0PerillasPCabina[1]);*/
+                        Debug.Log(confirmarcontacto + " auxcontacto=" + auxContacto + " Abriendo");
 
+                        si_PuertaCabinaCerrada = false;
+                        aSource.goFx("PuertaCabinaAbriendo");
+                        aSource.MusicaVol(0.75f);
+                    }
+                }
+                break;
+            case 14://Si Pj dentro de cabina
+                if (contacto_confirmado[confirmarcontacto] == true)
+                {
+                    si_PJEnCabina = true;
+                }
+                else
+                {
+                    si_PJEnCabina = false;
+                }
+                break;
+            case 15://detector de subida a cabina
+                if (contacto_confirmado[confirmarcontacto] == true)
+                {
+                    Items[7].GetComponent<XRGrabInteractable>().enabled = false;
+                    Items[9].SetActive(true);//candado personal refe -> pl
+                }
+                break;
         }
     }
     public void activacionXR(int contacto) //contacto con manos
@@ -247,34 +309,52 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 switch (auxContacto)
                 {
                     case 0://propel
+                        Debug.Log("Auxcontacto:"+auxContacto+" contacto:"+contacto+" rotActual:"+ Palancas[auxContacto].transform.localEulerAngles.x);
                         Palancas[2*auxContacto+1].SetActive (false);
                         Palancas[auxContacto].transform.localEulerAngles = new Vector3(rotPalancas[auxContacto], Palancas[auxContacto].transform.localEulerAngles.y, Palancas[auxContacto].transform.localEulerAngles.z);
+                        Debug.Log("Auxcontacto:" + auxContacto + " contacto:" + contacto + " rotActual:" + Palancas[auxContacto].transform.localEulerAngles.x);
                         LucesLEDCaja[auxContacto].SetActive(false);
                         LucesLEDCaja[auxContacto+1].SetActive(true);
+                        if (nPalancasOff == 0) 
+                        {
+                            StartCoroutine(ActivarObjxTiempo(Palancas[5]));
+                            StartCoroutine(DeactivarObjxTiempo(LucesLEDCaja[6]));
+                        }
                         nPalancasOff++;
                         if (nPalancasOff == 3)
                         {
                             StartCoroutine(TiempoEsperaTarea(1));
                             aSource.goFx(aSource.FxSonidos[21].nombre);
                             aSource.goFx(aSource.FxSonidos[23].nombre);
+                            Tablero_Indicaciones[4].SetActive(true);
                         }
                         break;
                     case 1://starter
+                        Debug.Log("Auxcontacto:" + auxContacto + " contacto:" + contacto + " rotActual:" + Palancas[2].transform.localEulerAngles.x);
                         Palancas[2*auxContacto + 1].SetActive(false);
-                        Palancas[2*auxContacto].transform.localEulerAngles = new Vector3(rotPalancas[auxContacto], Palancas[2 * auxContacto].transform.localEulerAngles.y, Palancas[2 * auxContacto].transform.localEulerAngles.z);
+                        Palancas[2].transform.localEulerAngles = new Vector3(0, 0, 0);
+                        Debug.Log("Auxcontacto:" + auxContacto + " contacto:" + contacto + " rotActual:" + Palancas[2].transform.localEulerAngles.x);
                         LucesLEDCaja[2 * auxContacto].SetActive(false);
                         LucesLEDCaja[2*auxContacto + 1].SetActive(true);
+                        if (nPalancasOff == 0)
+                        {
+                            StartCoroutine(ActivarObjxTiempo(Palancas[5]));
+                            StartCoroutine(DeactivarObjxTiempo(LucesLEDCaja[6]));
+                        }
                         nPalancasOff++;
                         if (nPalancasOff == 3)
                         {
                             StartCoroutine(TiempoEsperaTarea(1));
                             aSource.goFx(aSource.FxSonidos[21].nombre);
                             aSource.goFx(aSource.FxSonidos[23].nombre);
+                            Tablero_Indicaciones[4].SetActive(true);
                         }
                         break;
                     case 2://Master
+                        Debug.Log("Auxcontacto:" + auxContacto + " contacto:" + contacto + " rotActual:" + Palancas[4].transform.localEulerAngles.x);
                         Palancas[2 * auxContacto + 1].SetActive(false);
-                        Palancas[2*auxContacto].transform.localEulerAngles = new Vector3(rotPalancas[auxContacto], Palancas[2 * auxContacto].transform.localEulerAngles.y, Palancas[2*auxContacto].transform.localEulerAngles.z);
+                        Palancas[4].transform.localEulerAngles = new Vector3(0,0,0);
+                        Debug.Log("Auxcontacto:" + auxContacto + " contacto:" + contacto + " rotActual:" + Palancas[4].transform.localEulerAngles.x);
                         LucesLEDCaja[2*auxContacto].SetActive(false);
                         LucesLEDCaja[2*auxContacto + 1].SetActive(true);
                         LucesLEDCaja[1].SetActive(false);
@@ -285,6 +365,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                             StartCoroutine(TiempoEsperaTarea(1));
                             aSource.goFx(aSource.FxSonidos[21].nombre);
                             aSource.goFx(aSource.FxSonidos[23].nombre);
+                            Tablero_Indicaciones[4].SetActive(true);
                         }
                         break;
                 }

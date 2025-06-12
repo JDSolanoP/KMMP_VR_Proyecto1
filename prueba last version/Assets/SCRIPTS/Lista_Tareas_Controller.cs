@@ -24,6 +24,9 @@ public class Lista_Tareas_Controller : MonoBehaviour
     public Color fadeColor;
     public float fadeTiempo = 2;
     public bool IniciaFade = true;
+    [Header("*****ELEMENTOS DE BLOQUEO DE CERRADO*****")]
+    [SerializeField] private GameObject exitConfirmationPanel = null;
+    private bool _exitRequested = false;
     [Header("ELEMENTOS DE MODULOS")]
     public GameObject[] Tablero_Indicaciones;
     public bool[] contacto_confirmado;
@@ -181,5 +184,38 @@ public class Lista_Tareas_Controller : MonoBehaviour
         yield return new WaitForSeconds(fadeTiempo);
         SceneManager.LoadScene(nEscena);
     }
+    /*public void ShowExitConfirmation()
+    {
+        _exitRequested = true;
+        exitConfirmationPanel.SetActive(true);
+    }
 
+    public void ConfirmExit()
+    {
+        Application.Quit();
+    }
+
+    public void CancelExit()
+    {
+        _exitRequested = false;
+        exitConfirmationPanel.SetActive(false);
+    }
+
+    private static bool WantsToQuit()
+    {
+        //tm= FindFirstObjectByType<l>();
+        if (tm != null && !tm._exitRequested)
+        {
+            tm.ShowExitConfirmation();
+            return false;
+        }
+
+        return true;
+    }
+
+    [RuntimeInitializeOnLoadMethod]
+    private static void RegisterQuitCallback()
+    {
+        Application.wantsToQuit += WantsToQuit;
+    }*/
 }

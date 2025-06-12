@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Oculus.Interaction.Editor;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
 {
@@ -9,6 +11,11 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
     public GameObject[] Muros;
     public GameObject[] Flechas;
     public GameObject[] BtnContinue;
+    public float tiempoBTNContinuar;
+    public GameObject[] perillaPuertaCabinaOBJ;//******11-06-25******//Para verificar si puerta cerrada
+    public Transform[] pos0PerillasPCabina;//******11-06-25******//Para verificar si puerta cerrada
+    public bool si_PuertaCabinaCerrada=true;
+    public bool si_PJEnCabina =false;
     public override void Start()
     {
         base.Start();
@@ -38,6 +45,8 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                     BtnContinue[i].SetActive(false);
                 }
                 yield return new WaitForSecondsRealtime(0.5f);
+                pos0PerillasPCabina[0] = perillaPuertaCabinaOBJ[0].transform;
+                pos0PerillasPCabina[1] = perillaPuertaCabinaOBJ[1].transform;
                 Tablero_Indicaciones[0].SetActive(true);//panel de bienvenido
                 /*   //audioManager de bienvenida
 
@@ -58,15 +67,17 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
 
                     yield return new WaitForFixedUpdate();
                 }
-                yield return new WaitForSecondsRealtime(5f);
+                yield return new WaitForSecondsRealtime(23f);
+                aSource.goFx(aSource.FxSonidos[33].nombre);
                 Tablero_Indicaciones[1].SetActive(true);//Locucion para panel intro de P1
                 Flechas[0].SetActive(true);
                 aros_indicadores[0].SetActive(true);
                 break;
             case 1://ARO_00
+                aSource.goFx(aSource.FxSonidos[40].nombre);
                 auxContacto++;
                 Tablero_Indicaciones[TareaActual+1].SetActive(true);//Locucion para panel intro de P1
-                yield return new WaitForSecondsRealtime(5);
+                yield return new WaitForSecondsRealtime(tiempoBTNContinuar);
                 BtnContinue[TareaActual-1].SetActive(true);
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
@@ -75,9 +86,10 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 }
                 break;
             case 2://ARO_01
+                aSource.goFx(aSource.FxSonidos[40].nombre);
                 auxContacto++;
                 Tablero_Indicaciones[TareaActual + 1].SetActive(true);//Locucion para panel intro de P1
-                yield return new WaitForSecondsRealtime(5);
+                yield return new WaitForSecondsRealtime(tiempoBTNContinuar);
                 BtnContinue[TareaActual - 1].SetActive(true);
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
@@ -86,10 +98,11 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 }
                 break;
             case 3://ARO_02
+                aSource.goFx(aSource.FxSonidos[40].nombre);
                 auxContacto++;
                 Debug.Log(TareaActual + "Nuevo AuxContacto aumentado en Tarea==" + auxContacto);
                 Tablero_Indicaciones[TareaActual + 1].SetActive(true);//Locucion para panel intro de P1
-                yield return new WaitForSecondsRealtime(5);
+                yield return new WaitForSecondsRealtime(tiempoBTNContinuar);
                 BtnContinue[TareaActual - 1].SetActive(true);
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
@@ -98,10 +111,11 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 }
                 break;
             case 4://ARO_03
+                aSource.goFx(aSource.FxSonidos[40].nombre);
                 auxContacto++;
                 Debug.Log(TareaActual + "Nuevo AuxContacto aumentado en Tarea==" + auxContacto);
                 Tablero_Indicaciones[TareaActual + 1].SetActive(true);//Locucion para panel intro de P1
-                yield return new WaitForSecondsRealtime(5);
+                yield return new WaitForSecondsRealtime(tiempoBTNContinuar);
                 BtnContinue[TareaActual - 1].SetActive(true);
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
@@ -110,10 +124,11 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 }
                 break;
             case 5://ARO_04
+                aSource.goFx(aSource.FxSonidos[40].nombre);
                 auxContacto++;
                 Debug.Log(TareaActual + "Nuevo AuxContacto aumentado en Tarea==" + auxContacto);
                 Tablero_Indicaciones[TareaActual + 2].SetActive(true);//Locucion para panel intro de P1
-                yield return new WaitForSecondsRealtime(5);
+                yield return new WaitForSecondsRealtime(tiempoBTNContinuar);
                 BtnContinue[TareaActual - 1].SetActive(true);
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
@@ -122,10 +137,11 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 }
                 break;
             case 6://ARO_05
+                aSource.goFx(aSource.FxSonidos[40].nombre);
                 auxContacto++;
                 Debug.Log(TareaActual + "Nuevo AuxContacto aumentado en Tarea==" + auxContacto);
                 Tablero_Indicaciones[TareaActual + 2].SetActive(true);//Locucion para panel intro de P1
-                yield return new WaitForSecondsRealtime(5);
+                yield return new WaitForSecondsRealtime(tiempoBTNContinuar);
                 BtnContinue[TareaActual - 1].SetActive(true);
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
@@ -134,10 +150,11 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 }
                 break;
             case 7://ARO_06
+                aSource.goFx(aSource.FxSonidos[40].nombre);
                 auxContacto++;
                 Debug.Log(TareaActual+" Nuevo AuxContacto aumentado en Tarea==" + auxContacto);
                 Tablero_Indicaciones[TareaActual + 2].SetActive(true);//Locucion para panel intro de P1
-                yield return new WaitForSecondsRealtime(5);
+                yield return new WaitForSecondsRealtime(tiempoBTNContinuar);
                 BtnContinue[TareaActual - 1].SetActive(true);
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
@@ -158,12 +175,14 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 }
                 break;
             case 9:////ARO_07
+                
+                aSource.goFx(aSource.FxSonidos[38].nombre);
                 Muros[8].SetActive(true);
                 aros_indicadores[7].SetActive(false);
                 auxContacto++;
                 Debug.Log(TareaActual + " Nuevo AuxContacto aumentado en Tarea==" + auxContacto);
                 Tablero_Indicaciones[TareaActual + 2].SetActive(true);//Locucion para panel intro de P1
-                yield return new WaitForSecondsRealtime(5);
+                yield return new WaitForSecondsRealtime(18.5f);
                 BtnContinue[TareaActual - 2].SetActive(true);
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
@@ -172,8 +191,12 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 }
                 break;
             case 10://CONTINUAR DE PANEL DE CONCLUSIONES
+                aSource.goFx(aSource.FxSonidos[39].nombre);
+                aSource.goFx(aSource.FxSonidos[30].nombre);
+                aSource.goFx(aSource.FxSonidos[31].nombre);
                 Tablero_Indicaciones[11].SetActive(false);//Locucion para panel intro de P1
                 Tablero_Indicaciones[12].SetActive(true);//Locucion para panel intro de P1
+                Muros[8].SetActive(false);
                 Muros[9].SetActive(false);
                 auxContacto++;
                 Debug.Log(TareaActual + " Nuevo AuxContacto aumentado en Tarea==" + auxContacto);
@@ -182,10 +205,9 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 BtnContinue[8].SetActive(true);
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
-
                     yield return new WaitForFixedUpdate();
                 }
-                yield return new WaitForSecondsRealtime(5);
+                yield return new WaitForSecondsRealtime(6);
                 BtnContinue[9].SetActive(true);
                 break;
         }
@@ -216,6 +238,50 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 Flechas[8].SetActive(false);
                 TareaCompletada(8);
                 break;
+            case 2:
+                if (contacto_confirmado[confirmarcontacto] == true)
+                {
+                    if (si_PuertaCabinaCerrada == false)//cerrando
+                    {
+                        Debug.Log(confirmarcontacto + " auxcontacto=" + auxContacto + " cerrando");
+                        /*perillaPuertaCabinaOBJ[0].GetComponent<Transform>().Equals(pos0PerillasPCabina[0]);
+                        perillaPuertaCabinaOBJ[1].GetComponent<Transform>().Equals(pos0PerillasPCabina[1]);*/
+                        aSource.goFx("PuertaCabinaCerrando");
+                        si_PuertaCabinaCerrada = true;
+                        if (si_PJEnCabina == true)
+                        {
+                            aSource.MusicaVol(0.1f);
+                        }
+                        else
+                        {
+                            aSource.MusicaVol(0.75f);
+                        }
+                    }
+                }
+                else
+                {
+                    if (si_PuertaCabinaCerrada == true)//abriendo
+                    {
+                        /*perillaPuertaCabinaOBJ[0].GetComponent<Transform>().Equals(pos0PerillasPCabina[0]);
+                        perillaPuertaCabinaOBJ[1].GetComponent<Transform>().Equals(pos0PerillasPCabina[1]);*/
+                        Debug.Log(confirmarcontacto + " auxcontacto=" + auxContacto + " Abriendo");
+                        
+                        si_PuertaCabinaCerrada = false;
+                        aSource.goFx("PuertaCabinaAbriendo");
+                        aSource.MusicaVol(0.75f);
+                    }
+                }
+                break;
+            case 3:
+                if (contacto_confirmado[confirmarcontacto] == true)
+                {
+                    si_PJEnCabina = true;
+                }
+                else
+                {
+                    si_PJEnCabina = false;
+                }
+                break;
         }
     }
     public void activacionXR(int contacto) //contacto con manos
@@ -223,11 +289,16 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
         switch (contacto) 
         {
             case 0://boton continue
+                aSource.goFx(aSource.FxSonidos[8].nombre);
                 Debug.Log("auxcontacto=" + auxContacto);
                 if (auxContacto < 8) {
                     Muros[auxContacto - 1].SetActive(false);
                     aros_indicadores[auxContacto].SetActive(true);
                     Flechas[auxContacto].SetActive(true);
+                    if (auxContacto < 7)
+                    {
+                        aSource.goFx(aSource.FxSonidos[34].nombre);
+                    }
                 }
                 
                 if (TareaActual < 4)//antes de subir a cabina
@@ -241,16 +312,23 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 }
                 else if(TareaActual==4)
                 {
+                    Debug.Log(auxContacto+" Verificacion "+TareaActual);
                     Tablero_Indicaciones[auxContacto + 1].SetActive(false);
                     Tablero_Indicaciones[auxContacto + 2].SetActive(true);
+                    StartCoroutine(TiempoParaFX(35));
                 }
                 else 
                 {
-
+                    if (TareaActual == 6)
+                    {
+                        StartCoroutine(TiempoParaFX(36));
+                    }
                     Tablero_Indicaciones[auxContacto + 2].SetActive(false);
                 }
                 if (auxContacto == 7)
                 {
+                    aSource.goFx(aSource.FxSonidos[21].nombre);
+                    aSource.goFx(aSource.FxSonidos[23].nombre);
                     Muros[7].SetActive(false);
                     Tablero_Indicaciones[6].SetActive(false);
                     TareaCompletada(TareaActual);
@@ -258,9 +336,11 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 }
                 break;
             case 1://boton reinicio
+                Debug.Log("Reiniciando");
                 IrEscenaAsincron(0);
                 break;
             case 2://boton SALIR
+                Debug.Log("Saliendo");
                 Application.Quit();
                 break;
         }
@@ -273,5 +353,12 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
     public void activarItem(bool on)
     {
         Flechas[8].SetActive(on);
+    }
+    public IEnumerator TiempoParaFX(int nAudio)
+    {
+        Debug.Log("audioFX "+nAudio+" Llamando en 5s");
+        yield return new WaitForSecondsRealtime(3f);
+        Debug.Log("audioFX " + nAudio + " reproduciendo");
+        aSource.goFx(aSource.FxSonidos[nAudio].nombre);
     }
 }
