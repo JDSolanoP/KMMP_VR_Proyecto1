@@ -12,6 +12,7 @@ public class Lista_Tareas_Controller : MonoBehaviour
     public int totalTareas;
     [Header("*****Opciones de Desarrollador*****")]
     public bool EnPruebas = true;
+    public bool si_MusicaInicial=false;
     [Header("EnPruebas=false->Para Pruebas de todas las tareas y animaciones")]
     public bool si_login=false;//01-03-25//espera la pausa
     public GameObject[] aros_indicadores;
@@ -45,7 +46,14 @@ public class Lista_Tareas_Controller : MonoBehaviour
         }
     }
     public virtual void Start()
-    {
+    {if (EnPruebas == false)
+        {
+            for (int i = 0; i < Tablero_Indicaciones.Length; i++)
+            {
+                Tablero_Indicaciones[i].SetActive(false);
+            }
+        }
+        
         if (SiFadeActivo)//mantener desactivado para usar render asigando en el editor
         {
             rend = GetComponent<Renderer>();
@@ -110,6 +118,11 @@ public class Lista_Tareas_Controller : MonoBehaviour
     {
         if (si_login)
         {
+
+            if (si_MusicaInicial == true)
+            {
+                aSource.PlayMusica(aSource.MusicaSonidos[0].nombre, 0.75f, true);
+            }
             //audio inicial
             while (TM_Lobby.lb.si_inicioModulo == false)
             {
