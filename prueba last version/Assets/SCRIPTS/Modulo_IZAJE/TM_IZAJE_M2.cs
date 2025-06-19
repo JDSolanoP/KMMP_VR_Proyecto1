@@ -157,6 +157,7 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 ElementoPost[8].transform.localPosition = pos0AgarreViento[1];
                 verificarContacto(5);*/
                 aSource.goFx("Bien");
+                
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
 
@@ -177,6 +178,10 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 ElementoPost[8].SetActive(false);//agarrea der*/
                 ElementoPost[11].SetActive(false);//detector1 de mt de lelgada
                 ElementoPost[12].SetActive(false);//detector2 de mt de lelgada
+                for(int i = 0; i < 6; i++)
+                {
+                    ControlOBJ.GetComponent<Control_Grua_Puente>().bloqueo[i] = true;
+                }
                 CtrlTotalBtn.SetActive(false);//apagar botones
                 ElementoPost[13].SetActive(true);//refe control llegada
                 while (AudioManager.aSource.IsPlayingVoz() == true)

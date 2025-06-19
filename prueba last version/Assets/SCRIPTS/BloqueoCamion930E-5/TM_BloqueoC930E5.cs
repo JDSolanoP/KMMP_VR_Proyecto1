@@ -26,6 +26,10 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     int nPalancasOff=0;
     public Vector3 cajaBloqueoTapaRot0;
     bool si_LlaveEnMano;
+    public GameObject[] llaveArranque;//prueba de desenergizado
+    public GameObject[] Timon;
+    Vector3 TimonRot0;
+    int nVerificiones;
     [Header("*****ElementosPropioDeCamión*****")]
     public bool si_PuertaCabinaCerrada;
     public bool si_PJEnCabina;
@@ -132,6 +136,10 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     LucesLEDCaja[2].SetActive(true);
                     LucesLEDCaja[4].SetActive(true);
                     LucesLEDCaja[6].SetActive(true);
+                    //***********************Preparativos pra bloqueo de camion***************
+                    llaveArranque[0].SetActive(false);
+                    TimonRot0= Timon[1].transform.localEulerAngles;
+                    int nValidacionCabina=0;
                     Tablero_Indicaciones[0].SetActive(true);//panel de bienvenido
                     /*   //audioManager de bienvenida
 
@@ -173,17 +181,19 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                         yield return new WaitForFixedUpdate();
                     }
                     break;
-                case 3:
+                case 3://verificacion de no arranque
                     if (Tablero_Indicaciones[7].activeInHierarchy == true)
                     {
                         Tablero_Indicaciones[7].SetActive(false);//Panel error de subida
                     }
                     Tablero_Indicaciones[8].SetActive(true);
+                    llaveArranque[0].SetActive(true);
+                    Timon[0].SetActive(true);
                     while (AudioManager.aSource.IsPlayingVoz() == true)
-                {
+                    {
                     yield return new WaitForFixedUpdate();
-                }
-                break;
+                    }
+                     break;
         }
         }
     }
@@ -433,6 +443,8 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 Items[15].SetActive(false);//llave candado personal refe
                 Items[16].SetActive(false);//llave candado personal mesh
                 Tablero_Indicaciones[6].SetActive(true);
+                Tablero_Indicaciones[4].SetActive(false);
+                Tablero_Indicaciones[5].SetActive(false);
                 aSource.goFx("Bien");
                 aSource.goFx("Locu_Bien");
                 StartCoroutine(TiempoEsperaTarea(2));
@@ -526,6 +538,40 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
         Items[auxContacto].GetComponent<Rigidbody>().useGravity = si;
         si_LlaveEnMano = si;
     }
+    //*************************FUNCIONES DE VERIFICACION DE NO ARRANQUE*****TIMON Y LLAVE DE ARRANQUE******17-06-25********
+    public void contadorVerificadorArranque()
+    {
+        nVerificiones++;
+    }
+    public void activarLlaveArranque()
+    {
+        llaveArranque[0].SetActive(false);
+        llaveArranque[1].SetActive(false);
+        
+        StartCoroutine(AnimacionLlaveArranque());
+    }
+    public IEnumerator AnimacionLlaveArranque()
+    {
+        llaveArranque[2].SetActive(true);
+        yield return new WaitForSeconds(3);
+        contadorVerificadorArranque();
+        if (nVerificiones == 2)
+        {
+            TiempoEsperaTarea(3);//completa tarea 3
+        }
+    }
+    public void si_Timon_Probado()
+    {
+        if (Timon[0].transform.localEulerAngles != TimonRot0)
+        {
+            contadorVerificadorArranque();
+            if (nVerificiones == 2)
+            {
+                TiempoEsperaTarea(3);//completa tarea 3
+            }
+        }
+    }
+    //************************FUNCIONES DE VOLTIMETRO*******17-06-25**************
     public void LlevarVoltimetro(bool si_der)//si se agarro con alguna mano****16.06-25
     {
         if (si_voltimetroAgarrado[0] == false&& si_voltimetroAgarrado[1] == false)//primera ocacion

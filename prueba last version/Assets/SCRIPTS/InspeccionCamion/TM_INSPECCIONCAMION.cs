@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Oculus.Interaction.Editor;
+//using Oculus.Interaction.Editor;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -143,6 +143,7 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 Tablero_Indicaciones[TareaActual + 2].SetActive(true);//Locucion para panel intro de P1
                 yield return new WaitForSecondsRealtime(tiempoBTNContinuar);
                 BtnContinue[TareaActual - 1].SetActive(true);
+                Flechas[8].SetActive(true);
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
 
@@ -156,6 +157,7 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 Tablero_Indicaciones[TareaActual + 2].SetActive(true);//Locucion para panel intro de P1
                 yield return new WaitForSecondsRealtime(tiempoBTNContinuar);
                 BtnContinue[TareaActual - 1].SetActive(true);
+                
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
 
