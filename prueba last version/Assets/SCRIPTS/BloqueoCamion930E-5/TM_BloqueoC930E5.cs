@@ -29,7 +29,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     public GameObject[] llaveArranque;//prueba de desenergizado
     public GameObject[] Timon;
     Vector3 TimonRot0;
-    int nVerificiones;
+    bool[] nVerificiones;
     [Header("*****ElementosPropioDeCamión*****")]
     public bool si_PuertaCabinaCerrada;
     public bool si_PJEnCabina;
@@ -194,6 +194,14 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     yield return new WaitForFixedUpdate();
                     }
                      break;
+                case 4:
+                    llaveArranque[0].SetActive(true);
+                    Timon[0].SetActive(true);
+                    while (AudioManager.aSource.IsPlayingVoz() == true)
+                    {
+                        yield return new WaitForFixedUpdate();
+                    }
+                    break;
         }
         }
     }
@@ -539,33 +547,29 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
         si_LlaveEnMano = si;
     }
     //*************************FUNCIONES DE VERIFICACION DE NO ARRANQUE*****TIMON Y LLAVE DE ARRANQUE******17-06-25********
-    public void contadorVerificadorArranque()
-    {
-        nVerificiones++;
-    }
+    
     public void activarLlaveArranque()
     {
         llaveArranque[0].SetActive(false);
         llaveArranque[1].SetActive(false);
-        
         StartCoroutine(AnimacionLlaveArranque());
     }
     public IEnumerator AnimacionLlaveArranque()
     {
         llaveArranque[2].SetActive(true);
         yield return new WaitForSeconds(3);
-        contadorVerificadorArranque();
-        if (nVerificiones == 2)
+        nVerificiones[0]=true;//llave completada
+        if (nVerificiones[0] == true&& nVerificiones[1] == true)
         {
             TiempoEsperaTarea(3);//completa tarea 3
         }
     }
-    public void si_Timon_Probado()
+    public void si_Timon_Probado()//select exited de las manos del timon
     {
         if (Timon[0].transform.localEulerAngles != TimonRot0)
         {
-            contadorVerificadorArranque();
-            if (nVerificiones == 2)
+            //contadorVerificadorArranque();
+            if (nVerificiones[0] == true && nVerificiones[1] == true)
             {
                 TiempoEsperaTarea(3);//completa tarea 3
             }

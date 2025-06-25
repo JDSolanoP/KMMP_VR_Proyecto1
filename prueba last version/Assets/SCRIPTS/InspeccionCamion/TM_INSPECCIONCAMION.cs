@@ -144,6 +144,7 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 yield return new WaitForSecondsRealtime(tiempoBTNContinuar);
                 BtnContinue[TareaActual - 1].SetActive(true);
                 Flechas[8].SetActive(true);
+                Muros[4].SetActive(true);
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
 
@@ -168,6 +169,7 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
                 auxContacto++;
                 Debug.Log(TareaActual + " Nuevo AuxContacto aumentado en Tarea==" + auxContacto);
                 Tablero_Indicaciones[TareaActual + 2].SetActive(true);//PANEL DE VICTORIA
+                Muros[4].SetActive(false);
                 yield return new WaitForSecondsRealtime(5);
                 //BtnContinue[TareaActual - 1].SetActive(true);
                 while (AudioManager.aSource.IsPlayingVoz() == true)
