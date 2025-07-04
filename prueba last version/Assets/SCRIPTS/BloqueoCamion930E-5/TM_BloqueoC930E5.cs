@@ -141,6 +141,8 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     Palancas[1].SetActive(false);
                     Palancas[3].SetActive(false);
                     Palancas[5].SetActive(false);
+
+                    btn_Pedal.SetActive(false);
                     //*****CAptura de posiciones de los nodos del voltimetro*****16-06-25**********
                     NodosVoltimetro[0].transform.SetParent(NodosVoltimetro[1].transform);
                     NodoIzqPos0 = NodosVoltimetro[0].transform.localPosition;
@@ -405,10 +407,12 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     if (TareaActual == 4)
                     {
                         Muros[2].SetActive(true);
+                        Debug.Log("Muro de Frenos activado");
                     }
                     else
                     {
                         Muros[2].SetActive(false);
+                        Debug.Log("Muro de Frenos desactivado");
                     }
                     if (/*si_PuertaCabinaCerrada == false &&*/ TareaActual > 0)//cerrando
                     {
@@ -417,7 +421,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                         perillaPuertaCabinaOBJ[1].GetComponent<Transform>().Equals(pos0PerillasPCabina[1]);*/
                         aSource.goFx("PuertaCabinaCerrando");
                         //si_PuertaCabinaCerrada = true;
-                        aSource.MusicaVol(0.1f);
+                        //aSource.MusicaVol(0.1f);
                     }
                 }
                 else
@@ -425,10 +429,12 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     if (TareaActual == 4)
                     {
                         Muros[2].SetActive(true);
+                        Debug.Log("Muro de Frenos activado");
                     }
                     else
                     {
                         Muros[2].SetActive(false);
+                        Debug.Log("Muro de Frenos desactivado");
                     }
                 }
                 break;
@@ -582,7 +588,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
             case 5://girando NV2
                 GiroFrenoAnim(false);
                 break;
-                case 6:
+            case 6:
                 AccionPedal();
                     break;
             case 8://boton reinicio
