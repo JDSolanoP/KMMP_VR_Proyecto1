@@ -165,6 +165,7 @@ public class Lista_Tareas_Controller : MonoBehaviour
     public IEnumerator CoroutineFade(float alfaIn, float alfaOut)
     {
         float timer = 0;
+        Debug.Log("tiempo fade = " + fadeTiempo);
         while (timer <= fadeTiempo)
         {
             Color newColor = fadeColor;
@@ -231,4 +232,10 @@ public class Lista_Tareas_Controller : MonoBehaviour
     {
         Application.wantsToQuit += WantsToQuit;
     }*/
+    public IEnumerator FadeOutIn(float tOut, float tEspera,float tIn)
+    {
+        FadeOut(tOut);
+        yield return new WaitForSecondsRealtime(tEspera);
+        FadeIn(tIn);
+    }
 }
