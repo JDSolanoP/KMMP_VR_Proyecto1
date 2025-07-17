@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Policy;
 using Newtonsoft.Json.Serialization;
+using TMPro;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -29,6 +31,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     [Header("***Bloqueo_Etiquetado***")]
     public GameObject[] Items;//LOTO
     public Vector3 cajaBloqueoTapaRot0;
+    public Vector3 cajaBloqueoTapaPos0;
     bool si_LlaveEnMano;
     [Header("***NoArranque***")]
     public GameObject[] llaveArranque;//prueba de desenergizado
@@ -51,8 +54,8 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     [Header("***acumulador_auxiliar***")]
     public GameObject[] escalera;
     public GameObject[] acumuladorAux;
-    public bool si_AcuAux_Liberado=false;
-    public bool tareaHecha=false;
+    public bool si_AcuAux_Liberado = false;
+    public bool tareaHecha = false;
     [Header("***Verificacion_Override***")]
     public bool si_Override_Liberado;
     public GameObject[] Override;
@@ -66,11 +69,30 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     public GameObject[] ItemsVolti;
     public GameObject[] NodosVoltimetro;
     public bool[] si_voltimetroAgarrado;
+    public GameObject[] PuertasGPotencia;
+    public float[] RotPuertaGPontencia;//0,1 : Izq 2,3: Der
     public int quien_primero_agarre = 2;//0:Izquierda;1:Derecha;2:Ninguno
     public Vector3 NodoIzqPos0;
     public Vector3 NodoIzqRot0;
     public Vector3 NodoDerPos0;
     public Vector3 NodoDerRot0;
+    public bool[] NodosContactoIzq;//los nodos que hacen contacto con la izquierda ***** 15-07-25******
+    public bool[] NodosContactoDer;
+    [Header("0:IZQ-1DER")]
+    public int[] valorNodo;
+    public bool[] si_contactoNodos;//si contactos coinciden
+    public bool si_OrdenPositivo;//verifica si el resultado es positivo
+    public bool si_circuitoCompleto;//verifica que ambos nodos esten en contacto
+    
+    public TMP_Text txt_panelVolti;
+
+        [Header("Extras")]
+    public GameObject UI_btn_Continuar_Panel;
+    public GameObject UI_btn_Salir_Panel;
+    public GameObject UI_btn_Reiniciar_Panel;
+    public GameObject UI_btn_Menu_Panel;
+
+    
     public override void Start()
     {
         base.Start();
@@ -108,8 +130,6 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                             NPC[i].SetActive(true);
                         }
                     }
-
-
                     /*for (int i = 0; i < aros_indicadores.Length; i++)
                     {
                         Flechas[i].SetActive(false);
@@ -159,8 +179,11 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     NodoDerPos0 = NodosVoltimetro[1].transform.localPosition;
                     NodoDerRot0 = NodosVoltimetro[1].transform.localEulerAngles;
                     NodosVoltimetro[1].transform.SetParent(NodosVoltimetro[2].transform);
+                    RotPuertaGPontencia[0] = PuertasGPotencia[0].transform.localEulerAngles.z;//rot0,izq
+                    RotPuertaGPontencia[2] = PuertasGPotencia[1].transform.localEulerAngles.z;//rot0 der
                     //**********************************************************************
-                    cajaBloqueoTapaRot0 = Items[15].transform.localEulerAngles;//tapa de caja de bloqueo*************17-06-25
+                    cajaBloqueoTapaRot0 = Items[18].transform.localEulerAngles;//tapa de caja de bloqueo*************17-06-25
+                    cajaBloqueoTapaPos0 = Items[18].transform.localPosition;    
                     for (int i = 0; i < LucesLEDCaja.Length; i++)
                     {
                         LucesLEDCaja[i].SetActive(false);
@@ -172,7 +195,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     //***********************Preparativos pra bloqueo de camion***************
                     llaveArranque[0].SetActive(false);
                     TimonRot0 = Timon[1].transform.localEulerAngles;
-
+                    txt_panelVolti.text = "";
                     Tablero_Indicaciones[0].SetActive(true);//panel de bienvenido
                     /*   //audioManager de bienvenida
 
@@ -211,6 +234,8 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     Tablero_Indicaciones[0].SetActive(false);//PBIENVENIDA
                     Tablero_Indicaciones[1].SetActive(false);//PBIENVENIDA
                     Items[0].SetActive(true);//candadoAmarillo refe
+                    Items[18].transform.localEulerAngles = new Vector3(0, 0, 0);
+                    Items[18].transform.localPosition = new Vector3(cajaBloqueoTapaPos0.x, cajaBloqueoTapaPos0.y, cajaBloqueoTapaPos0.z);
                     while (AudioManager.aSource.IsPlayingVoz() == true)
                     {
                         yield return new WaitForFixedUpdate();
@@ -240,7 +265,8 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                         yield return new WaitForFixedUpdate();
                     }
                     break;
-                case 5://verificacion´pedal
+                case 5://verificacion pedal
+                    Muros[3].SetActive(true);//muro que evita pedal
                     Tablero_Indicaciones[10].SetActive(false);
                     Tablero_Indicaciones[12].SetActive(true);
                     btn_Pedal.SetActive(true);
@@ -251,6 +277,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     }
                     break;
                 case 6://liberacion acumulador auxiliar
+                    Muros[3].SetActive(true);//muro que evita pedal
                     Tablero_Indicaciones[12].SetActive(false);
                     Tablero_Indicaciones[14].SetActive(true);
                     acumuladorAux[0].SetActive(true);
@@ -276,8 +303,10 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 case 8://verificacion con voltimetro
                     Tablero_Indicaciones[18].SetActive(true);
                     Tablero_Indicaciones[16].SetActive(false);
+                    Tablero_Indicaciones[22].SetActive(true);
                     btn_AbrirGabinetePotencia.SetActive(true);
-
+                    auxContacto = 0;
+                    contactoIntAux = 0;
                     
 
                     while (AudioManager.aSource.IsPlayingVoz() == true)
@@ -286,18 +315,24 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     }
                     break;
                 case 9://conclusiones
+                    UI_btn_Continuar_Panel.SetActive(false);
                     Tablero_Indicaciones[20].SetActive(true);
-
-
+                    yield return new WaitForSecondsRealtime(5);
+                    UI_btn_Continuar_Panel.SetActive(true);
                     while (AudioManager.aSource.IsPlayingVoz() == true)
                     {
                         yield return new WaitForFixedUpdate();
                     }
                     break;
                 case 10://final
+                    UI_btn_Reiniciar_Panel.SetActive(false);
+                    UI_btn_Salir_Panel.SetActive(false);    
                     Tablero_Indicaciones[21].SetActive(true);
                     Tablero_Indicaciones[20].SetActive(false);
-
+                    yield return new WaitForSecondsRealtime(5);
+                    UI_btn_Reiniciar_Panel.SetActive(true);
+                    yield return new WaitForSecondsRealtime(5);
+                    UI_btn_Salir_Panel.SetActive(true);
                     while (AudioManager.aSource.IsPlayingVoz() == true)
                     {
                         yield return new WaitForFixedUpdate();
@@ -372,16 +407,18 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     Items[4].SetActive(false);//taobj
                     Items[5].SetActive(true);//TAMesh
                     Items[6].SetActive(true);//refe llave
-                    Items[7].SetActive(true);//llave ta obj
+                    Items[7].SetActive(true);//llave ca obj
                     Items[8].SetActive(false);//llave TA mesh
                 }
                 break;
-            case 4://contacto llave con caja
+            case 4://detector contacto llave con caja
                 if (contacto_confirmado[confirmarcontacto] == true && si_LlaveEnMano == false)
                 {
-                    Debug.Log("llave en caja confirmarcontacto " + confirmarcontacto + " : auxcontacto=" + auxContacto);
+                    
                     Items[7].GetComponent<XRGrabInteractable>().enabled = false;
-                    Items[9].SetActive(true);//candado personal refe -> pl
+                    Items[7].GetComponent<BoxCollider>().enabled = false;
+                    //Items[9].SetActive(true);//candado personal refe -> pl
+                    Debug.Log("*****llave en caja confirmarcontacto " + confirmarcontacto + " : auxcontacto=" + auxContacto+" box collider:"+Items[7].GetComponent<BoxCollider>().enabled);
                 }
                 break;
             case 5://caja bloqueo cerrada
@@ -389,18 +426,23 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 {
                     if (contacto_confirmado[4] == true)
                     {
+                        Items[18].transform.localEulerAngles = new Vector3(0, 0, 0);
+                        Items[18].transform.localPosition = new Vector3(cajaBloqueoTapaPos0.x, cajaBloqueoTapaPos0.y, cajaBloqueoTapaPos0.z);
                         auxContacto = 7;
                         objRGBDActived(false);
                         Items[7].GetComponent<XRGrabInteractable>().enabled = false;
+                        Items[7].GetComponent<BoxCollider>().enabled = false;
                         Items[9].SetActive(true);//candado personal refe -> pl
                         Items[17].GetComponent<XRGrabInteractable>().enabled = false;
-                        Items[18].transform.localEulerAngles.Set(cajaBloqueoTapaRot0.x, cajaBloqueoTapaRot0.y, cajaBloqueoTapaRot0.z);
+                        Items[18].transform.localEulerAngles.Set(0, 0, 0);
+                        Debug.Log("Caja cerrada*************************************************************");
                     }
                 }
                 break;
             case 6://colocar Candado Rojo
                 if (contacto_confirmado[confirmarcontacto] == true)
                 {
+                    Items[7].SetActive(false);//llave CA
                     Items[9].SetActive(false);//cr refe
                     Items[10].SetActive(false);// cr obj
                     Items[11].SetActive(true);//cr mesh
@@ -469,25 +511,25 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 if (tareaHecha)
                 {
                     escalera[2].transform.SetParent(escalera[1].transform);
-                    escalera[2].transform.localPosition = new Vector3(0,0,0);
-                    escalera[2].transform.localEulerAngles = new Vector3(0,0,0);
+                    escalera[2].transform.localPosition = new Vector3(0, 0, 0);
+                    escalera[2].transform.localEulerAngles = new Vector3(0, 0, 0);
                     escalera[2].GetComponent<Rigidbody>().isKinematic = true;
-                    escalera[2].GetComponent <Rigidbody>().useGravity = false;
+                    escalera[2].GetComponent<Rigidbody>().useGravity = false;
                     escalera[2].transform.SetParent(CamionC930.transform);
                     if (contacto_confirmado[confirmarcontacto] == true)
                     {
-                        escalera[2].SetActive(true);//escalera obj
+                        escalera[2].SetActive(false);//escalera obj
 
                     }
                     else
                     {
-                        escalera[2].SetActive(false);
+                        escalera[2].SetActive(true);
                     }
                 }
                 break;
-                case 11://colocar la escalera en su sitio
+            case 11://colocar la escalera en su sitio
                 if (contacto_confirmado[confirmarcontacto] == true)
-                { 
+                {
                     escalera[3].SetActive(false);//refe2
                     escalera[4].SetActive(true);//mesh
                     escalera[2].SetActive(false);//obj
@@ -495,7 +537,22 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     aSource.goFx("Locu_Bien");
                     StartCoroutine(TiempoEsperaTarea(6));//fin de acumulador aux
                 }
-                    break;
+                break;
+            case 12://refe volti
+                if (contacto_confirmado[confirmarcontacto] == true)
+                {
+                    ItemsVolti[3].SetActive(false);//refe volti
+                    ItemsVolti[4].SetActive(false);//obj volti
+                    ItemsVolti[0].SetActive(false);//refe caja
+                    ItemsVolti[1].SetActive(true);//caja cerrada
+                    ItemsVolti[2].SetActive(false);//caja abierta
+                    
+                    
+                    ItemsVolti[6].SetActive(true);//manija refe izq
+                    ItemsVolti[7].SetActive(true);//manija refe izq
+                    StartCoroutine(TiempoEsperaTarea(8));//******************************************************fin de TAREA 8
+                }
+                break;
             case 13://sonido Puerta Cabina
                 if (contacto_confirmado[confirmarcontacto] == true)
                 {
@@ -550,6 +607,124 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                         aSource.goFx("Locu_Fallo");
                     }
                     else { Muros[1].SetActive(false); }
+                }
+                break;
+            case 16://nodo izq
+                if (contacto_confirmado[confirmarcontacto] == true)
+                {
+                    
+                    valorNodo[0] = contactoIntAux;
+                    NodosContactoIzq[contactoIntAux] = true;
+                    Debug.Log("izquierda en valorNodo[0] : " + contactoIntAux+ "NodosContactoIzq["+contactoIntAux+"]="+ NodosContactoIzq[contactoIntAux]);
+                    if (contacto_confirmado[17] == true)
+                    {
+                        si_circuitoCompleto=true;
+                        Debug.Log("Verificado en IZQ; si_circuitoCompleto=" + si_circuitoCompleto);
+                        verificacionNodo(contactoIntAux);
+                    }
+                    else
+                    {
+                        txt_panelVolti.text = "";//si solo se muestra cuando se hace contacto
+                        NodosContactoIzq[contactoIntAux] = false;
+                        si_circuitoCompleto = false;
+                    }
+                    /*Debug.Log(auxContacto +"= auxcontacto - nodo izq en : " + contactoIntAux);
+                    auxContacto += contactoIntAux;
+                    if (contactoIntAux == 0 || contactoIntAux == 4)
+                    {
+                        Debug.Log(auxContacto + "= auxcontacto - nodo izq en : " + contactoIntAux + " negativo");
+                        si_OrdenPositivo = false;
+                    }
+                    if (contacto_confirmado[17] == true&&auxContacto>4)
+                    {
+                        Debug.Log(auxContacto + "= auxcontacto - nodo izq en : " + contactoIntAux + " negativo, circuito completo");
+                        si_circuitoCompleto = true;
+                        verificacionNodo(auxContacto);
+                    }
+                } else
+                {
+                    Debug.Log(auxContacto + "= auxcontacto - nodo izq fuera de : " + contactoIntAux);
+                    si_circuitoCompleto = false;
+                    auxContacto -= contactoIntAux;
+                    Debug.Log(auxContacto + "= auxcontacto -  nodo izq fuera de : " + contactoIntAux);*/
+                }
+                else
+                {
+                    NodosContactoIzq[contactoIntAux] = false;
+                    si_circuitoCompleto = false;
+                    Debug.Log("Salio de IZQ; si_circuitoCompleto=" + si_circuitoCompleto);
+                }
+                if (si_circuitoCompleto == false)
+                {
+                    txt_panelVolti.text = "";
+                }
+                break;
+            case 17://nodo der//********************015*17*25
+                if (contacto_confirmado[confirmarcontacto] == true)
+                {
+                    valorNodo[1] = contactoIntAux;
+                    /*auxContacto += contactoIntAux;
+                    if (contactoIntAux == 0 || contactoIntAux == 4)
+                    {
+                        Debug.Log(auxContacto + "= auxcontacto - nodo derecho en : " + contactoIntAux+ " positivo");
+                        si_OrdenPositivo = true;
+                    }
+                    if (contacto_confirmado[16] == true && auxContacto > 4)
+                    {
+                        Debug.Log(auxContacto + "= auxcontacto - nodo derecho en : " + contactoIntAux + " positivo, circuito completo" );
+                        si_circuitoCompleto = true;
+                        verificacionNodo(auxContacto);
+                    }
+                }
+                else {
+                    Debug.Log(auxContacto + "= auxcontacto - nodo derecho fuera de : " + contactoIntAux);
+                    si_circuitoCompleto = false;
+                    auxContacto -= contactoIntAux;
+                    Debug.Log(auxContacto + "= auxcontacto -  nodo derecho fuera de : " + contactoIntAux);*/
+                    NodosContactoDer[contactoIntAux] = true;
+                    Debug.Log("derecha en valorNodo[1] : " + contactoIntAux + "NodosContactoDer[" + contactoIntAux + "]=" + NodosContactoDer[contactoIntAux]);
+                    if (contacto_confirmado[16] == true)
+                    {
+                        si_circuitoCompleto = true;
+                        Debug.Log("Verificado en Der; si_circuitoCompleto=" + si_circuitoCompleto);
+                        verificacionNodo(contactoIntAux);
+                    }
+                    else
+                    {
+                        txt_panelVolti.text = "";//si solo se muestra cuando se hace contacto
+                        NodosContactoDer[contactoIntAux] = false;
+                        si_circuitoCompleto = false;
+                        Debug.Log("Salio de Der; si_circuitoCompleto=" + si_circuitoCompleto);
+                    }
+                    /*Debug.Log(auxContacto +"= auxcontacto - nodo izq en : " + contactoIntAux);
+                    auxContacto += contactoIntAux;
+                    if (contactoIntAux == 0 || contactoIntAux == 4)
+                    {
+                        Debug.Log(auxContacto + "= auxcontacto - nodo izq en : " + contactoIntAux + " negativo");
+                        si_OrdenPositivo = false;
+                    }
+                    if (contacto_confirmado[17] == true&&auxContacto>4)
+                    {
+                        Debug.Log(auxContacto + "= auxcontacto - nodo izq en : " + contactoIntAux + " negativo, circuito completo");
+                        si_circuitoCompleto = true;
+                        verificacionNodo(auxContacto);
+                    }
+                } else
+                {
+                    Debug.Log(auxContacto + "= auxcontacto - nodo izq fuera de : " + contactoIntAux);
+                    si_circuitoCompleto = false;
+                    auxContacto -= contactoIntAux;
+                    Debug.Log(auxContacto + "= auxcontacto -  nodo izq fuera de : " + contactoIntAux);*/
+                }
+                else
+                {
+                    NodosContactoDer[contactoIntAux] = false;
+                    si_circuitoCompleto = false;
+                    Debug.Log("Salio de Der; si_circuitoCompleto=" + si_circuitoCompleto);
+                }
+                if (si_circuitoCompleto == false)
+                {
+                    txt_panelVolti.text = "";
                 }
                 break;
         }
@@ -648,15 +823,16 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 break;
             case 6:
                 AccionPedal();
+                Muros[3].SetActive(false);
                 break;
             case 7://
                 if (tareaHecha == true)
                 {
                     //escalera[2].GetComponent<Transform>().position = new Vector3(escalera[0].transform.position.x, escalera[0].transform.position.y, escalera[0].transform.position.z);
-                    escalera[1].SetActive(false);
+                    escalera[1].SetActive(false);//subible
                 }
                 break;
-            case 8://activacion animacion
+            case 8://activacion animacion acu aux
                 if (tareaHecha == false)
                 {
                     StartCoroutine(AcuAux());
@@ -666,8 +842,8 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     acumuladorAux[0].SetActive(false);
                     aSource.goFx("Bien");
                     aSource.goFx("Locu_Bien");
-                    escalera[3].SetActive(true);
-                    Tablero_Indicaciones[17].SetActive(true);
+                    escalera[3].SetActive(true);//refe 2
+                    Tablero_Indicaciones[15].SetActive(true);//panel de victoria acu aux
                     
                 }
 
@@ -675,9 +851,9 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
             case 9://para agarra la escalera despues de tarea
                 if (tareaHecha == true && escalera[1].activeInHierarchy == true)
                 {
-                    escalera[1].SetActive(false);
-                    escalera[2].GetComponent<Rigidbody>().isKinematic = false;
-                    escalera[2].GetComponent<Rigidbody>().useGravity = true;
+                    escalera[1].SetActive(false);//subible
+                    escalera[2].GetComponent<Rigidbody>().isKinematic = false;//obje
+                    escalera[2].GetComponent<Rigidbody>().useGravity = true;//obj
                 }
                 break;
             case 10://override
@@ -689,17 +865,52 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 {
                     aSource.goFx("Bien");
                     aSource.goFx("Locu_Bien");
-                    escalera[3].SetActive(true);
+                    Override[0].SetActive(false);//refe
                     StartCoroutine(TiempoEsperaTarea(7));
                 }
                 break;
             case 11://abrir gabinete
                 StartCoroutine(animAbrirGPotencia());
+                Muros[4].SetActive(true);//muro que evita bajar escaleras diagonales
                     break;
-            case 12:
+            case 12://abrir caja
                 ItemsVolti[1].SetActive(false);//case cerrado
                 ItemsVolti[2].SetActive(true);//case abierto
-                ItemsVolti[3].SetActive(true);//voltimetro obj
+                ItemsVolti[4].SetActive(true);//voltimetro obj
+                ItemsVolti[8].SetActive(true);//nodo condesandor A0
+                ItemsVolti[9].SetActive(true);//nodo condesandor A1
+                ItemsVolti[10].SetActive(true);//nodo condesandor B0
+                ItemsVolti[11].SetActive(true);//nodo condesandor B1
+                
+                ItemsVolti[8].GetComponent<MeshRenderer>().enabled=true;//nodo condesandor A0
+                //ItemsVolti[9].GetComponent<MeshRenderer>().enabled = false;//nodo condesandor A1
+                ItemsVolti[10].GetComponent<MeshRenderer>().enabled = true;//nodo condesandor b0
+                //ItemsVolti[11].GetComponent<MeshRenderer>().enabled = false;//nodo condesandor b1
+                
+                aSource.goFx("Bien");
+                break;
+            case 13://puerta izq g potencia
+                PuertasGPotencia[0].transform.localEulerAngles = new Vector3(0, 0, RotPuertaGPontencia[0]);
+                ItemsVolti[6].SetActive(false);//manija refe izq
+                aSource.goFx("Bien");
+                if (ItemsVolti[7].activeInHierarchy == false)
+                {
+                    aSource.goFx("Locu_Bien");
+                    Muros[4].SetActive(false);//muro que evita bajar escaleras diagonales
+                }
+                break;
+            case 14://puerta izq g potencia
+                PuertasGPotencia[1].transform.localEulerAngles = new Vector3(0, 0, RotPuertaGPontencia[2]);
+                ItemsVolti[7].SetActive(false);//manija refe izq
+                aSource.goFx("Bien");
+                if (ItemsVolti[6].activeInHierarchy == false)
+                {
+                    aSource.goFx("Locu_Bien");
+                    Muros[4].SetActive(false);//muro que evita bajar escaleras diagonales
+                }
+                break;
+            case 17://bt continuar
+                TareaCompletada(9);
                 break;
             case 18://boton reinicio
                 IrEscenaAsincron(0);
@@ -728,6 +939,10 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     public void activarItem(bool on)
     {
         Flechas[8].SetActive(on);
+    }
+    public void Verificar_llaveEnMano(bool si_) 
+    {
+        si_LlaveEnMano=si_;
     }
     public IEnumerator TiempoEsperaAudio(float t)//Agregar tiempo***********Agregado el 26-05-25***************************************
     {
@@ -780,7 +995,22 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     {
         Items[auxContacto].GetComponent<BoxCollider>().enabled = onOff;
     }
-    public void objRGBDActived(bool si)//cuando agarra el perno
+    /*public void reposTapaLockbox(bool si_pos0)
+    {
+        Items[17].GetComponent<BoxCollider>().isTrigger = !si_pos0;
+        Items[18].GetComponent<Rigidbody>().isKinematic = !si_pos0;
+        Items[18].GetComponent<Rigidbody>().useGravity = si_pos0;
+        if (Items[18].transform.localEulerAngles.z < 0||Items[18].transform.localEulerAngles.x < 0)
+        {
+            Items[18].transform.localEulerAngles = new Vector3(0, 0, 0);
+            Items[18].transform.localPosition = new Vector3(cajaBloqueoTapaPos0.x, cajaBloqueoTapaPos0.y,cajaBloqueoTapaPos0.z);
+            Items[17].GetComponent<BoxCollider>().isTrigger = true;
+            Items[18].GetComponent<Rigidbody>().isKinematic = false;
+            Items[18].GetComponent<Rigidbody>().useGravity = true;
+        }
+        
+    }*/
+    public void objRGBDActived(bool si)//cuando agarra el llave
     {
         Debug.Log("ITEM " + (auxContacto) + "agarrado de activo el toggles de Rigidbody en funcion PernosRGBDActived");
 
@@ -788,7 +1018,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
         Items[auxContacto].GetComponent<BoxCollider>().enabled = si;
         Items[auxContacto].GetComponent<Rigidbody>().isKinematic = !si;
         Items[auxContacto].GetComponent<Rigidbody>().useGravity = si;
-        si_LlaveEnMano = si;
+        si_LlaveEnMano = !si;
     }
     //*************************FUNCIONES DE VERIFICACION DE NO ARRANQUE*****TIMON Y LLAVE DE ARRANQUE******17-06-25********
     public void activarLlaveArranque()
@@ -805,7 +1035,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
         if (nVerificionesArranque[0] == true && nVerificionesArranque[1] == true)
         {
             aSource.goFx("Bien");
-            aSource.goFx("locu_Bien");
+            aSource.goFx("Locu_Bien");
             Tablero_Indicaciones[9].SetActive(true);
             StartCoroutine(TiempoEsperaTarea(3));//completa tarea 3
         }
@@ -894,6 +1124,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     aSource.goFx("Locu_Bien");
                     //yield return new WaitForSecondsRealtime(2);
                     Tablero_Indicaciones[11].SetActive(true);
+                    V_NV1[0].SetActive(false);
                     StartCoroutine(TiempoEsperaTarea(4));
                 }
             }
@@ -916,6 +1147,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     aSource.goFx("Bien");
                     aSource.goFx("Locu_Bien");
                     //yield return new WaitForSecondsRealtime(2);
+                    V_NV2[0].SetActive(false);
                     Tablero_Indicaciones[11].SetActive(true);
                     StartCoroutine(TiempoEsperaTarea(4));
                 }
@@ -1074,13 +1306,15 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     public IEnumerator animAbrirGPotencia()
     {
         btn_AbrirGabinetePotencia.SetActive(false);
-        FadeOutIn(2f, 5f, 2f);
+        StartCoroutine(FadeOutIn(2f, 5f, 2f));
         yield return new WaitForSecondsRealtime(2f);
         aSource.goFx("Pistola_neumatica_Accion_cerrada");
         yield return new WaitForSecondsRealtime(1f);
         aSource.goFx("Pistola_neumatica_Accion_cerrada");
         yield return new WaitForSecondsRealtime(1f);
         aSource.goFx("Pistola_neumatica_Accion_cerrada");
+        PuertasGPotencia[0].transform.localEulerAngles = new Vector3(0, 0, RotPuertaGPontencia[1]);
+        PuertasGPotencia[1].transform.localEulerAngles = new Vector3(0, 0, RotPuertaGPontencia[3]);
         ItemsVolti[0].SetActive(true);
     }
     public void LlevarVoltimetro(bool si_der)//si se agarro con alguna mano****16.06-25
@@ -1090,7 +1324,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
             if (si_der==false)
             {
                 quien_primero_agarre=0;//indica si padre = izq
-                Debug.Log("SE AGARRO PRIMERO: IZQUIERDO, DERECHO ES HIJO");
+                //Debug.Log("SE AGARRO PRIMERO: IZQUIERDO, DERECHO ES HIJO");
                 si_voltimetroAgarrado[0] = true;
                 NodosVoltimetro[1].transform.SetParent(NodosVoltimetro[0].transform);
                 NodosVoltimetro[1].transform.localPosition.Set(NodoDerPos0.x, NodoDerPos0.y, NodoDerPos0.z);
@@ -1102,7 +1336,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
             }
             else
             {
-                Debug.Log("SE AGARRO PRIMERO: DERECHO, IZQUIERDO ES HIJO");
+                //Debug.Log("SE AGARRO PRIMERO: DERECHO, IZQUIERDO ES HIJO");
                 quien_primero_agarre = 1;//indica si padre = der
                 si_voltimetroAgarrado[1] = true;
                 NodosVoltimetro[0].transform.SetParent(NodosVoltimetro[1].transform);
@@ -1120,14 +1354,14 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
         {
             if (si_der==false)
             {
-                Debug.Log("SE AGARRO DESPUES: IZQUIERDO");
+                //Debug.Log("SE AGARRO DESPUES: IZQUIERDO");
                 si_voltimetroAgarrado[0] = true;
                 NodosVoltimetro[0].GetComponent<Rigidbody>().isKinematic = true;
                 NodosVoltimetro[0].GetComponent<Rigidbody>().useGravity = false;
                 NodosVoltimetro[0].GetComponent<Return_Pos0>().enabled = false;
             }
             else {
-                Debug.Log("SE AGARRO DESPUES: DERECHO");
+                //Debug.Log("SE AGARRO DESPUES: DERECHO");
                 si_voltimetroAgarrado[1] = true;
                 NodosVoltimetro[1].GetComponent<Rigidbody>().isKinematic = true;
                 NodosVoltimetro[1].GetComponent<Rigidbody>().useGravity = false;
@@ -1143,38 +1377,40 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
             if (si_der==false)
             {
                 si_voltimetroAgarrado[0] = false;
+                NodosVoltimetro[0].GetComponent<Rigidbody>().isKinematic = true;
+                NodosVoltimetro[0].GetComponent<Rigidbody>().useGravity = false;
                 StartCoroutine(ReUbicacionEnJerarquia(false));//17*6*25
-                
+                /*
                 //NodosVoltimetro[1].transform.SetParent(NodosVoltimetro[0].transform);
                 
                 //NodosVoltimetro[0].GetComponent<BoxCollider>().enabled = !si_voltimetroAgarrado[0];
-                NodosVoltimetro[0].GetComponent<Rigidbody>().isKinematic = true;
-                NodosVoltimetro[0].GetComponent<Rigidbody>().useGravity = false;
+                
                 if (quien_primero_agarre== 0) 
                 {
-                    Debug.Log("SE AGARRO PRIMERO: iZQUIERDA Y SE SOLTO IZQUIERDA");
+                    //Debug.Log("SE AGARRO PRIMERO: iZQUIERDA Y SE SOLTO IZQUIERDA");
                 }
                 if (quien_primero_agarre == 1)
                 {
-                    Debug.Log("SE AGARRO PRIMERO: derecho Y SE SOLTO izquierdo");
-                }
+                    //Debug.Log("SE AGARRO PRIMERO: derecho Y SE SOLTO izquierdo");
+                }*/
             }
             else
             {
                 si_voltimetroAgarrado[1] = false;
+                NodosVoltimetro[1].GetComponent<Rigidbody>().isKinematic = true;
+                NodosVoltimetro[1].GetComponent<Rigidbody>().useGravity = false;
                 StartCoroutine(ReUbicacionEnJerarquia(true));//17*6*25
                 //NodosVoltimetro[0].transform.SetParent(NodosVoltimetro[1].transform);
                 
                 //NodosVoltimetro[1].GetComponent<BoxCollider>().enabled = !si_voltimetroAgarrado[0];
-                NodosVoltimetro[1].GetComponent<Rigidbody>().isKinematic = true;
-                NodosVoltimetro[1].GetComponent<Rigidbody>().useGravity = false;
+                
                 if (quien_primero_agarre == 0)
                 {
-                    Debug.Log("SE AGARRO PRIMERO: iZQUIERDA Y SE SOLTO derecho");
+                    //Debug.Log("SE AGARRO PRIMERO: iZQUIERDA Y SE SOLTO derecho");
                 }
                 if (quien_primero_agarre == 1)
                 {
-                    Debug.Log("SE AGARRO PRIMERO: derecho Y SE SOLTO derecho");
+                    //Debug.Log("SE AGARRO PRIMERO: derecho Y SE SOLTO derecho");
                 }
             }
         }
@@ -1189,7 +1425,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
             if (si_voltimetroAgarrado[0] == false && si_voltimetroAgarrado[1] == false)
             {
                 quien_primero_agarre = 2;
-                Debug.Log("SE SOLTO ambos");
+                //Debug.Log("SE SOLTO ambos");
                 si_voltimetroAgarrado[0] = false;
                 si_voltimetroAgarrado[1] = false;
                 NodosVoltimetro[0].transform.SetParent(NodosVoltimetro[2].transform);
@@ -1202,6 +1438,15 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 NodosVoltimetro[0].GetComponent<Rigidbody>().useGravity = true;
                 NodosVoltimetro[0].GetComponent<Return_Pos0>().enabled = true;
                 NodosVoltimetro[1].GetComponent<Return_Pos0>().enabled = true;
+                auxContacto = 0;
+                contactoIntAux = 0;
+                for(int i = 0; i < NodosContactoDer.Length; i++)
+                {
+                    NodosContactoDer[i]=false;
+                    NodosContactoIzq[i] = false;
+                    txt_panelVolti.text = "";//si solo se muestra cuando se hace contacto
+                }
+                Debug.Log(auxContacto+" : aux-contactointaux : "+contactoIntAux);
             }
         }
     }
@@ -1209,6 +1454,194 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     {
         si_voltimetroAgarrado[0]=siPickUp;
     }
+    public void verificacionNodo(int cont)
+    {
+        
+        Debug.Log(valorNodo[0] + "-> izquierda ; derecha -> " + valorNodo[1]);
+        //*************version 1*****************
+        if (NodosContactoDer[0] == true && NodosContactoIzq[2]==true&&
+            si_contactoNodos[0] == false && si_contactoNodos[1] == false&& 
+            si_contactoNodos[2] == false && si_contactoNodos[3] == false)//1
+        {
+            txt_panelVolti.text = "0.0 v";
+            ItemsVolti[10].GetComponent<MeshRenderer>().enabled = false;//nodo condesandor B0
+            ItemsVolti[11].GetComponent<MeshRenderer>().enabled = true;//nodo condesandor B1
+            si_contactoNodos[0]=true;
+            Debug.Log("circuito[0] verificado +");
+            aSource.goFx("Bien");
+        }
+        if (NodosContactoDer[0] == true && NodosContactoIzq[3] == true &&
+            si_contactoNodos[0] == true && si_contactoNodos[1] == false &&
+            si_contactoNodos[2] == false && si_contactoNodos[3] == false)//2
+        {
+            txt_panelVolti.text = "0.0 v";
+            //ItemsVolti[8].SetActive(false);//nodo condesandor A0
+            ItemsVolti[11].GetComponent<MeshRenderer>().enabled = false;//nodo condesandor B1
+            ItemsVolti[8].GetComponent<MeshRenderer>().enabled = false;//nodo condesandor A0
+            ItemsVolti[9].GetComponent<MeshRenderer>().enabled = true;//nodo condesandor A1
+            ItemsVolti[10].GetComponent<MeshRenderer>().enabled = true;//nodo condesandor B0
+            //ItemsVolti[11].SetActive(false);//nodo condesandor B1
+            si_contactoNodos[1] = true;
+            Debug.Log("circuito[1] verificado +");
+            aSource.goFx("Bien");
+        }
+        if (NodosContactoDer[1] == true && NodosContactoIzq[2] == true &&
+            si_contactoNodos[0] == true && si_contactoNodos[1] == true && 
+            si_contactoNodos[2] == false && si_contactoNodos[3] == false)//3
+        {
+            txt_panelVolti.text = "0.0 v";
+            /*ItemsVolti[8].SetActive(false);//nodo condesandor A0
+            ItemsVolti[9].SetActive(true);//nodo condesandor A1
+            ItemsVolti[10].SetActive(false);//nodo condesandor B0
+            ItemsVolti[11].SetActive(true);//nodo condesandor B1*/
+            ItemsVolti[10].GetComponent<MeshRenderer>().enabled = false;//nodo condesandor B0
+            ItemsVolti[11].GetComponent<MeshRenderer>().enabled = true;//nodo condesandor B1
+            si_contactoNodos[2] = true;
+            Debug.Log("circuito[2] verificado +");
+            aSource.goFx("Bien");
+        }
+
+        if (NodosContactoDer[1] == true && NodosContactoIzq[3] == true &&
+            si_contactoNodos[0] == true && si_contactoNodos[1] == true &&
+            si_contactoNodos[2] == true && si_contactoNodos[3] == false)
+        {
+            txt_panelVolti.text = "0.0 v";
+            /*ItemsVolti[8].SetActive(false);//nodo condesandor A0
+            ItemsVolti[9].SetActive(false);//nodo condesandor A1
+            ItemsVolti[10].SetActive(false);//nodo condesandor B0
+            ItemsVolti[11].SetActive(false);//nodo condesandor B1*/
+            ItemsVolti[9].GetComponent<MeshRenderer>().enabled = false;//nodo condesandor A1
+            ItemsVolti[11].GetComponent<MeshRenderer>().enabled = false;//nodo condesandor B0
+            Debug.Log("circuito[3] verificado +");
+            si_contactoNodos[3] = true;
+            aSource.goFx("Bien");
+        }
+        /////////*************version2********************
+        if (NodosContactoDer[2] == true && NodosContactoIzq[0] == true 
+            && si_contactoNodos[0] == false && si_contactoNodos[1] == false 
+            && si_contactoNodos[2] == false && si_contactoNodos[3] == false)//1
+        {
+            txt_panelVolti.text = "0.0 v";
+            /*ItemsVolti[8].SetActive(true);//nodo condesandor A0
+            ItemsVolti[9].SetActive(false);//nodo condesandor A1
+            ItemsVolti[10].SetActive(false);//nodo condesandor B0
+            ItemsVolti[11].SetActive(true);//nodo condesandor B1*/
+            ItemsVolti[10].GetComponent<MeshRenderer>().enabled = false;//nodo condesandor B0
+            ItemsVolti[11].GetComponent<MeshRenderer>().enabled = true;//nodo condesandor B1
+            si_contactoNodos[0] = true;
+            Debug.Log("circuito[0] verificado -");
+
+            aSource.goFx("Bien");
+        }
+        if (NodosContactoDer[3] == true && NodosContactoIzq[0] == true 
+            && si_contactoNodos[0] == true && si_contactoNodos[1] == false 
+            && si_contactoNodos[2] == false && si_contactoNodos[3] == false)//2
+        {
+            txt_panelVolti.text = "0.0 v";
+            /*ItemsVolti[8].SetActive(false);//nodo condesandor A0
+            ItemsVolti[9].SetActive(true);//nodo condesandor A1
+            ItemsVolti[10].SetActive(true);//nodo condesandor B0
+            ItemsVolti[11].SetActive(false);//nodo condesandor B1*/
+            ItemsVolti[11].GetComponent<MeshRenderer>().enabled = false;//nodo condesandor B1
+            ItemsVolti[8].GetComponent<MeshRenderer>().enabled = false;//nodo condesandor A0
+            ItemsVolti[9].GetComponent<MeshRenderer>().enabled = true;//nodo condesandor A1
+            ItemsVolti[10].GetComponent<MeshRenderer>().enabled = true;//nodo condesandor B0
+            si_contactoNodos[1] = true;
+            Debug.Log("circuito[2] verificado -");
+            aSource.goFx("Bien");
+        }
+        if (NodosContactoDer[2] == true && NodosContactoIzq[1] == true && 
+            si_contactoNodos[0] == true && si_contactoNodos[1] == true && 
+            si_contactoNodos[2] == false && si_contactoNodos[3] == false)
+        {
+            txt_panelVolti.text = "0.0 v";
+            /*ItemsVolti[8].SetActive(false);//nodo condesandor A0
+            ItemsVolti[9].SetActive(true);//nodo condesandor A1
+            ItemsVolti[10].SetActive(false);//nodo condesandor B0
+            ItemsVolti[11].SetActive(true);//nodo condesandor B1*/
+            ItemsVolti[10].GetComponent<MeshRenderer>().enabled = false;//nodo condesandor B0
+            ItemsVolti[11].GetComponent<MeshRenderer>().enabled = true;//nodo condesandor B1
+            si_contactoNodos[2] = true;
+            Debug.Log("circuito[1] verificado -");
+            aSource.goFx("Bien");
+        }
+
+        if (NodosContactoDer[3] == true && NodosContactoIzq[1] == true &&
+            si_contactoNodos[0] == true && si_contactoNodos[1] == true &&
+            si_contactoNodos[2] == true && si_contactoNodos[3] == false)
+        {
+            txt_panelVolti.text = "0.0 v";
+            /*ItemsVolti[8].SetActive(false);//nodo condesandor A0
+            ItemsVolti[9].SetActive(false);//nodo condesandor A1
+            ItemsVolti[10].SetActive(false);//nodo condesandor B0
+            ItemsVolti[11].SetActive(false);//nodo condesandor B1*/
+            ItemsVolti[9].GetComponent<MeshRenderer>().enabled = false;//nodo condesandor A1
+            ItemsVolti[11].GetComponent<MeshRenderer>().enabled = false;//nodo condesandor B1
+            Debug.Log("circuito[3] verificado -");
+            si_contactoNodos[3] = true;
+            aSource.goFx("Bien");
+        }
+        /*switch (cont)
+        {//****A*B***0*4
+            //*C*D***6*7
+            case 6://AC
+                si_contactoNodos[0] = true;
+                if (si_OrdenPositivo)
+                {
+                    Debug.Log("Circuito de valor positivo");
+                }
+                else
+                {
+                    Debug.Log("Circuito de valor negativo");
+                }
+                break;
+            case 7://AD
+                si_contactoNodos[1] = true;
+                if (si_OrdenPositivo)
+                {
+                    Debug.Log("Circuito de valor positivo");
+                }
+                else
+                {
+                    Debug.Log("Circuito de valor negativo");
+                }
+                break;
+            case 10://BC
+                si_contactoNodos[2] = true;
+                if (si_OrdenPositivo)
+                {
+                    Debug.Log("Circuito de valor positivo");
+                }
+                else
+                {
+                    Debug.Log("Circuito de valor negativo");
+                }
+                break;
+            case 11://BD
+                si_contactoNodos[3] = true;
+                if (si_OrdenPositivo)
+                {
+                    Debug.Log("Circuito de valor positivo");
+                }
+                else
+                {
+                    Debug.Log("Circuito de valor negativo");
+                }
+                break;
+        }*/
+        if (si_contactoNodos[0]&& si_contactoNodos[1] && si_contactoNodos[2] && si_contactoNodos[3] )
+        {
+            txt_panelVolti.text = "0.0 v";
+            //aSource.goFx("Bien");
+            aSource.goFx("Locu_Bien");
+            Debug.Log("Todos los Circuitos verificados");
+            Tablero_Indicaciones[17].SetActive(true);
+            Tablero_Indicaciones[19].SetActive(true);
+            ItemsVolti[3].SetActive(true);
+            //StartCoroutine(TiempoEsperaTarea(8));//fin de verificacion de voltimetro
+        }
+    }
+    //***********************FIN DE FUNCION VOLTIMETRO*********************
     IEnumerator ReUbicacionEnJerarquia(bool si_der)
     {
         yield return new WaitForSecondsRealtime(0.1f);
@@ -1242,7 +1675,6 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 NodosVoltimetro[1].transform.localPosition = new Vector3(.13f, 0, 0);
                 NodosVoltimetro[1].transform.localEulerAngles = new Vector3(0, 0, 0);
             }
-            
         }
     }
     IEnumerator CoroutineAnimSonidoEntradaCamion()
