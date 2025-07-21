@@ -83,7 +83,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     public bool[] si_contactoNodos;//si contactos coinciden
     public bool si_OrdenPositivo;//verifica si el resultado es positivo
     public bool si_circuitoCompleto;//verifica que ambos nodos esten en contacto
-    
+    public bool si_voltimetro_en_mano=false;
     public TMP_Text txt_panelVolti;
 
         [Header("Extras")]
@@ -505,6 +505,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     escalera[2].transform.localEulerAngles = new Vector3(escalera[0].transform.localEulerAngles.x, escalera[0].transform.localEulerAngles.y, escalera[0].transform.localEulerAngles.z);
                     escalera[1].SetActive(true);//subible
                     escalera[2].SetActive(false);//obj
+                    Tablero_Indicaciones[13].SetActive(false);
                 }
                 break;
             case 10://detecta pj en el suelo
@@ -539,8 +540,10 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 }
                 break;
             case 12://refe volti
-                if (contacto_confirmado[confirmarcontacto] == true)
+                if (contacto_confirmado[confirmarcontacto] == true/*&&si_voltimetro_en_mano==false*/)//*******21-07-25
                 {
+                    ItemsVolti[12].SetActive(false);//mesh izq
+                    ItemsVolti[13].SetActive(false);//mesh der
                     ItemsVolti[3].SetActive(false);//refe volti
                     ItemsVolti[4].SetActive(false);//obj volti
                     ItemsVolti[0].SetActive(false);//refe caja
@@ -622,12 +625,12 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                         Debug.Log("Verificado en IZQ; si_circuitoCompleto=" + si_circuitoCompleto);
                         verificacionNodo(contactoIntAux);
                     }
-                    else
+                    /*else
                     {
                         txt_panelVolti.text = "";//si solo se muestra cuando se hace contacto
                         NodosContactoIzq[contactoIntAux] = false;
                         si_circuitoCompleto = false;
-                    }
+                    }*/
                     /*Debug.Log(auxContacto +"= auxcontacto - nodo izq en : " + contactoIntAux);
                     auxContacto += contactoIntAux;
                     if (contactoIntAux == 0 || contactoIntAux == 4)
@@ -689,14 +692,14 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                         Debug.Log("Verificado en Der; si_circuitoCompleto=" + si_circuitoCompleto);
                         verificacionNodo(contactoIntAux);
                     }
-                    else
+                    /*else
                     {
                         txt_panelVolti.text = "";//si solo se muestra cuando se hace contacto
                         NodosContactoDer[contactoIntAux] = false;
                         si_circuitoCompleto = false;
                         Debug.Log("Salio de Der; si_circuitoCompleto=" + si_circuitoCompleto);
                     }
-                    /*Debug.Log(auxContacto +"= auxcontacto - nodo izq en : " + contactoIntAux);
+                    Debug.Log(auxContacto +"= auxcontacto - nodo izq en : " + contactoIntAux);
                     auxContacto += contactoIntAux;
                     if (contactoIntAux == 0 || contactoIntAux == 4)
                     {
@@ -943,6 +946,10 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     public void Verificar_llaveEnMano(bool si_) 
     {
         si_LlaveEnMano=si_;
+    }
+    public void Verificar_VoltiEnMano(bool si_)
+    {
+        si_voltimetro_en_mano = si_;
     }
     public IEnumerator TiempoEsperaAudio(float t)//Agregar tiempo***********Agregado el 26-05-25***************************************
     {
@@ -1319,6 +1326,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     }
     public void LlevarVoltimetro(bool si_der)//si se agarro con alguna mano****16.06-25
     {
+        si_voltimetro_en_mano = true;
         if (si_voltimetroAgarrado[0] == false&& si_voltimetroAgarrado[1] == false)//primera ocacion
         {
             if (si_der==false)
@@ -1356,15 +1364,18 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
             {
                 //Debug.Log("SE AGARRO DESPUES: IZQUIERDO");
                 si_voltimetroAgarrado[0] = true;
-                NodosVoltimetro[0].GetComponent<Rigidbody>().isKinematic = true;
                 NodosVoltimetro[0].GetComponent<Rigidbody>().useGravity = false;
+                NodosVoltimetro[0].GetComponent<Rigidbody>().isKinematic = true;
+                
                 NodosVoltimetro[0].GetComponent<Return_Pos0>().enabled = false;
             }
             else {
                 //Debug.Log("SE AGARRO DESPUES: DERECHO");
+
                 si_voltimetroAgarrado[1] = true;
-                NodosVoltimetro[1].GetComponent<Rigidbody>().isKinematic = true;
                 NodosVoltimetro[1].GetComponent<Rigidbody>().useGravity = false;
+                NodosVoltimetro[1].GetComponent<Rigidbody>().isKinematic = true;
+                
                 NodosVoltimetro[1].GetComponent<Return_Pos0>().enabled = false;
             }
         }
@@ -1424,6 +1435,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
             }
             if (si_voltimetroAgarrado[0] == false && si_voltimetroAgarrado[1] == false)
             {
+                si_voltimetro_en_mano = false;
                 quien_primero_agarre = 2;
                 //Debug.Log("SE SOLTO ambos");
                 si_voltimetroAgarrado[0] = false;
