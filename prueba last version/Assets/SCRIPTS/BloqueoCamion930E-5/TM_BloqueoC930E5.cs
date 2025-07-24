@@ -277,7 +277,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     }
                     break;
                 case 6://liberacion acumulador auxiliar
-                    Muros[3].SetActive(true);//muro que evita pedal
+                    Muros[3].SetActive(false);//muro que evita pedal
                     Tablero_Indicaciones[12].SetActive(false);
                     Tablero_Indicaciones[14].SetActive(true);
                     acumuladorAux[0].SetActive(true);
@@ -825,8 +825,9 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 GiroFrenoAnim(false);
                 break;
             case 6:
-                AccionPedal();
                 Muros[3].SetActive(false);
+                AccionPedal();
+                
                 break;
             case 7://
                 if (tareaHecha == true)
@@ -1026,6 +1027,25 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
         Items[auxContacto].GetComponent<Rigidbody>().isKinematic = !si;
         Items[auxContacto].GetComponent<Rigidbody>().useGravity = si;
         si_LlaveEnMano = !si;
+    }
+    //**************************FUNCIONES DE TACOS************************************22-07-25
+    public void OnFisicasOBJ(GameObject obj)
+    {
+        obj.GetComponent<Rigidbody>().isKinematic = false;
+        obj.GetComponent <Rigidbody>().useGravity = true;
+    }
+    public void OffFisicasOBJ(GameObject obj)
+    {
+        obj.GetComponent<Rigidbody>().isKinematic = true;
+        obj.GetComponent<Rigidbody>().useGravity = false;
+    }
+    public void activeTriggerTacoIZQ(bool si_)
+    {
+        Tacos[0].GetComponent<BoxCollider>().isTrigger = si_;
+    }
+    public void activeTriggerTacoDer(bool si_)
+    {
+        Tacos[1].GetComponent<BoxCollider>().isTrigger = si_;
     }
     //*************************FUNCIONES DE VERIFICACION DE NO ARRANQUE*****TIMON Y LLAVE DE ARRANQUE******17-06-25********
     public void activarLlaveArranque()
