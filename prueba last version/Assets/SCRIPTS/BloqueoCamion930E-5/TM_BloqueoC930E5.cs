@@ -325,6 +325,8 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     }
                     break;
                 case 10://final
+                    aSource.goFx("fanfarrias");
+                    aSource.goFx("aplausos");
                     UI_btn_Reiniciar_Panel.SetActive(false);
                     UI_btn_Salir_Panel.SetActive(false);    
                     Tablero_Indicaciones[21].SetActive(true);
@@ -802,6 +804,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 }
                 break;
             case 1:
+                aSource.goFx("Agarrar");
                 Items[8].SetActive(false);//llave TA mesh
                 Items[6].SetActive(false);//refe llave
                 break;
@@ -1192,6 +1195,8 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
             V_NV1[3].SetActive(false);//MESH
             V_NV1[0].SetActive(false);
             V_NV1[1].SetActive(true);//ANIM1
+            aSource.goFx("Liberacion_Acu", 0.8f, false, false);
+            
             yield return new WaitForSecondsRealtime(10);
             si_Valvula_Liberada[0] = true;
             si_Valvula_Cerrada[0] = false;
@@ -1228,6 +1233,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
             V_NV2[3].SetActive(false);//MESH
             V_NV2[0].SetActive(false);
             V_NV2[1].SetActive(true);//ANIM1
+            aSource.goFx("Liberacion_Acu",0.8f,false,false);
             yield return new WaitForSecondsRealtime(10);
             si_Valvula_Liberada[1] = true;
             si_Valvula_Cerrada[1] = false;
@@ -1346,9 +1352,11 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     }
     public void LlevarVoltimetro(bool si_der)//si se agarro con alguna mano****16.06-25
     {
+        
         si_voltimetro_en_mano = true;
         if (si_voltimetroAgarrado[0] == false&& si_voltimetroAgarrado[1] == false)//primera ocacion
         {
+            aSource.goFx("Agarrar");
             if (si_der==false)
             {
                 quien_primero_agarre=0;//indica si padre = izq
