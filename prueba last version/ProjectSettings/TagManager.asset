@@ -8,6 +8,7 @@ TagManager:
   - Colision Negro
   - Colision Rojo
   - Ground
+  - Muro_Area_Delimitada
   layers:
   - Default
   - TransparentFX

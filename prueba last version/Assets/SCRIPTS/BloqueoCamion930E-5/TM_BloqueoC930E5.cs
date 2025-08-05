@@ -171,6 +171,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
 
                     btn_Pedal.SetActive(false);
                     //*****CAptura de posiciones de los nodos del voltimetro*****16-06-25**********
+                    
                     NodosVoltimetro[0].transform.SetParent(NodosVoltimetro[1].transform);
                     NodoIzqPos0 = NodosVoltimetro[0].transform.localPosition;
                     NodoIzqRot0 = NodosVoltimetro[0].transform.localEulerAngles;
@@ -181,6 +182,8 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     NodosVoltimetro[1].transform.SetParent(NodosVoltimetro[2].transform);
                     RotPuertaGPontencia[0] = PuertasGPotencia[0].transform.localEulerAngles.z;//rot0,izq
                     RotPuertaGPontencia[2] = PuertasGPotencia[1].transform.localEulerAngles.z;//rot0 der
+                    txt_panelVolti.text = "";
+                    ItemsVolti[14].SetActive(false);
                     //**********************************************************************
                     cajaBloqueoTapaRot0 = Items[18].transform.localEulerAngles;//tapa de caja de bloqueo*************17-06-25
                     cajaBloqueoTapaPos0 = Items[18].transform.localPosition;    
@@ -195,7 +198,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     //***********************Preparativos pra bloqueo de camion***************
                     llaveArranque[0].SetActive(false);
                     TimonRot0 = Timon[1].transform.localEulerAngles;
-                    txt_panelVolti.text = "";
+                    
                     Tablero_Indicaciones[0].SetActive(true);//panel de bienvenido
                     /*   //audioManager de bienvenida
 
@@ -256,6 +259,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     }
                     break;
                 case 4://gabinete frenos
+                    Tablero_Indicaciones[6].SetActive(false);
                     Tablero_Indicaciones[10].SetActive(true);
                     Tablero_Indicaciones[8].SetActive(false);
                     Muros[2].SetActive(false);
@@ -266,6 +270,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     }
                     break;
                 case 5://verificacion pedal
+                    Tablero_Indicaciones[9].SetActive(false);
                     Muros[3].SetActive(true);//muro que evita pedal
                     Tablero_Indicaciones[10].SetActive(false);
                     Tablero_Indicaciones[12].SetActive(true);
@@ -293,6 +298,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 case 7://verificacion override
                     Tablero_Indicaciones[16].SetActive(true);
                     Tablero_Indicaciones[14].SetActive(false);
+
                     tareaHecha=false;
                     Override[0].SetActive(true);
                     while (AudioManager.aSource.IsPlayingVoz() == true)
@@ -301,6 +307,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     }
                     break;
                 case 8://verificacion con voltimetro
+                    ItemsVolti[14].SetActive(true);
                     Tablero_Indicaciones[18].SetActive(true);
                     Tablero_Indicaciones[16].SetActive(false);
                     Tablero_Indicaciones[22].SetActive(true);
@@ -416,7 +423,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
             case 4://detector contacto llave con caja
                 if (contacto_confirmado[confirmarcontacto] == true && si_LlaveEnMano == false)
                 {
-                    
+                    aSource.goFx("Perno_Contacto");
                     Items[7].GetComponent<XRGrabInteractable>().enabled = false;
                     Items[7].GetComponent<BoxCollider>().enabled = false;
                     //Items[9].SetActive(true);//candado personal refe -> pl
@@ -555,7 +562,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     
                     ItemsVolti[6].SetActive(true);//manija refe izq
                     ItemsVolti[7].SetActive(true);//manija refe izq
-                    StartCoroutine(TiempoEsperaTarea(8));//******************************************************fin de TAREA 8
+                    ItemsVolti[15].SetActive(true);//detector conclusiones
                 }
                 break;
             case 13://sonido Puerta Cabina
@@ -732,6 +739,10 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     txt_panelVolti.text = "";
                 }
                 break;
+                case 18:
+                TareaCompletada(8);//******************************************************fin de TAREA 8
+                ItemsVolti[15].SetActive(false);//detector conclusiones
+                break;
         }
     }
     public void activacionXR(int contacto) //contacto con manos
@@ -816,7 +827,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 Tablero_Indicaciones[5].SetActive(false);
                 aSource.goFx("Bien");
                 aSource.goFx("Locu_Bien");
-                StartCoroutine(TiempoEsperaTarea(2));
+                StartCoroutine(TiempoEsperaTarea(2));//*****************************fin de tarea 2
                 break;
             case 3:
                 activarLlaveArranque();
@@ -873,7 +884,8 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     aSource.goFx("Bien");
                     aSource.goFx("Locu_Bien");
                     Override[0].SetActive(false);//refe
-                    StartCoroutine(TiempoEsperaTarea(7));
+                    Tablero_Indicaciones[17].SetActive(true);
+                    StartCoroutine(TiempoEsperaTarea(7));//***********************************fin de tarea7
                 }
                 break;
             case 11://abrir gabinete
@@ -902,16 +914,18 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 aSource.goFx("Bien");
                 if (ItemsVolti[7].activeInHierarchy == false)
                 {
+                    ItemsVolti[15].SetActive(true);//detector conclusiones
                     aSource.goFx("Locu_Bien");
                     Muros[4].SetActive(false);//muro que evita bajar escaleras diagonales
                 }
                 break;
-            case 14://puerta izq g potencia
+            case 14://puerta der g potencia
                 PuertasGPotencia[1].transform.localEulerAngles = new Vector3(0, 0, RotPuertaGPontencia[2]);
                 ItemsVolti[7].SetActive(false);//manija refe izq
                 aSource.goFx("Bien");
                 if (ItemsVolti[6].activeInHierarchy == false)
                 {
+                    ItemsVolti[15].SetActive(true);//detector conclusiones
                     aSource.goFx("Locu_Bien");
                     Muros[4].SetActive(false);//muro que evita bajar escaleras diagonales
                 }
@@ -1032,10 +1046,10 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
         si_LlaveEnMano = !si;
     }
     //**************************FUNCIONES DE TACOS************************************22-07-25
-    public void OnFisicasOBJ(GameObject obj)
+    public void OnFisicasOBJEscaleraObj(bool si_)
     {
-        obj.GetComponent<Rigidbody>().isKinematic = false;
-        obj.GetComponent <Rigidbody>().useGravity = true;
+        Items[19].GetComponent<Rigidbody>().isKinematic = !si_;//para escalera 3 peldaños
+        Items[19].GetComponent <Rigidbody>().useGravity = si_;
     }
     public void OffFisicasOBJ(GameObject obj)
     {
@@ -1155,7 +1169,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     //yield return new WaitForSecondsRealtime(2);
                     Tablero_Indicaciones[11].SetActive(true);
                     V_NV1[0].SetActive(false);
-                    StartCoroutine(TiempoEsperaTarea(4));
+                    StartCoroutine(TiempoEsperaTarea(4));//*********************************************fin de tarea 4
                 }
             }
             else
@@ -1179,7 +1193,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     //yield return new WaitForSecondsRealtime(2);
                     V_NV2[0].SetActive(false);
                     Tablero_Indicaciones[11].SetActive(true);
-                    StartCoroutine(TiempoEsperaTarea(4));
+                    StartCoroutine(TiempoEsperaTarea(4));//*********************************************fin de tarea 4
                 }
             }
             else
@@ -1195,12 +1209,12 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
             V_NV1[3].SetActive(false);//MESH
             V_NV1[0].SetActive(false);
             V_NV1[1].SetActive(true);//ANIM1
-            aSource.goFx("Liberacion_Acu", 0.8f, false, false);
+            aSource.goFx("Liberacion_Acu", 1f, false, false);
             
             yield return new WaitForSecondsRealtime(10);
             si_Valvula_Liberada[0] = true;
             si_Valvula_Cerrada[0] = false;
-            yield return new WaitForSecondsRealtime(1);
+            yield return new WaitForSecondsRealtime(.5f);
             V_NV1[0].SetActive(true);
         }
         else
@@ -1210,7 +1224,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
             V_NV1[2].SetActive(true);//ANIM2
             yield return new WaitForSecondsRealtime(10);
             si_Valvula_Cerrada[0] = true;
-            yield return new WaitForSecondsRealtime(1);
+            yield return new WaitForSecondsRealtime(.5f);
             V_NV1[0].SetActive(true);
             /*if (si_Valvula_Liberada[1] == false)
             {
@@ -1233,7 +1247,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
             V_NV2[3].SetActive(false);//MESH
             V_NV2[0].SetActive(false);
             V_NV2[1].SetActive(true);//ANIM1
-            aSource.goFx("Liberacion_Acu",0.8f,false,false);
+            aSource.goFx("Liberacion_Acu",1f,false,false);
             yield return new WaitForSecondsRealtime(10);
             si_Valvula_Liberada[1] = true;
             si_Valvula_Cerrada[1] = false;
@@ -1263,7 +1277,11 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     {
         Pedales[0].SetActive(false);
         Pedales[1].SetActive(true);
-        yield return new WaitForSecondsRealtime(7f);
+        yield return new WaitForSecondsRealtime(2f);
+        aSource.goFx("pedal");
+        yield return new WaitForSecondsRealtime(2.5f);
+        aSource.goFx("pedal");
+        yield return new WaitForSecondsRealtime(3f);
         Pedales[1].SetActive(false);
         Pedales[0].SetActive(true);
         aSource.goFx("Bien");
@@ -1277,12 +1295,13 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     {
         if (si_AcuAux_Liberado == false)
         {
+            aSource.goFx("Liberacion_Acu_Aux");
             acumuladorAux[3].SetActive(false);//MESH
             acumuladorAux[0].SetActive(false);
             acumuladorAux[1].SetActive(true);//ANIM1
             yield return new WaitForSecondsRealtime(10);
             si_AcuAux_Liberado = true;
-            yield return new WaitForSecondsRealtime(1);
+            //yield return new WaitForSecondsRealtime(.5f);
             acumuladorAux[0].SetActive(true);
         }
         else
@@ -1292,7 +1311,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
             acumuladorAux[2].SetActive(true);//ANIM1
             yield return new WaitForSecondsRealtime(10);
             //si_Valvula_Liberada[0] = true;
-            yield return new WaitForSecondsRealtime(1);
+            //yield return new WaitForSecondsRealtime(1);
             tareaHecha=true;
             acumuladorAux[0].SetActive(true);//REFE
 
@@ -1675,7 +1694,8 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
             //aSource.goFx("Bien");
             aSource.goFx("Locu_Bien");
             Debug.Log("Todos los Circuitos verificados");
-            Tablero_Indicaciones[17].SetActive(true);
+            Tablero_Indicaciones[17].SetActive(false);
+            Tablero_Indicaciones[18].SetActive(false);
             Tablero_Indicaciones[19].SetActive(true);
             ItemsVolti[3].SetActive(true);
             //StartCoroutine(TiempoEsperaTarea(8));//fin de verificacion de voltimetro
