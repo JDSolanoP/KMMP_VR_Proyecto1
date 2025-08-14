@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Oculus.Interaction;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class Detector_Fuera_Area_Delimitada : MonoBehaviour
 {
@@ -22,6 +24,7 @@ public class Detector_Fuera_Area_Delimitada : MonoBehaviour
     public Vector3 margenDemovimiento;
     public bool si_otroSfx;
     public string nombreSfx;
+    public XRGrabInteractable grabInteractable;
     public bool Agarrable = false;//si dicho objeto se puede agarrar con mano
     void Start()
     {
@@ -29,6 +32,7 @@ public class Detector_Fuera_Area_Delimitada : MonoBehaviour
         {
             margenDemovimiento = new Vector3(100, 100, 100);
         }
+        grabInteractable = this.GetComponent<XRGrabInteractable>();
         auxPos0 = Pos0 = this.gameObject.transform.position;
         auxRot0 = Rot0 = this.gameObject.transform.eulerAngles;
         LocalPos0 = this.gameObject.transform.localPosition;
@@ -49,10 +53,19 @@ public class Detector_Fuera_Area_Delimitada : MonoBehaviour
         //Debug.Log(col.gameObject.tag);
         if (col.gameObject.tag == "Muro_Area_Delimitada")
         {
-
-            reposicionObj();
+            if (grabInteractable.interactorsSelecting.Count > 0)
+            {
+                // The object is currently grabbed by at least one interactor.
+            }
+            else
+            {
+                reposicionObj();
+                AudioManager.aSource.goFx("Fallo");
+                en_piso = false;
+            }
+            /*reposicionObj();
             AudioManager.aSource.goFx("Fallo");
-            en_piso = false;
+            en_piso = false;*/
         }
         else
         {
@@ -61,25 +74,34 @@ public class Detector_Fuera_Area_Delimitada : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
+
         if (other.CompareTag("Muro_Area_Delimitada"))
         {
-            if (other.GetComponent<BoxCollider>().isTrigger == true)
+            if (grabInteractable.interactorsSelecting.Count > 0)
             {
-                if (si_otroSfx)
+                
+            }
+            else
+            {
+                if (other.GetComponent<BoxCollider>().isTrigger == true)
                 {
-                    AudioManager.aSource.goFx(nombreSfx);
+                    if (si_otroSfx)
+                    {
+                        AudioManager.aSource.goFx(nombreSfx);
+                    }
+                    else
+                    {
+                        AudioManager.aSource.goFx("Fallo");
+                    }
                 }
                 else
                 {
                     AudioManager.aSource.goFx("Fallo");
                 }
+                reposicionObj();
+                en_piso = false;
             }
-            else
-            {
-                AudioManager.aSource.goFx("Fallo");
-            }
-            reposicionObj();
-            en_piso = false;
+            
         }
         else
         {

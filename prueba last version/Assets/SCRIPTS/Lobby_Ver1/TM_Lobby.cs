@@ -131,6 +131,10 @@ public class TM_Lobby : MonoBehaviour
                 auxDU.si_Supervisor = true;
             }
         }
+        else
+        {
+            AudioManager.aSource.goFx("Locu_Lobby", 1, false, false);
+        }
         
     }
     public void Transferir_Usuarios()//*******transfiere datos desde DTs(el guardado) a DU lista auxiliar***********

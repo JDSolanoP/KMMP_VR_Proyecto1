@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
+
 //using Unity.Android.Gradle;
 
 //using Unity.Android.Gradle;
@@ -265,17 +267,34 @@ public class AudioManager : MonoBehaviour
             while (AudioManager.aSource != null)
             {
                 //if(AudioManager.aSource.isVozPlay == true) { }
-                if (VocesSourceCanal[VozCanalActual].isPlaying != true || s.clip.name == VocesSourceCanal[VozCanalActual].name)
+                if (VocesSourceCanal[VozCanalActual].isPlaying != true/* || s.clip.name != VocesSourceCanal[VozCanalActual].name*/)
                 {
-                    VocesSourceCanal[VozCanalActual].clip = s.clip;
-                    //Debug.Log(VocesSourceCanal[VozCanalActual].clip.name + " SonidoVoz Encontrado tocado en el canal " + VozCanalActual);
-                    VocesSourceCanal[VozCanalActual].Play();
-                    isVozPlay = true;
-                    StartCoroutine(CheckingPlayVoz());//************************************************************07-08-24
-                    break;
-                }
+                    if (VozCanalActual == 0&& s.clip != VocesSourceCanal[1].clip)
+                    {
+                        VocesSourceCanal[VozCanalActual].clip = s.clip;
+                        //Debug.Log(VocesSourceCanal[VozCanalActual].clip.name + " SonidoVoz Encontrado tocado en el canal " + VozCanalActual);
+                        VocesSourceCanal[VozCanalActual].Play();
+                        isVozPlay = true;
+                        StartCoroutine(CheckingPlayVoz());//************************************************************07-08-24
+                        break;
+                    }
+                    else
+                    {
+                        if (VozCanalActual == 1 && s.clip != VocesSourceCanal[0].clip)
+                        {
+                            VocesSourceCanal[VozCanalActual].clip = s.clip;
+                            //Debug.Log(VocesSourceCanal[VozCanalActual].clip.name + " SonidoVoz Encontrado tocado en el canal " + VozCanalActual);
+                            VocesSourceCanal[VozCanalActual].Play();
+                            isVozPlay = true;
+                            StartCoroutine(CheckingPlayVoz());//************************************************************07-08-24
+                            break;
+                        }
+                        else { break; 
+                        }
+                    
+                    }/*
                 else {
-                    if (VocesSourceCanal[VozCanalActual].isPlaying == true)
+                    if (s.clip.name != VocesSourceCanal[VozCanalActual].name)
                     {
                         if (VozCanalActual == 0)
                         {
@@ -295,10 +314,10 @@ public class AudioManager : MonoBehaviour
                             StartCoroutine(CheckingPlayVoz());//************************************************************07-08-24
                             break;
                         }
-                    }
+                    }*/
                 }
             }
-            Debug.Log("playVoz en canal " + VozCanalActual);
+            Debug.Log(VocesSourceCanal[VozCanalActual].clip+" playVoz en canal " + VozCanalActual);
             VozCanalActual++;
             if (VozCanalActual >= VocesSourceCanal.Length) { VozCanalActual = 0; }
             Debug.Log("playVoz en canal a usar " + VozCanalActual);

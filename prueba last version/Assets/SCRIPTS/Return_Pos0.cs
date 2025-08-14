@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Oculus.Interaction;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class Return_Pos0 : MonoBehaviour
 {
@@ -24,8 +26,8 @@ public class Return_Pos0 : MonoBehaviour
     public bool si_otroSfx;
     public string nombreSfx;
     public bool Agarrable=false;//si dicho objeto se puede agarrar con mano
+    public XRGrabInteractable grabInteractable;
 
-    
 
     void Start()
     {
@@ -34,7 +36,8 @@ public class Return_Pos0 : MonoBehaviour
             margenDemovimiento = new Vector3(100,100,100);
         }
         //NivelDeReferencia = GameObject.FindGameObjectWithTag("Ground");
-        auxPos0=Pos0=this.gameObject.transform.position;
+        grabInteractable = this.GetComponent<XRGrabInteractable>();
+        auxPos0 =Pos0=this.gameObject.transform.position;
         auxRot0=Rot0 = this.gameObject.transform.eulerAngles;
         LocalPos0 = this.gameObject.transform.localPosition;
         LocalRot0 = this.gameObject.transform.localEulerAngles;
@@ -55,16 +58,23 @@ public class Return_Pos0 : MonoBehaviour
         //Debug.Log(col.gameObject.tag);
         if (col.gameObject.tag == "Ground")
         {
-            
-            reposicionObj();
-            AudioManager.aSource.goFx("Fallo");
-            en_piso = false;
-           
-            /*if (contador >= tiempoDeEspera)
+            if (grabInteractable.interactorsSelecting.Count > 0)
             {
 
-                //contador = 0;
-            }*/
+            }
+            else
+            {
+
+                reposicionObj();
+                AudioManager.aSource.goFx("Fallo");
+                en_piso = false;
+
+                /*if (contador >= tiempoDeEspera)
+                {
+
+                    //contador = 0;
+                }*/
+            }
         }
         else
         {
@@ -75,28 +85,35 @@ public class Return_Pos0 : MonoBehaviour
     {
         if (other.CompareTag("Ground"))
         {
-            if(other.GetComponent<BoxCollider>().isTrigger==true)
+            if (grabInteractable.interactorsSelecting.Count > 0)
             {
-                if (si_otroSfx)
+
+            }
+            else
+            {
+                if (other.GetComponent<BoxCollider>().isTrigger == true)
                 {
-                    AudioManager.aSource.goFx(nombreSfx);
+                    if (si_otroSfx)
+                    {
+                        AudioManager.aSource.goFx(nombreSfx);
+                    }
+                    else
+                    {
+                        AudioManager.aSource.goFx("Fallo");
+                    }
                 }
                 else
                 {
                     AudioManager.aSource.goFx("Fallo");
                 }
+                reposicionObj();
+                en_piso = false;
             }
-            else
-            {
-                AudioManager.aSource.goFx("Fallo");
-            }
-            reposicionObj();
-            en_piso = false;
         }
         else
         {
             en_piso = true;
-        }
+        } 
     }
     public void reposicionObj()
     {

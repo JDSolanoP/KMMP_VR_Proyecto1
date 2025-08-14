@@ -100,12 +100,16 @@ public class Lista_Tareas_Controller : MonoBehaviour
         if(aSource != null) {
             if (aSource.VocesSonidos.Length > TareaActual)
             {
-                AudioManager.aSource.PlayVoz(aSource.VocesSonidos[TareaActual].nombre);
+                /*if (aSource.VocesSonidos[TareaActual].clip.name!= aSource.VocesSourceCanal[0].clip.name)
+                {*/
+                    AudioManager.aSource.PlayVoz(aSource.VocesSonidos[TareaActual].nombre);
+                //}
+                //AudioManager.aSource.PlayVoz(aSource.VocesSonidos[TareaActual].nombre);
                 Debug.Log($"se cargo clip de tarea n " + TareaActual + " correctamente");
             }
         }
         
-        yield return new WaitForSeconds(0.5f);
+        //yield return new WaitForSeconds(0.5f);
 
         //audioManager.ReproducirAudioClip();
         Debug.Log("Audio en curso");
@@ -129,7 +133,7 @@ public class Lista_Tareas_Controller : MonoBehaviour
                 yield return new WaitForFixedUpdate();
             }
         }
-        yield return new WaitForSeconds(0.5f);
+        //yield return new WaitForSeconds(0.5f);
         //tiempo de espera del audio inicial(tarea = 0)
         StartCoroutine(CargarReproducir_Clip());
     }

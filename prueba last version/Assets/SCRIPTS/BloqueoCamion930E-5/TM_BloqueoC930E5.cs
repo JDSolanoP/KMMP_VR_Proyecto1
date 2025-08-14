@@ -207,14 +207,18 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     manosXR[1].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[1];
                     */
                     //aSource.MusicaVol(0.75f);//**************************************Sonido Musica Inicial*************
-                    aSource.FxVol(1);
-
+                    aSource.FxVol(0.6f);
+                    //yield return new WaitForSecondsRealtime(3f);
+                    
+                    aSource.goFx("Locu_intro");
+                    yield return new WaitForSecondsRealtime(20f);
+                    aSource.goFx("Locu_Parte1");
                     //yield return new WaitForSecondsRealtime(23f);
                     while (AudioManager.aSource.IsPlayingVoz() == true)
                     {
                         yield return new WaitForFixedUpdate();
                     }
-                    yield return new WaitForSecondsRealtime(5f);
+                    //yield return new WaitForSecondsRealtime(5f);
 
                     Tacos[2].SetActive(true);
                     Tacos[3].SetActive(true);
@@ -236,6 +240,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     Tablero_Indicaciones[5].SetActive(true);//P2
                     Tablero_Indicaciones[0].SetActive(false);//PBIENVENIDA
                     Tablero_Indicaciones[1].SetActive(false);//PBIENVENIDA
+                    Tablero_Indicaciones[2].SetActive(false);//PBIENVENIDA
                     Items[0].SetActive(true);//candadoAmarillo refe
                     Items[18].transform.localEulerAngles = new Vector3(0, 0, 0);
                     Items[18].transform.localPosition = new Vector3(cajaBloqueoTapaPos0.x, cajaBloqueoTapaPos0.y, cajaBloqueoTapaPos0.z);
@@ -249,6 +254,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     {
                         Tablero_Indicaciones[7].SetActive(false);//Panel error de subida
                     }
+                    Tablero_Indicaciones[3].SetActive(false);
                     Tablero_Indicaciones[5].SetActive(false);
                     Tablero_Indicaciones[8].SetActive(true);
                     llaveArranque[0].SetActive(true);
@@ -311,10 +317,10 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     Tablero_Indicaciones[18].SetActive(true);
                     Tablero_Indicaciones[16].SetActive(false);
                     Tablero_Indicaciones[22].SetActive(true);
-                    btn_AbrirGabinetePotencia.SetActive(true);
                     auxContacto = 0;
                     contactoIntAux = 0;
-                    
+                    yield return new WaitForSecondsRealtime(5);
+                    btn_AbrirGabinetePotencia.SetActive(true);
 
                     while (AudioManager.aSource.IsPlayingVoz() == true)
                     {
@@ -324,7 +330,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 case 9://conclusiones
                     UI_btn_Continuar_Panel.SetActive(false);
                     Tablero_Indicaciones[20].SetActive(true);
-                    yield return new WaitForSecondsRealtime(5);
+                    yield return new WaitForSecondsRealtime(21.5f);
                     UI_btn_Continuar_Panel.SetActive(true);
                     while (AudioManager.aSource.IsPlayingVoz() == true)
                     {
@@ -332,6 +338,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     }
                     break;
                 case 10://final
+                    Muros[5].SetActive(false);//muro que evita bajar escaleras diagonales
                     aSource.goFx("fanfarrias");
                     aSource.goFx("aplausos");
                     UI_btn_Reiniciar_Panel.SetActive(false);
@@ -370,7 +377,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                         Tablero_Indicaciones[2].SetActive(true);
                         Tablero_Indicaciones[1].SetActive(false);//panelP1
                         Tablero_Indicaciones[0].SetActive(false);//panel bienvenida
-                        StartCoroutine(TiempoEsperaTarea(0));
+                        StartCoroutine(TiempoEsperaTarea(0,6,43));//************************************************COMPLETA TAREA 0
                         aSource.goFx(aSource.FxSonidos[21].nombre);
                         aSource.goFx(aSource.FxSonidos[23].nombre);
                     }
@@ -391,7 +398,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                         Tablero_Indicaciones[2].SetActive(true);
                         Tablero_Indicaciones[1].SetActive(false);//panelP1
                         Tablero_Indicaciones[0].SetActive(false);//panel bienvenida
-                        StartCoroutine(TiempoEsperaTarea(0));
+                        StartCoroutine(TiempoEsperaTarea(0, 6, 43));//************************************************COMPLETA TAREA 0
                         aSource.goFx(aSource.FxSonidos[21].nombre);
                         aSource.goFx(aSource.FxSonidos[23].nombre);
                     }
@@ -472,7 +479,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
             case 8://sonido Gabinete de Frenos***********03-07-25
                 if (contacto_confirmado[confirmarcontacto] == true)
                 {
-                    if (TareaActual == 4)
+                    if (TareaActual == 4 && Tablero_Indicaciones[11].activeInHierarchy==false)
                     {
                         Muros[2].SetActive(true);
                         Debug.Log("Muro de Frenos activado");
@@ -545,7 +552,8 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     escalera[2].SetActive(false);//obj
                     aSource.goFx("Bien");
                     aSource.goFx("Locu_Bien");
-                    StartCoroutine(TiempoEsperaTarea(6));//fin de acumulador aux
+                    Tablero_Indicaciones[15].SetActive(true);//panel de victoria acu aux
+                    StartCoroutine(TiempoEsperaTarea(6, 6, 43));//*******************************************************************fin de acumulador aux TAREA 6
                 }
                 break;
             case 12://refe volti
@@ -612,13 +620,15 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
             case 15://detector de subida a cabina
                 if (contacto_confirmado[confirmarcontacto] == true)
                 {
-                    if (TareaActual < 2)
+                    if (TareaActual < 3 && Tablero_Indicaciones[6].activeInHierarchy==false)
                     {
                         Tablero_Indicaciones[7].SetActive(true);
                         aSource.goFx("Fallo");
                         aSource.goFx("Locu_Fallo");
                     }
-                    else { Muros[1].SetActive(false); }
+                    else { Muros[1].SetActive(false);
+                        Tablero_Indicaciones[7].SetActive(false);
+                    }
                 }
                 break;
             case 16://nodo izq
@@ -628,7 +638,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     valorNodo[0] = contactoIntAux;
                     NodosContactoIzq[contactoIntAux] = true;
                     Debug.Log("izquierda en valorNodo[0] : " + contactoIntAux+ "NodosContactoIzq["+contactoIntAux+"]="+ NodosContactoIzq[contactoIntAux]);
-                    if (contacto_confirmado[17] == true)
+                    if (contacto_confirmado[17] == true && Tablero_Indicaciones[19].activeInHierarchy == false)
                     {
                         si_circuitoCompleto=true;
                         Debug.Log("Verificado en IZQ; si_circuitoCompleto=" + si_circuitoCompleto);
@@ -695,7 +705,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     Debug.Log(auxContacto + "= auxcontacto -  nodo derecho fuera de : " + contactoIntAux);*/
                     NodosContactoDer[contactoIntAux] = true;
                     Debug.Log("derecha en valorNodo[1] : " + contactoIntAux + "NodosContactoDer[" + contactoIntAux + "]=" + NodosContactoDer[contactoIntAux]);
-                    if (contacto_confirmado[16] == true)
+                    if (contacto_confirmado[16] == true&& Tablero_Indicaciones[19].activeInHierarchy==false)
                     {
                         si_circuitoCompleto = true;
                         Debug.Log("Verificado en Der; si_circuitoCompleto=" + si_circuitoCompleto);
@@ -767,7 +777,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                         nPalancasOff++;
                         if (nPalancasOff == 3)
                         {
-                            StartCoroutine(TiempoEsperaTarea(1));
+                            StartCoroutine(TiempoEsperaTarea(1, 5, 44));//***********************************************************COMPLETA TAREA 1
                             aSource.goFx(aSource.FxSonidos[21].nombre);
                             aSource.goFx(aSource.FxSonidos[23].nombre);
                             Tablero_Indicaciones[4].SetActive(true);
@@ -788,7 +798,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                         nPalancasOff++;
                         if (nPalancasOff == 3)
                         {
-                            StartCoroutine(TiempoEsperaTarea(1));
+                            StartCoroutine(TiempoEsperaTarea(1, 5, 44));//***********************************************************COMPLETA TAREA 1
                             aSource.goFx(aSource.FxSonidos[21].nombre);
                             aSource.goFx(aSource.FxSonidos[23].nombre);
                             Tablero_Indicaciones[4].SetActive(true);
@@ -806,7 +816,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                         nPalancasOff++;
                         if (nPalancasOff == 3)
                         {
-                            StartCoroutine(TiempoEsperaTarea(1));
+                            StartCoroutine(TiempoEsperaTarea(1, 5, 44));//***********************************************************COMPLETA TAREA 1
                             aSource.goFx(aSource.FxSonidos[21].nombre);
                             aSource.goFx(aSource.FxSonidos[23].nombre);
                             Tablero_Indicaciones[4].SetActive(true);
@@ -827,7 +837,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 Tablero_Indicaciones[5].SetActive(false);
                 aSource.goFx("Bien");
                 aSource.goFx("Locu_Bien");
-                StartCoroutine(TiempoEsperaTarea(2));//*****************************fin de tarea 2
+                StartCoroutine(TiempoEsperaTarea(2, 6, 43));//*********************************************************************fin de tarea 2
                 break;
             case 3:
                 activarLlaveArranque();
@@ -861,8 +871,6 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     aSource.goFx("Bien");
                     aSource.goFx("Locu_Bien");
                     escalera[3].SetActive(true);//refe 2
-                    Tablero_Indicaciones[15].SetActive(true);//panel de victoria acu aux
-                    
                 }
 
                 break;
@@ -885,7 +893,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     aSource.goFx("Locu_Bien");
                     Override[0].SetActive(false);//refe
                     Tablero_Indicaciones[17].SetActive(true);
-                    StartCoroutine(TiempoEsperaTarea(7));//***********************************fin de tarea7
+                    StartCoroutine(TiempoEsperaTarea(7,5,47));//***********************************fin de tarea7
                 }
                 break;
             case 11://abrir gabinete
@@ -915,6 +923,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 if (ItemsVolti[7].activeInHierarchy == false)
                 {
                     ItemsVolti[15].SetActive(true);//detector conclusiones
+                    Muros[5].SetActive(true);//muro que evita bajar escaleras diagonales
                     aSource.goFx("Locu_Bien");
                     Muros[4].SetActive(false);//muro que evita bajar escaleras diagonales
                 }
@@ -926,17 +935,31 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 if (ItemsVolti[6].activeInHierarchy == false)
                 {
                     ItemsVolti[15].SetActive(true);//detector conclusiones
+                    Muros[5].SetActive(true);//muro que evita bajar escaleras diagonales
                     aSource.goFx("Locu_Bien");
                     Muros[4].SetActive(false);//muro que evita bajar escaleras diagonales
                 }
+                break;
+            case 15:
+                if (TareaActual == 4 && Tablero_Indicaciones[11].activeInHierarchy == false)
+                {
+                    Muros[2].SetActive(true);
+                }
+                else
+                {
+                    Muros[2].SetActive(false);
+                }
+                    
                 break;
             case 17://bt continuar
                 TareaCompletada(9);
                 break;
             case 18://boton reinicio
                 IrEscenaAsincron(0);
+                Debug.Log("reinicio");
                 break;
             case 19://boton SALIR
+                Debug.Log("salir");
                 Application.Quit();
                 break;
         }
@@ -968,6 +991,10 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     public void Verificar_VoltiEnMano(bool si_)
     {
         si_voltimetro_en_mano = si_;
+    }
+    public IEnumerator TiempoXAudioXTarea(float t)//Agregar tiempo***********Agregado el 26-05-25***************************************
+    {
+        yield return new WaitForSeconds(1);
     }
     public IEnumerator TiempoEsperaAudio(float t)//Agregar tiempo***********Agregado el 26-05-25***************************************
     {
@@ -1002,9 +1029,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
         else
         {
             aSource.goFx(NombreAuxAudio);
-
         }
-
     }
     public IEnumerator TiempoEsperaTarea(int tarea)//*******************************************Agregado el 26-05-25***************************************
     {
@@ -1013,6 +1038,20 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
         if (TareaActual == tarea)
         {
             Debug.Log("Se completo la tarea " + tarea + "- dentro del tiempo tiempoEsperaAux : " + tiempoEsperaAux);
+            TareaCompletada(tarea);
+        }
+    }
+    public IEnumerator TiempoEsperaTarea(int tarea,float tiempo,int nAudio)//*******************************************Agregado el 26-05-25***************************************
+    {
+
+        yield return new WaitForSeconds(2);
+        aSource.goFx(aSource.FxSonidos[nAudio].nombre);
+        yield return new WaitForSeconds(tiempo);
+
+        Debug.Log("Se espero por la tarea " + tarea + "- tiempoEspera : " + tiempo);
+        if (TareaActual == tarea)
+        {
+            Debug.Log("Se completo la tarea " + tarea + "- dentro del tiempo tiempoEspera : " + tiempo);
             TareaCompletada(tarea);
         }
     }
@@ -1081,7 +1120,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
             aSource.goFx("Bien");
             aSource.goFx("Locu_Bien");
             Tablero_Indicaciones[9].SetActive(true);
-            StartCoroutine(TiempoEsperaTarea(3));//completa tarea 3
+            StartCoroutine(TiempoEsperaTarea(3,6,45));//*************************************************************************completa tarea 3
         }
     }
     public void VerificacionTimonNoArranque()
@@ -1127,7 +1166,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 aSource.goFx("Locu_Bien");
                 Tablero_Indicaciones[6].SetActive(false);
                 Tablero_Indicaciones[9].SetActive(true);
-                StartCoroutine(TiempoEsperaTarea(3));//completa tarea 3
+                StartCoroutine(TiempoEsperaTarea(3,6,45));//************************************************completa tarea 3
                 break;
             }
             if (si_timon_agarrado == false)
@@ -1169,7 +1208,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     //yield return new WaitForSecondsRealtime(2);
                     Tablero_Indicaciones[11].SetActive(true);
                     V_NV1[0].SetActive(false);
-                    StartCoroutine(TiempoEsperaTarea(4));//*********************************************fin de tarea 4
+                    StartCoroutine(TiempoEsperaTarea(4,6,43));//*********************************************fin de tarea 4
                 }
             }
             else
@@ -1193,7 +1232,11 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     //yield return new WaitForSecondsRealtime(2);
                     V_NV2[0].SetActive(false);
                     Tablero_Indicaciones[11].SetActive(true);
-                    StartCoroutine(TiempoEsperaTarea(4));//*********************************************fin de tarea 4
+                    if (contacto_confirmado[8] == true)
+                    {
+                        Muros[2].SetActive(false);
+                    }
+                    StartCoroutine(TiempoEsperaTarea(4,5,48));//*********************************************fin de tarea 4
                 }
             }
             else
@@ -1288,7 +1331,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
         aSource.goFx("Locu_Bien");
         Tablero_Indicaciones[11].SetActive(false);
         Tablero_Indicaciones[13].SetActive(true);
-        StartCoroutine(TiempoEsperaTarea(5));
+        StartCoroutine(TiempoEsperaTarea(5,6,43));//**********************************************************************COMPLETA TAREA 5
     }
     //************************FUNCIONES DE Acumulador Auxiliar*******07-07-25***************************
     public IEnumerator AcuAux()
@@ -1698,6 +1741,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
             Tablero_Indicaciones[18].SetActive(false);
             Tablero_Indicaciones[19].SetActive(true);
             ItemsVolti[3].SetActive(true);
+            StartCoroutine(CoroutineAnimSonidoFinVolti());
             //StartCoroutine(TiempoEsperaTarea(8));//fin de verificacion de voltimetro
         }
     }
@@ -1741,5 +1785,10 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     {
         yield return new WaitForSecondsRealtime(49f);
         aSource.goFx("Camion_Escalera_Short");
+    }
+    IEnumerator CoroutineAnimSonidoFinVolti()
+    {
+        yield return new WaitForSecondsRealtime(2f);
+        aSource.goFx("Locu_vic_volti");
     }
 }
