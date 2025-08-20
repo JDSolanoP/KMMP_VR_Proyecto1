@@ -237,7 +237,8 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     }
                     break;
                 case 2://LOTO
-                    Tablero_Indicaciones[5].SetActive(true);//P2
+                    Tablero_Indicaciones[5].SetActive(true);//P3
+                    Tablero_Indicaciones[3].SetActive(false);//P2
                     Tablero_Indicaciones[0].SetActive(false);//PBIENVENIDA
                     Tablero_Indicaciones[1].SetActive(false);//PBIENVENIDA
                     Tablero_Indicaciones[2].SetActive(false);//PBIENVENIDA
@@ -329,6 +330,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     break;
                 case 9://conclusiones
                     UI_btn_Continuar_Panel.SetActive(false);
+                    Tablero_Indicaciones[19].SetActive(false);
                     Tablero_Indicaciones[20].SetActive(true);
                     yield return new WaitForSecondsRealtime(21.5f);
                     UI_btn_Continuar_Panel.SetActive(true);
@@ -536,11 +538,13 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     if (contacto_confirmado[confirmarcontacto] == true)
                     {
                         escalera[2].SetActive(false);//escalera obj
+                        escalera[5].SetActive(false);//escalera refe agarre
 
                     }
                     else
                     {
                         escalera[2].SetActive(true);
+                        escalera[5].SetActive(true);//escalera refe agarre
                     }
                 }
                 break;
@@ -1077,12 +1081,21 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     public void objRGBDActived(bool si)//cuando agarra el llave
     {
         Debug.Log("ITEM " + (auxContacto) + "agarrado de activo el toggles de Rigidbody en funcion PernosRGBDActived");
-
+        
         //Items[n].transform.SetParent(PuntoDeRecepccionPernos.transform);
         Items[auxContacto].GetComponent<BoxCollider>().enabled = si;
         Items[auxContacto].GetComponent<Rigidbody>().isKinematic = !si;
         Items[auxContacto].GetComponent<Rigidbody>().useGravity = si;
-        si_LlaveEnMano = !si;
+        //si_LlaveEnMano = !si;
+    }
+    public void llaveRGBDActived(bool si)//***********19--08-25***********
+    {
+        Debug.Log("ITEM llave agarrado de activo el toggles de Rigidbody en funcion PernosRGBDActived");
+            Items[7].GetComponent<BoxCollider>().enabled = true;
+            Items[7].GetComponent<Rigidbody>().isKinematic = false;
+            Items[7].GetComponent<Rigidbody>().useGravity = true;
+        
+        si_LlaveEnMano = si;
     }
     //**************************FUNCIONES DE TACOS************************************22-07-25
     public void OnFisicasOBJEscaleraObj(bool si_)
