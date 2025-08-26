@@ -103,7 +103,8 @@ public class TM_Oficina : Lista_Tareas_Controller
                 break;//cuando se tiene todos los EPPS
             case 5://dejo el tablero en la otra area
                 muros[3].SetActive(true);//para la siguiente area
-                aSource.goFx("Bien");
+                aSource.goFx("fanfarrias");
+                aSource.goFx("aplausos");
                 aSource.goFx("Locu_Bien");//********************AGREGADO EL 27-08-24********************////////////
                 /*while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
@@ -181,7 +182,7 @@ public class TM_Oficina : Lista_Tareas_Controller
                                     if (numero == rN)
                                     {
                                         Frase_Txt.text = "¡¡¡Bien Hecho!!!";
-                                    //TareaCompletada(0);
+                                    TareaCompletada(0);
                                     }
                                     else
                                     {
@@ -262,7 +263,7 @@ public class TM_Oficina : Lista_Tareas_Controller
     }
     public void DarRandomNum()//Cambio de limite para prueba
     {
-        rN=Random.Range(10000000, 99999999);// de 3 digitos a 8
+        rN=Random.Range(100, 999);// de 3 digitos a 8**devuelta a 3****26.08.25
         NumPizarron.text = rN.ToString();
     }
 
