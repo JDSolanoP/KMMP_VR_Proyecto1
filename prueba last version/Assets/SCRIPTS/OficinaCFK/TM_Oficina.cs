@@ -18,6 +18,8 @@ public class TM_Oficina : Lista_Tareas_Controller
     public int nCifras;
     public int numero;
     public int rN;
+    public string CodigoAcceso;
+    public string[] n;//captura auxliar de cifras
     [Header("Modulo 2")]
     public GameObject[] Epps;
     public GameObject[] correasGuantes;
@@ -140,13 +142,20 @@ public class TM_Oficina : Lista_Tareas_Controller
                         {
                             if (nCifras == 0)
                             {
-                                numero = auxcontacto;
+                                CodigoAcceso = "" + auxcontacto;
+                                n[0] = CodigoAcceso;
+                                //numero = auxcontacto;
                             }
                             else
                             {
-                                numero = numero * 10 + auxcontacto;
+                                CodigoAcceso = CodigoAcceso + auxcontacto;
+                                if (nCifras < limiteCifras)
+                                {
+                                    n[nCifras] = CodigoAcceso;
+                                }
+                                //numero = numero * 10 + auxcontacto;
                             }
-                            Panel_Txt.text = "" + numero;
+                            Panel_Txt.text = "" + CodigoAcceso/*numero*/;
                             nCifras++;
                         }
                     }
@@ -154,7 +163,19 @@ public class TM_Oficina : Lista_Tareas_Controller
                     {
                         if (auxcontacto == 10)
                         {
-                            if (nCifras > 0)
+                            if (nCifras > 1)
+                            {
+                                nCifras--;
+                                CodigoAcceso = n[nCifras - 1];
+                            }
+                            else
+                            {
+                                nCifras = 0;
+                                CodigoAcceso = "";
+                            }
+                            Panel_Txt.text = CodigoAcceso;
+                            Debug.Log(CodigoAcceso + " - cifras : " + nCifras);
+                            /*if (nCifras > 0)
                             {
                                 if (nCifras > 1)
                                 {
@@ -169,11 +190,31 @@ public class TM_Oficina : Lista_Tareas_Controller
                                 }
                                 Panel_Txt.text = "" + numero;
                                 nCifras--;
-                            }
+                            }*/
                         }
                         else
                         {
-                            if (contacto_confirmado[confirmarContacto] == true)
+                            if (auxcontacto == 11)
+                            {//*********btn LOGIN**************************************************LOGIN********************
+                                if (CodigoAcceso == rN.ToString())
+                                {
+                               
+                                Debug.Log(CodigoAcceso + " dni de prueba mandado");
+                                
+                                    CodigoAcceso = "";
+                                    Panel_Txt.text = CodigoAcceso;
+                                    nCifras = 0;
+                                    Frase_Txt.text = "¡¡¡Bien Hecho!!!";
+                                    TareaCompletada(0);
+                                    AudioManager.aSource.goFx("Bien");
+                  }
+                  else
+                  {
+                                    Frase_Txt.text = "¡¡¡Fallo!!!";
+                                    AudioManager.aSource.goFx("Fallo");
+                    }
+                }
+                            /*if (contacto_confirmado[confirmarContacto] == true)
                             {
                                 Debug.Log(numero+" dni de prueba mandado");
                                 //
@@ -191,15 +232,102 @@ public class TM_Oficina : Lista_Tareas_Controller
                                     }
                                 tml.cargarDni("" + numero);
                                 aSource.goFx("Bien");
-                            }
+                            }*/
                             
                         }
-                        
+
                     }
-                    
+
                 }
 
-            break;
+                break;
+            /*case 0://btn de panel numerico
+                if (objs[0].activeInHierarchy == false)
+                {
+                    objs[0].SetActive(true);//evita regresar
+                }
+                if (auxcontacto <= 9)
+                {
+                    if (nCifras < limiteCifras)
+                    {
+                        if (nCifras == 0)
+                        {
+                            CodigoAcceso = "" + auxcontacto;
+                            n[0] = CodigoAcceso;
+                        }
+                        else
+                        {
+                            CodigoAcceso = CodigoAcceso + auxcontacto;
+                            if (nCifras < limiteCifras)
+                            {
+                                n[nCifras] = CodigoAcceso;
+                            }
+                        }
+                        Panel_Txt.text = CodigoAcceso;
+                        Debug.Log(CodigoAcceso + " - cifras : " + nCifras);
+                        nCifras++;
+                        if (nCifras == 8)
+                        {
+                            if (ActualUsuario == "")
+                            {
+                                btnPanel[1].SetActive(true);
+                            }
+                            else
+                            {
+                                btnPanel[9].SetActive(true);
+                            }
+                        }
+                    }
+                }
+                if (auxcontacto == 10)
+                {
+                    if (nCifras > 1)
+                    {
+                        nCifras--;
+                        CodigoAcceso = n[nCifras - 1];
+                    }
+                    else
+                    {
+                        nCifras = 0;
+                        CodigoAcceso = "";
+                    }
+                    Panel_Txt.text = CodigoAcceso;
+                    Debug.Log(CodigoAcceso + " - cifras : " + nCifras);
+                    if (nCifras < 8)
+                    {
+                        if (ActualUsuario == "")
+                        {
+                            btnPanel[1].SetActive(false);
+                        }
+                        else
+                        {
+                            btnPanel[9].SetActive(false);
+                        }
+                    }
+                }
+                if (auxcontacto == 11)
+                {//*********btn LOGIN**************************************************LOGIN********************
+                    if (nCifras == 8)
+                    {
+                        /*if (auxcontacto == 12)
+                        {//********BTN ACTUALIZAR USUARIO
+                            actualizarUsuario(CodigoAcceso);
+                            Debug.Log(CodigoAcceso + " datos actualizados");
+                        }
+                        Debug.Log(CodigoAcceso + " dni de prueba mandado");
+                        cargarDni(CodigoAcceso);
+                        btnPanel[1].SetActive(false);
+                        CodigoAcceso = "";
+                        Panel_Txt.text = CodigoAcceso;
+                        nCifras = 0;
+                        AudioManager.aSource.goFx("Bien");
+                  }
+                  else
+                  {
+                      AudioManager.aSource.goFx("Fallo");
+                    }
+                }
+               // break;*/
             case 1://firmado
                 if (contacto_confirmado[confirmarContacto] == true)
                 {
