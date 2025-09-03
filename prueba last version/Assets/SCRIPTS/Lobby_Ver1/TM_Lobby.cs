@@ -133,7 +133,7 @@ public class TM_Lobby : MonoBehaviour
         }
         else
         {
-            AudioManager.aSource.goFx("Locu_Lobby", 1, false, false);
+            AudioManager.aSource.goFx("Locu_Lobby", 1, false, false);//Elemento 40 en audiomanager->FX Sonidos
         }
         
     }

@@ -8,11 +8,14 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class TM_BloqueoC930E5 : Lista_Tareas_Controller
 {
+    [Header("************Propios de Módulo***********")]
+    public GameObject ModuloEvaluacion;
     public int auxContacto;//para activavionXR u otros
     public int contactoIntAux;//exclusivo de DetectorObj
     public string NombreAuxAudio;
     public float tiempoEsperaAux;
-    [Header("ElementosEscenario")]
+    public bool FullSonidos=true;//********************************Agregado 02-09-25************************
+    [Header("***ElementosEscenario***")]
     public GameObject PJ;
     public Transform[] posPJ;
     public GameObject[] NPC;
@@ -100,8 +103,10 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
         {
             PJ.transform.position = posPJ[0].position;
         }
-
-        StartCoroutine(ListaTareas(TareaActual));
+        if (si_ModuloEvaluación == false)
+        {
+            StartCoroutine(ListaTareas(TareaActual));
+        }
     }
     public override void TareaCompletada(int TareaSiguiente)
     {
@@ -143,6 +148,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     aSource.PlayMusica(aSource.MusicaSonidos[0].nombre, 0.6f, true);
                     if (!EnPruebas)
                     {
+                        aSource.altoFx("Locu_Lobby");//*****************Agregado 02-09-25************ naudiofx40
                         CamionAnim.SetActive(true);
                         CamionC930.SetActive(false);
                         StartCoroutine(CoroutineAnimSonidoEntradaCamion());
@@ -195,7 +201,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     LucesLEDCaja[2].SetActive(true);
                     LucesLEDCaja[4].SetActive(true);
                     LucesLEDCaja[6].SetActive(true);
-                    //***********************Preparativos pra bloqueo de camion***************
+                    //***********************Preparativos para bloqueo de camion***************
                     llaveArranque[0].SetActive(false);
                     TimonRot0 = Timon[1].transform.localEulerAngles;
                     
@@ -211,8 +217,16 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     //yield return new WaitForSecondsRealtime(3f);
                     
                     aSource.goFx("Locu_intro");
-                    yield return new WaitForSecondsRealtime(20f);
-                    aSource.goFx("Locu_Parte1");
+                    if (FullSonidos == true)//********************************Agregado 02-09-25************************
+                    {
+                        yield return new WaitForSecondsRealtime(20f);//********************
+                        aSource.goFx("Locu_Parte1");
+                    }
+                    else
+                    {
+                        yield return new WaitForSecondsRealtime(5f);//********************
+                    }
+                    
                     //yield return new WaitForSecondsRealtime(23f);
                     while (AudioManager.aSource.IsPlayingVoz() == true)
                     {
@@ -332,7 +346,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     UI_btn_Continuar_Panel.SetActive(false);
                     Tablero_Indicaciones[19].SetActive(false);
                     Tablero_Indicaciones[20].SetActive(true);
-                    yield return new WaitForSecondsRealtime(21.5f);
+                    yield return new WaitForSecondsRealtime(12f);
                     UI_btn_Continuar_Panel.SetActive(true);
                     while (AudioManager.aSource.IsPlayingVoz() == true)
                     {
@@ -379,6 +393,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                         Tablero_Indicaciones[2].SetActive(true);
                         Tablero_Indicaciones[1].SetActive(false);//panelP1
                         Tablero_Indicaciones[0].SetActive(false);//panel bienvenida
+                        //
                         StartCoroutine(TiempoEsperaTarea(0,6,43));//************************************************COMPLETA TAREA 0
                         aSource.goFx(aSource.FxSonidos[21].nombre);
                         aSource.goFx(aSource.FxSonidos[23].nombre);
@@ -524,6 +539,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     escalera[1].SetActive(true);//subible
                     escalera[2].SetActive(false);//obj
                     Tablero_Indicaciones[13].SetActive(false);
+                    aSource.goFx("4Puerta_Corrediza_Alto");
                 }
                 break;
             case 10://detecta pj en el suelo
@@ -554,6 +570,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     escalera[3].SetActive(false);//refe2
                     escalera[4].SetActive(true);//mesh
                     escalera[2].SetActive(false);//obj
+                    aSource.goFx("4Puerta_Corrediza_Alto");
                     aSource.goFx("Bien");
                     aSource.goFx("Locu_Bien");
                     Tablero_Indicaciones[15].SetActive(true);//panel de victoria acu aux
@@ -1006,7 +1023,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
         int auxTarea = TareaActual;
         if (EnPruebas)
         {
-            yield return new WaitForSeconds(t + 1);
+            yield return new WaitForSecondsRealtime(t + 1);
             Debug.Log("Se espero " + t + "segundos - AuxAudio : " + NombreAuxAudio);
             while (auxTarea == TareaActual)
             {
@@ -1018,7 +1035,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 }
                 else
                 {
-                    yield return new WaitForSeconds(5);
+                    yield return new WaitForSecondsRealtime(5);
                     if (auxTarea != TareaActual)
                     {
                         NombreAuxAudio = "";
@@ -1037,26 +1054,50 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     }
     public IEnumerator TiempoEsperaTarea(int tarea)//*******************************************Agregado el 26-05-25***************************************
     {
-        yield return new WaitForSeconds(tiempoEsperaAux + 1);
-        Debug.Log("Se espero por la tarea " + tarea + "- tiempoEsperaAux : " + tiempoEsperaAux);
-        if (TareaActual == tarea)
+        if (si_ModuloEvaluación == false)
         {
-            Debug.Log("Se completo la tarea " + tarea + "- dentro del tiempo tiempoEsperaAux : " + tiempoEsperaAux);
-            TareaCompletada(tarea);
+            yield return new WaitForSecondsRealtime(tiempoEsperaAux + 1);
+            Debug.Log("Se espero por la tarea " + tarea + "- tiempoEsperaAux : " + tiempoEsperaAux);
+            if (TareaActual == tarea)
+            {
+                Debug.Log("Se completo la tarea " + tarea + "- dentro del tiempo tiempoEsperaAux : " + tiempoEsperaAux);
+                TareaCompletada(tarea);
+            }
+        }
+        else
+        {
+            ModuloEvaluacion.GetComponent<EV_Bloqueo_C390E5>().AccionTarea(tarea, 0, 0);
         }
     }
     public IEnumerator TiempoEsperaTarea(int tarea,float tiempo,int nAudio)//*******************************************Agregado el 26-05-25***************************************
     {
-
-        yield return new WaitForSeconds(2);
-        aSource.goFx(aSource.FxSonidos[nAudio].nombre);
-        yield return new WaitForSeconds(tiempo);
-
-        Debug.Log("Se espero por la tarea " + tarea + "- tiempoEspera : " + tiempo);
-        if (TareaActual == tarea)
+        if (si_ModuloEvaluación == false)
         {
-            Debug.Log("Se completo la tarea " + tarea + "- dentro del tiempo tiempoEspera : " + tiempo);
-            TareaCompletada(tarea);
+            if (FullSonidos == true)
+            {//para audio "Locu_Bien"
+                yield return new WaitForSecondsRealtime(1.5f);//*********CAMBIADO PARA BLOQUEO EN INGLES***********1-09-25******************
+            }
+            else
+            {
+                yield return new WaitForSeconds(0);//*********CAMBIADO PARA BLOQUEO EN INGLES***********1-09-25******************
+            }
+            //yield return new WaitForSeconds(0);//*********CAMBIADO PARA BLOQUEO EN INGLES***********1-09-25******************
+            aSource.goFx(aSource.FxSonidos[nAudio].nombre);
+            yield return new WaitForSecondsRealtime(tiempo);
+
+            Debug.Log("Se espero por la tarea " + tarea + "- tiempoEspera : " + tiempo);
+            if (TareaActual == tarea)
+            {
+                Debug.Log("Se completo la tarea " + tarea + "- dentro del tiempo tiempoEspera : " + tiempo);
+                TareaCompletada(tarea);
+            }
+        }
+        else 
+        {
+            if (ModuloEvaluacion != null)
+            {
+                ModuloEvaluacion.GetComponent<EV_Bloqueo_C390E5>().AccionTarea(tarea, tiempo, nAudio);
+            }
         }
     }
     public void OnOffBoxCollider(bool onOff)//ACTivar y DEactivar boxcollider//requiere dar AUXCONTACTO***03-06-25**************
@@ -1088,14 +1129,21 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
         Items[auxContacto].GetComponent<Rigidbody>().useGravity = si;
         //si_LlaveEnMano = !si;
     }
-    public void llaveRGBDActived(bool si)//***********19--08-25***********
+    public void llaveRGBDActived(bool si_)//***********19--08-25***********
     {
         Debug.Log("ITEM llave agarrado de activo el toggles de Rigidbody en funcion PernosRGBDActived");
             Items[7].GetComponent<BoxCollider>().enabled = true;
             Items[7].GetComponent<Rigidbody>().isKinematic = false;
             Items[7].GetComponent<Rigidbody>().useGravity = true;
-        
-        si_LlaveEnMano = si;
+        if (si_ == true)
+        {
+            Debug.Log("ITEM llave agarrado de activo el toggles de Rigidbody en funcion PernosRGBDActived");
+        }
+        else
+        {
+            Debug.Log("ITEM llave SOLTADO de activo el toggles de Rigidbody en funcion PernosRGBDActived");
+        }
+        si_LlaveEnMano = si_;
     }
     //**************************FUNCIONES DE TACOS************************************22-07-25
     public void OnFisicasOBJEscaleraObj(bool si_)
@@ -1444,6 +1492,8 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 NodosVoltimetro[1].GetComponent<Rigidbody>().isKinematic = true;
                 NodosVoltimetro[1].GetComponent<Rigidbody>().useGravity = false;
                 NodosVoltimetro[1].GetComponent<Return_Pos0>().enabled = false;
+                StartCoroutine(ReUbicacionEnJerarquia(true));//02*09*25
+
             }
             else
             {
@@ -1459,6 +1509,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 NodosVoltimetro[0].GetComponent<Rigidbody>().isKinematic = true;
                 NodosVoltimetro[0].GetComponent<Rigidbody>().useGravity = false;
                 NodosVoltimetro[0].GetComponent<Return_Pos0>().enabled = false;
+                StartCoroutine(ReUbicacionEnJerarquia(false));//02*09*25
             }
         }
         else
@@ -1759,7 +1810,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
         }
     }
     //***********************FIN DE FUNCION VOLTIMETRO*********************
-    IEnumerator ReUbicacionEnJerarquia(bool si_der)
+    public IEnumerator ReUbicacionEnJerarquia(bool si_der)
     {
         yield return new WaitForSecondsRealtime(0.1f);
         if (si_der== false)
@@ -1794,12 +1845,12 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
             }
         }
     }
-    IEnumerator CoroutineAnimSonidoEntradaCamion()
+    public IEnumerator CoroutineAnimSonidoEntradaCamion()
     {
         yield return new WaitForSecondsRealtime(49f);
         aSource.goFx("Camion_Escalera_Short");
     }
-    IEnumerator CoroutineAnimSonidoFinVolti()
+    public IEnumerator CoroutineAnimSonidoFinVolti()
     {
         yield return new WaitForSecondsRealtime(2f);
         aSource.goFx("Locu_vic_volti");
