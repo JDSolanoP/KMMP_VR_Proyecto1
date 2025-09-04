@@ -27,6 +27,7 @@ public class AudioManager : MonoBehaviour
     public bool[] fxloop;
     public bool[] fxPlaying;
     public bool[] fxNoReemplazable;
+    public int VozCanalAntiguo;
     private bool testingFx = true;
     private bool testingVoz = true;
     private void Awake()
@@ -275,6 +276,10 @@ public class AudioManager : MonoBehaviour
                         //Debug.Log(VocesSourceCanal[VozCanalActual].clip.name + " SonidoVoz Encontrado tocado en el canal " + VozCanalActual);
                         VocesSourceCanal[VozCanalActual].Play();
                         isVozPlay = true;
+                        if (VocesSourceCanal[1].isPlaying == true)
+                        {
+                            VozCanalAntiguo = 0;
+                        }
                         StartCoroutine(CheckingPlayVoz());//************************************************************07-08-24
                         break;
                     }
@@ -286,6 +291,10 @@ public class AudioManager : MonoBehaviour
                             //Debug.Log(VocesSourceCanal[VozCanalActual].clip.name + " SonidoVoz Encontrado tocado en el canal " + VozCanalActual);
                             VocesSourceCanal[VozCanalActual].Play();
                             isVozPlay = true;
+                            if (VocesSourceCanal[0].isPlaying == true)
+                            {
+                                VozCanalAntiguo = 1;
+                            }
                             StartCoroutine(CheckingPlayVoz());//************************************************************07-08-24
                             break;
                         }
@@ -315,6 +324,14 @@ public class AudioManager : MonoBehaviour
                             break;
                         }
                     }*/
+                }
+                else
+                {
+                    VocesSourceCanal[VozCanalAntiguo].clip = s.clip;
+                    //Debug.Log(VocesSourceCanal[VozCanalActual].clip.name + " SonidoVoz Encontrado tocado en el canal " + VozCanalActual);
+                    VocesSourceCanal[VozCanalAntiguo].Play();
+                    isVozPlay = true;
+                    break;
                 }
             }
             Debug.Log(VocesSourceCanal[VozCanalActual].clip+" playVoz en canal " + VozCanalActual);

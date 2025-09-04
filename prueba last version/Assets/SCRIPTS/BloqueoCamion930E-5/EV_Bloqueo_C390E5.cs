@@ -8,6 +8,7 @@ public class EV_Bloqueo_C390E5 : MonoBehaviour
 {
     public TM_BloqueoC930E5 tm_;//***********03-09-25**********
     public int TareaActual;
+    public bool[] Si_TareasHecha;
     public void Awake()
     {
         /*auxContacto=tm_.auxContacto;//para activavionXR u otros
@@ -238,7 +239,13 @@ public class EV_Bloqueo_C390E5 : MonoBehaviour
     {
         switch (t)
         {
-            case 0:
+            case 0://Tacos
+                break;
+            case 1://Caja de aislamiento
+                break;
+            case 2://Candados
+                break;
+            case 3://
                 break;
         }
     }

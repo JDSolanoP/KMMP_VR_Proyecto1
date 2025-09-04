@@ -390,13 +390,19 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     {
                         Tacos[6].SetActive(true);
                         Tacos[7].SetActive(true);
-                        Tablero_Indicaciones[2].SetActive(true);
-                        Tablero_Indicaciones[1].SetActive(false);//panelP1
-                        Tablero_Indicaciones[0].SetActive(false);//panel bienvenida
-                        //
+                        if (si_ModuloEvaluación == true)//*********************************************04-09-25*************
+                        {
+                            Tablero_Indicaciones[2].SetActive(true);
+                            Tablero_Indicaciones[1].SetActive(false);//panelP1
+                            Tablero_Indicaciones[0].SetActive(false);//panel bienvenida
+                        }
                         StartCoroutine(TiempoEsperaTarea(0,6,43));//************************************************COMPLETA TAREA 0
                         aSource.goFx(aSource.FxSonidos[21].nombre);
                         aSource.goFx(aSource.FxSonidos[23].nombre);
+                        if (ModuloEvaluacion != null)//*********************************************04-09-25*************
+                        {
+                            ModuloEvaluacion.GetComponent<EV_Bloqueo_C390E5>().Si_TareasHecha[0]=true;
+                        }
                     }
                 }
                 break;
@@ -412,12 +418,19 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     {
                         Tacos[6].SetActive(true);
                         Tacos[7].SetActive(true);
-                        Tablero_Indicaciones[2].SetActive(true);
-                        Tablero_Indicaciones[1].SetActive(false);//panelP1
-                        Tablero_Indicaciones[0].SetActive(false);//panel bienvenida
+                        if (si_ModuloEvaluación == true)//*********************************************04-09-25*************
+                        {
+                            Tablero_Indicaciones[2].SetActive(true);
+                            Tablero_Indicaciones[1].SetActive(false);//panelP1
+                            Tablero_Indicaciones[0].SetActive(false);//panel bienvenida
+                        }
                         StartCoroutine(TiempoEsperaTarea(0, 6, 43));//************************************************COMPLETA TAREA 0
                         aSource.goFx(aSource.FxSonidos[21].nombre);
                         aSource.goFx(aSource.FxSonidos[23].nombre);
+                        if (ModuloEvaluacion != null)//*********************************************04-09-25*************
+                        {
+                            ModuloEvaluacion.GetComponent<EV_Bloqueo_C390E5>().Si_TareasHecha[1] = true;
+                        }
                     }
                 }
                 break;
@@ -796,12 +809,20 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                             StartCoroutine(DeactivarObjxTiempo(LucesLEDCaja[6]));
                         }
                         nPalancasOff++;
+                        if (ModuloEvaluacion != null)//*********************************************04-09-25*************
+                        {
+                            ModuloEvaluacion.GetComponent<EV_Bloqueo_C390E5>().Si_TareasHecha[2] = true;
+                        }
                         if (nPalancasOff == 3)
                         {
                             StartCoroutine(TiempoEsperaTarea(1, 5, 44));//***********************************************************COMPLETA TAREA 1
                             aSource.goFx(aSource.FxSonidos[21].nombre);
                             aSource.goFx(aSource.FxSonidos[23].nombre);
-                            Tablero_Indicaciones[4].SetActive(true);
+                            if (si_ModuloEvaluación == false)//*********************************************04-09-25*************
+                            {
+                                Tablero_Indicaciones[4].SetActive(true);
+                            }
+                            
                         }
                         break;
                     case 1://starter
@@ -817,6 +838,10 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                             StartCoroutine(DeactivarObjxTiempo(LucesLEDCaja[6]));
                         }
                         nPalancasOff++;
+                        if (ModuloEvaluacion != null)//*********************************************04-09-25*************
+                        {
+                            ModuloEvaluacion.GetComponent<EV_Bloqueo_C390E5>().Si_TareasHecha[2] = true;
+                        }
                         if (nPalancasOff == 3)
                         {
                             StartCoroutine(TiempoEsperaTarea(1, 5, 44));//***********************************************************COMPLETA TAREA 1
@@ -835,6 +860,10 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                         LucesLEDCaja[1].SetActive(false);
                         LucesLEDCaja[3].SetActive(false);
                         nPalancasOff++;
+                        if (ModuloEvaluacion != null)//*********************************************04-09-25*************
+                        {
+                            ModuloEvaluacion.GetComponent<EV_Bloqueo_C390E5>().Si_TareasHecha[2] = true;
+                        }
                         if (nPalancasOff == 3)
                         {
                             StartCoroutine(TiempoEsperaTarea(1, 5, 44));//***********************************************************COMPLETA TAREA 1
