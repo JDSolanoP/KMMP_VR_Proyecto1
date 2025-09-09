@@ -183,8 +183,7 @@ public class EV_Bloqueo_C390E5 : MonoBehaviour
                     tm_.LucesLEDCaja[2].SetActive(true);
                     tm_.LucesLEDCaja[4].SetActive(true);
                     tm_.LucesLEDCaja[6].SetActive(true);
-                    //***********************Preparativos para bloqueo de camion***************
-                    tm_.llaveArranque[0].SetActive(false);
+                    //***********************Preparativos para bloqueo de  
                     tm_.TimonRot0 = tm_.Timon[1].transform.localEulerAngles;
 
                     tm_.Tablero_Indicaciones[0].SetActive(true);//panel de bienvenido
@@ -215,12 +214,8 @@ public class EV_Bloqueo_C390E5 : MonoBehaviour
                     //***********************Parte 1*****************************
                     tm_.Tablero_Indicaciones[1].SetActive(true);//Muestra informacion inicial
                     ActivacionesXTarea(0);//Tacos
-                    /*tm_.Tacos[2].SetActive(true);
-                    tm_.Tacos[3].SetActive(true);*/
+                                     
                     
-                    //***********************Parte 2*****************************
-                    tm_.Palancas[1].SetActive(true);
-                    tm_.Palancas[3].SetActive(true);
                     break;
             }
         }
@@ -233,20 +228,19 @@ public class EV_Bloqueo_C390E5 : MonoBehaviour
                 tm_.Tacos[2].SetActive(true);
                 tm_.Tacos[3].SetActive(true);
                 break;
+            case 1:
+                //***********************Parte 2*****************************
+                tm_.Palancas[1].SetActive(true);
+                tm_.Palancas[3].SetActive(true);
+                tm_.Palancas[5].SetActive(true);
+                break;
+            case 2:
+
+                break;
         }
     }
     public void AccionTarea(int t,float ti,int nAudio)
     {
-        switch (t)
-        {
-            case 0://Tacos
-                break;
-            case 1://Caja de aislamiento
-                break;
-            case 2://Candados
-                break;
-            case 3://
-                break;
-        }
+        Si_TareasHecha[t] = true;
     }
 }
