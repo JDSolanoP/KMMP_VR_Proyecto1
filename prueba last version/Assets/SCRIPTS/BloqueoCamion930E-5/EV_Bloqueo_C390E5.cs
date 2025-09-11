@@ -8,7 +8,11 @@ public class EV_Bloqueo_C390E5 : MonoBehaviour
 {
     public TM_BloqueoC930E5 tm_;//***********03-09-25**********
     public int TareaActual;
-    public bool[] Si_TareasHecha;
+    public bool[] Si_TareasHecha;//se define por cada accion realizable perteneciente a una tarea
+    public bool[] Si_ParteHecha;//se define por si el conjunto de acciones se realizaron para completar esa parte del proceso
+    public bool[] Si_TareaBienEjecutada;//si la tarea no ejecutada correctamente
+    public bool[] Si_TareaFueraDeProceso;//si tarea fue hecha fuera de cuando le correspondía
+    public bool[] Si_verificionAdicional;//booleanos encargados de verificar si se realizo una tarea en el tiempo adecuado.
     public void Awake()
     {
         /*auxContacto=tm_.auxContacto;//para activavionXR u otros
@@ -107,7 +111,7 @@ public class EV_Bloqueo_C390E5 : MonoBehaviour
             StartCoroutine(ListaTareas(TareaActual));
         }
     }
-    IEnumerator ListaTareas(int tarea)
+    public IEnumerator ListaTareas(int tarea)
     {
         if (tm_.si_login == true)
         {
@@ -214,8 +218,14 @@ public class EV_Bloqueo_C390E5 : MonoBehaviour
                     //***********************Parte 1*****************************
                     tm_.Tablero_Indicaciones[1].SetActive(true);//Muestra informacion inicial
                     ActivacionesXTarea(0);//Tacos
-                                     
-                    
+                    ActivacionesXTarea(1);//PALANCAS
+                    //ActivacionesXTarea(2);//LOTO
+                    //ActivacionesXTarea(3);//REVISION DE TIMON Y LLAVE
+                    //ActivacionesXTarea(4);//FRENOS
+                    //ActivacionesXTarea(5);//PEDALES
+                    //ActivacionesXTarea(6);//AUXILIAR
+                    //ActivacionesXTarea(7);//OVERRIDE
+                    //ActivacionesXTarea(8);//GABINETE
                     break;
             }
         }
@@ -242,5 +252,54 @@ public class EV_Bloqueo_C390E5 : MonoBehaviour
     public void AccionTarea(int t,float ti,int nAudio)
     {
         Si_TareasHecha[t] = true;
+        verificadorSecuencia();
+    }
+    public void verificadorSecuencia()
+    {
+                if (Si_TareasHecha[0] == true && Si_TareasHecha[1] == true)//parte 0 tacos
+                {
+            if (TareaActual != 0)
+            {
+                Si_TareaFueraDeProceso[0] = true;
+                Debug.Log(TareaActual + " != 0 : tarea hecha fuera de tiempo");
+            }
+            else { Debug.Log(TareaActual + " = 0 : tarea hecha en tiempo"); }
+                    Si_TareaBienEjecutada[0] = true;
+                    TareaActual++;//solo si sigue el orden ysi hace todas las tareas al final
+                    Si_ParteHecha[1] = true;
+                }
+        
+        if (Si_TareasHecha[2] == true && Si_TareasHecha[3] == true && Si_TareasHecha[4] == true)//parte 1 palancas
+        {
+            if (TareaActual != 1)
+            {
+                Si_TareaFueraDeProceso[1] = true;
+                Debug.Log(TareaActual + " != 1 : tarea hecha fuera de tiempo");
+            }
+            else { Debug.Log(TareaActual + " = 0 : tarea hecha en tiempo"); }
+            Si_TareaBienEjecutada[1] = true;
+            TareaActual++;
+            Si_ParteHecha[1] = true;
+            verificadorSiTareaBienHecha(1);
+        }
+        if (Si_TareasHecha[5] == true && Si_TareasHecha[6] == true && Si_TareasHecha[7] == true)//parte 2 loto
+        {
+            TareaActual++;
+            Si_ParteHecha[2] = true;
+        }
+        //*******************************************************Bloqueo de PUNTO CRITICO 1**********************************
+    }
+    public void verificadorSiTareaBienHecha(int t)
+    {
+        switch (t)
+        {
+            case 1://si system busy apagado
+                if (Si_verificionAdicional[0]==false)
+                {
+                    Debug.Log("*** el LED system busy estuvo prendido durante cerrado de Master");
+                    Si_TareaBienEjecutada[1] = false;
+                }
+                break;
+        }
     }
 }

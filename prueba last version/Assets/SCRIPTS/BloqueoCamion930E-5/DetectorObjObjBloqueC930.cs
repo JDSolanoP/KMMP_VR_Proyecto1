@@ -15,6 +15,10 @@ public class DetectorObjObjBloqueC930 : MonoBehaviour
     public bool permiteReposDespues = false;
     public bool permiteTmVerificar = true;
 
+    private void Start()
+    {
+        tm_=GameObject.Find("TareaManager").GetComponent<TM_BloqueoC930E5>();
+    }
     void OnTriggerEnter(Collider other)
     {
         if (Mas_de_1_Objeto == false)

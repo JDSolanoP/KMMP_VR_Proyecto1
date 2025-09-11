@@ -135,7 +135,8 @@ public class TM_Lobby : MonoBehaviour
         {
             AudioManager.aSource.goFx("Locu_Lobby", 1, false, false);//Elemento 40 en audiomanager->FX Sonidos
         }
-        
+        GameObject gtm = new GameObject();
+        gtm = GameObject.Find("TareaManager");
     }
     public void Transferir_Usuarios()//*******transfiere datos desde DTs(el guardado) a DU lista auxiliar***********
     {
@@ -572,7 +573,6 @@ public class TM_Lobby : MonoBehaviour
                     }
                     else
                     {
-                        
                         GUI_Panel[0].SetActive(false);
                         ltc.Start();
                     }

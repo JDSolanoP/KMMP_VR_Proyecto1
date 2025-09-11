@@ -9,7 +9,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class TM_BloqueoC930E5 : Lista_Tareas_Controller
 {
     [Header("************Propios de Módulo***********")]
-    public GameObject ModuloEvaluacion;
+    public GameObject ModuloEvaluacion;//*********************************************************MODULO EVALUADOR*********************
     public int auxContacto;//para activavionXR u otros
     public int contactoIntAux;//exclusivo de DetectorObj
     public string NombreAuxAudio;
@@ -106,6 +106,10 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
         if (si_ModuloEvaluación == false)
         {
             StartCoroutine(ListaTareas(TareaActual));
+        }
+        else
+        {
+            StartCoroutine(ModuloEvaluacion.GetComponent<EV_Bloqueo_C390E5>().ListaTareas(TareaActual));
         }
     }
     public override void TareaCompletada(int TareaSiguiente)
