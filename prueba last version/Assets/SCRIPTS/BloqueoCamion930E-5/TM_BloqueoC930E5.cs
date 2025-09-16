@@ -181,7 +181,8 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
 
                     btn_Pedal.SetActive(false);
                     //*****CAptura de posiciones de los nodos del voltimetro*****16-06-25**********
-                    
+                    ItemsVolti[4].SetActive(true);
+                    ItemsVolti[4].SetActive(false);
                     NodosVoltimetro[0].transform.SetParent(NodosVoltimetro[1].transform);
                     NodoIzqPos0 = NodosVoltimetro[0].transform.localPosition;
                     NodoIzqRot0 = NodosVoltimetro[0].transform.localEulerAngles;
@@ -194,6 +195,8 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     RotPuertaGPontencia[2] = PuertasGPotencia[1].transform.localEulerAngles.z;//rot0 der
                     txt_panelVolti.text = "";
                     ItemsVolti[14].SetActive(false);
+                    yield return new WaitForSecondsRealtime(0.1f);
+                    ItemsVolti[4].SetActive(false);
                     //**********************************************************************
                     cajaBloqueoTapaRot0 = Items[18].transform.localEulerAngles;//tapa de caja de bloqueo*************17-06-25
                     cajaBloqueoTapaPos0 = Items[18].transform.localPosition;    
@@ -288,7 +291,10 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     Tablero_Indicaciones[10].SetActive(true);
                     Tablero_Indicaciones[8].SetActive(false);
                     Muros[2].SetActive(false);
-                    V_NV1[0].SetActive(true);
+                    /*if (V_NV1[0].activeInHierarchy==false)
+                    {
+                        V_NV1[0].SetActive(true);
+                    }*/
                     while (AudioManager.aSource.IsPlayingVoz() == true)
                     {
                         yield return new WaitForFixedUpdate();
@@ -350,7 +356,14 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     UI_btn_Continuar_Panel.SetActive(false);
                     Tablero_Indicaciones[19].SetActive(false);
                     Tablero_Indicaciones[20].SetActive(true);
-                    yield return new WaitForSecondsRealtime(12f);
+                    if (FullSonidos == true)
+                    {
+                        yield return new WaitForSecondsRealtime(20f);
+                    }
+                    else
+                    {
+                        yield return new WaitForSecondsRealtime(11f);
+                    }
                     UI_btn_Continuar_Panel.SetActive(true);
                     while (AudioManager.aSource.IsPlayingVoz() == true)
                     {
