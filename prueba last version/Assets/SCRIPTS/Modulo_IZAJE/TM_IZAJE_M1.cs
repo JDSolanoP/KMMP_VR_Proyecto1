@@ -42,15 +42,44 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
     public GameObject UI_btn_Reiniciar_Panel;
     public GameObject UI_btn_Menu_Panel;
 
+    [Header("Inicio")]
+    [SerializeField] private Transform newSpawnPositionForPlayer = null;
+    [SerializeField] private GameObject playerXROrigin = null;
+
 
     public override void Start()
     {
         base.Start();
-        StartCoroutine(ListaTareas(TareaActual));
+        //StartCoroutine(ListaTareas(TareaActual));
+        StartCoroutine(WaitForTheStartOfTheModule());
     }
     public override void TareaCompletada(int TareaSiguiente)
     {
         base.TareaCompletada(TareaSiguiente);
+        StartCoroutine(ListaTareas(TareaActual));
+    }
+
+    private IEnumerator WaitForTheStartOfTheModule()
+    {
+        aSource.PlayMusica(aSource.MusicaSonidos[0].nombre, 1f, true);
+        aSource.MusicaVol(1);
+        for (int i = 0; i < Tablero_Indicaciones.Length; i++)//apago todos los paneles
+        {
+            Tablero_Indicaciones[i].SetActive(false);
+        }
+        if (si_login)
+        {
+            while (TM_Lobby.lb.si_inicioModulo == false)
+                yield return null;
+        }
+        float fadeTime = 1f;
+        FadeOut(fadeTime);
+        yield return new WaitForSeconds(fadeTime);
+        playerXROrigin.transform.position = newSpawnPositionForPlayer.position;
+        playerXROrigin.transform.rotation = newSpawnPositionForPlayer.rotation;
+        yield return new WaitForSeconds(0.125f);
+        FadeIn(fadeTime);
+        yield return new WaitForSeconds(fadeTime);
         StartCoroutine(ListaTareas(TareaActual));
     }
     IEnumerator ListaTareas(int tarea)
@@ -60,17 +89,13 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
             case 0:// AQUI, en al entra del taller
                    //audioManager de bienvenida
                 activarCtrlBTN(false);
-                aSource.PlayMusica(aSource.MusicaSonidos[0].nombre, 1f, true);
-                yield return new WaitForSeconds(0.5f);
+                
                 manosXR[0].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[0];
                 manosXR[1].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[0];
 
-                aSource.MusicaVol(1);//**************************************Sonido Musica Inicial*************
+                
                 //aSource.FxVol(1);
-                for (int i = 0; i < Tablero_Indicaciones.Length; i++)//apago todos los paneles
-                {
-                    Tablero_Indicaciones[i].SetActive(false);
-                }
+                
                 yield return new WaitForSeconds(1f);
                 Tablero_Indicaciones[0].SetActive(true);//tablero de bienvenida
 
@@ -129,6 +154,10 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
                 }
                 break;
             case 4:// Finde conclusiones
+                if (si_login == true)
+                {
+                    TM_Lobby.lb.moverPanelFinal();
+                }
                 //aSource.VocesSourceCanal[aSource.VozCanalActual].Stop();
                 UI_btn_Reiniciar_Panel.SetActive(false);
                 UI_btn_Salir_Panel.SetActive(false);
@@ -171,6 +200,10 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
                         aSource.goFx("Fallo");
                         aSource.goFx("Locu_Fallo");//********************AGREGADO EL 27-08-24********************////////////
                         Tablero_Indicaciones[2].SetActive(true);
+                        if (si_login == true)
+                        {
+                            TM_Lobby.lb.auxNotas[0]++;
+                        }
                     }
                     else
                     {
@@ -183,6 +216,10 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
                             tiempoEsperaAux = 2;
                             StartCoroutine(TiempoEsperaTarea(1));
                             //TareaCompletada(0);//**********************************************************Tarea 1 Completada************
+                            if (si_login == true)
+                            {
+                                TM_Lobby.lb.AgregarNota(0, TM_Lobby.lb.auxNotas[0]);
+                            }
                         }
 
                     }
@@ -195,9 +232,14 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
                     if (Ctrl_Grua.corneta_presionada == true)
                     {
                         ObjetosReferencias[0].SetActive(false);////detector cornete
+                        TM_Lobby.lb.AgregarNota(1, TM_Lobby.lb.auxNotas[1]);
                     }
                     else
                     {
+                        if (si_login == true)
+                        {
+                            TM_Lobby.lb.auxNotas[1]++;
+                        }
                         aSource.goFx("Fallo");
                         aSource.goFx("Locu_Fallo");//********************AGREGADO EL 276-08-24********************////////////
                         Tablero_Indicaciones[5].SetActive(true);
@@ -227,6 +269,10 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
                     aSource.goFx("Locu_Fallo");//********************AGREGADO EL 27-08-24********************////////////
                     Tablero_Indicaciones[6].SetActive(true);
                     ObjetosReferencias[4].SetActive(true);//flechas
+                    if (si_login == true)
+                    {
+                        TM_Lobby.lb.auxNotas[2]++;
+                    }
                 }
                 break;
             case 4://si coloca la carga en el lugar adecuado
@@ -250,6 +296,11 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
             case 5://******************************************************confirma dejar control en el punto verde indicado de la bahia fin********////////////////////
                 if (contacto_confirmado[confirmarContacto] == true)
                 {
+                    if (si_login == true)
+                    {
+                        TM_Lobby.lb.AgregarNota(2, TM_Lobby.lb.auxNotas[2]);
+                        TM_Lobby.lb.GuardarNotasTotales();
+                    }
                     aSource.altoFx("Devolver_Control");
                     aSource.goFx("Soltar");//*************************************************sonido soltar control grua******************
                     ObjetosReferencias[5].SetActive(false);
@@ -272,6 +323,11 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
             case 6://control remoto en la bahia inicio
                 if (contacto_confirmado[confirmarContacto] == true)
                 {
+                    if (si_login == true)
+                    {
+                        TM_Lobby.lb.AgregarNota(2, TM_Lobby.lb.auxNotas[2]);
+                        TM_Lobby.lb.GuardarNotasTotales();
+                    }
                     aSource.altoFx("Devolver_Control");
                     aSource.goFx("Soltar");
                     ObjetosReferencias[5].SetActive(false);

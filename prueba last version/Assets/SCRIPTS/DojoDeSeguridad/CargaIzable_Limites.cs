@@ -71,4 +71,15 @@ public class CargaIzable_Limites : MonoBehaviour
             TriggerContact = other.name;
         }
     }
+
+    private void OnDisable()
+    {
+        ForceUnlock();
+    }
+
+    public void ForceUnlock()
+    {
+        BloqueaActivo = false;
+        cgp.bloqueo[nBloqueo] = false;
+    }
 }

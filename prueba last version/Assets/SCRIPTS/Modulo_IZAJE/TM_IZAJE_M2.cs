@@ -59,15 +59,44 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
     public Transform pos_enMesa_Revision;
     public bool si_mt_enTaller;
 
+    [Header("Inicio")]
+    [SerializeField] private Transform newSpawnPositionForPlayer = null;
+    [SerializeField] private GameObject playerXROrigin = null;
+
 
     public override void Start()
     {
         base.Start();
-        StartCoroutine(ListaTareas(TareaActual));
+        //StartCoroutine(ListaTareas(TareaActual));
+        StartCoroutine(WaitForTheStartOfTheModule());
     }
     public override void TareaCompletada(int TareaSiguiente)
     {
         base.TareaCompletada(TareaSiguiente);
+        StartCoroutine(ListaTareas(TareaActual));
+    }
+
+    private IEnumerator WaitForTheStartOfTheModule()
+    {
+        aSource.PlayMusica(aSource.MusicaSonidos[0].nombre, 1f, true);
+        aSource.MusicaVol(1);
+        for (int i = 0; i < Tablero_Indicaciones.Length; i++)//apago todos los paneles
+        {
+            Tablero_Indicaciones[i].SetActive(false);
+        }
+        if (si_login)
+        {
+            while (TM_Lobby.lb.si_inicioModulo == false)
+                yield return null;
+        }
+        float fadeTime = 1f;
+        FadeOut(fadeTime);
+        yield return new WaitForSeconds(fadeTime);
+        playerXROrigin.transform.position = newSpawnPositionForPlayer.position;
+        playerXROrigin.transform.rotation = newSpawnPositionForPlayer.rotation;
+        yield return new WaitForSeconds(0.125f);
+        FadeIn(fadeTime);
+        yield return new WaitForSeconds(fadeTime);
         StartCoroutine(ListaTareas(TareaActual));
     }
 
@@ -114,7 +143,7 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
 
                     yield return new WaitForFixedUpdate();
                 }
-                yield return new WaitForSecondsRealtime(23f);
+                yield return new WaitForSecondsRealtime(2f);
                 Tablero_Indicaciones[3].SetActive(true);//panel de conformidad
                 //Debug.Log("Se esta reproduciendo audio");
                 aSource.goFx("IM2_Locu01");
@@ -157,7 +186,12 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 ElementoPost[8].transform.localPosition = pos0AgarreViento[1];
                 verificarContacto(5);*/
                 aSource.goFx("Bien");
-                
+                if (si_login == true)
+                {
+                    TM_Lobby.lb.AgregarNota(1, TM_Lobby.lb.auxNotas[1]);
+                    TM_Lobby.lb.GuardarNotasTotales();
+                }
+
                 while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
 
@@ -226,6 +260,10 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 }
                 break;
             case 7://cuando se presiona el boton continuar
+                if (si_login == true)
+                {
+                    TM_Lobby.lb.moverPanelFinal();
+                }
                 aSource.goFx("fanfarrias");
                 aSource.goFx("aplausos");
                 Muros[1].SetActive(true);///muro de conos de concluciones
@@ -382,6 +420,10 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                         Tablero_Indicaciones[6].SetActive(true);
                         aSource.goFx("Fallo");
                         aSource.goFx("Locu_Fallo");
+                        if (si_login == true)
+                        {
+                            TM_Lobby.lb.auxNotas[1]++;
+                        }
                     }
                     else
                     {
@@ -501,6 +543,10 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
             Tablero_Indicaciones[0].SetActive(true);//si no detecta ninguna eslinga
             aSource.goFx("Locu_Fallo");
             aSource.goFx("Fallo");
+            if (si_login == true)
+            {
+                TM_Lobby.lb.auxNotas[0]++;
+            }
             //Debug.Log("error no eslinga "+Si_HayEslingaColocada+" - TodoCorrecto : "+TodoCorrecto+" ->"+Si_EslingaColocadaUsable+" "+si_perilla );
         } else
         {
@@ -509,6 +555,10 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
             {
                 aSource.goFx("Locu_Fallo");
                 aSource.goFx("Fallo");
+                if (si_login == true)
+                {
+                    TM_Lobby.lb.auxNotas[0]++;
+                }
                 if (Si_EslingaColocadaUsable == false)
                 {
                     //Debug.Log("error eslinga no usable" + Si_HayEslingaColocada + " - TodoCorrecto : " + TodoCorrecto + " ->" + Si_EslingaColocadaUsable + " " + si_perilla);
@@ -556,6 +606,10 @@ public class TM_IZAJE_M2 : Lista_Tareas_Controller
                 StartCoroutine(TiempoEsperaTarea(0));
                 //TiempoEsperaTarea(0);
                 //TareaCompletada(0);
+                if (si_login == true)
+                {
+                    TM_Lobby.lb.AgregarNota(0, TM_Lobby.lb.auxNotas[0]);
+                }
             }
         }
     }

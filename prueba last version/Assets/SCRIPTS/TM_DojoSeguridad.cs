@@ -1239,7 +1239,7 @@ public class TM_DojoSeguridad : Lista_Tareas_Controller
     }
     public IEnumerator TiempoEsperaTarea(int tarea)//*******************************************Agregado el 04-09-24***************************************
     {
-        yield return new WaitForSeconds(tiempoEsperaAux+1);
+        yield return new WaitForSecondsRealtime(tiempoEsperaAux+1);
         Debug.Log("Se espero por la tarea " + tarea + "- tiempoEsperaAux : " + tiempoEsperaAux);
         if (TareaActual == tarea)
         {

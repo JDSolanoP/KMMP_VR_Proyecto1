@@ -19,8 +19,8 @@ public class TM_INSPECCIONCAMION : Lista_Tareas_Controller
     public override void Start()
     {
         base.Start();
-        StartCoroutine(ListaTareas(TareaActual));
-    }
+            StartCoroutine(ListaTareas(TareaActual));
+        }
     public override void TareaCompletada(int TareaSiguiente)
     {
         base.TareaCompletada(TareaSiguiente);

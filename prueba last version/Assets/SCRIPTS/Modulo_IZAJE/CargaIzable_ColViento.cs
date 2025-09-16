@@ -80,4 +80,15 @@ public class CargaIzable_ColViento : MonoBehaviour
             TriggerContact = other.name;
         }
     }
+
+    private void OnDisable()
+    {
+        ForceUnlock();
+    }
+
+    public void ForceUnlock()
+    {
+        BloqueaActivo = false;
+        GGR.siBloqueo[nBloqueo] = false;
+    }
 }

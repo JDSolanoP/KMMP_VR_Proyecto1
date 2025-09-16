@@ -21,13 +21,13 @@ public class AudioManager : MonoBehaviour
     public float FxVolumenMaster, VocesVolumenMaster;
     public int FxCanalActual=0;
     public int VozCanalActual;
+    public int VozCanalAntiguo;
     public bool isMusicaPlay;
     public bool isVozPlay;
     [Header("Valores para FXSounds")]
     public bool[] fxloop;
     public bool[] fxPlaying;
     public bool[] fxNoReemplazable;
-    public int VozCanalAntiguo;
     private bool testingFx = true;
     private bool testingVoz = true;
     private void Awake()
@@ -270,31 +270,23 @@ public class AudioManager : MonoBehaviour
                 //if(AudioManager.aSource.isVozPlay == true) { }
                 if (VocesSourceCanal[VozCanalActual].isPlaying != true/* || s.clip.name != VocesSourceCanal[VozCanalActual].name*/)
                 {
-                    if (VozCanalActual == 0&& s.clip != VocesSourceCanal[1].clip)
+                    if (VozCanalActual == 0&& s.clip != VocesSourceCanal[0].clip)
                     {
                         VocesSourceCanal[VozCanalActual].clip = s.clip;
-                        //Debug.Log(VocesSourceCanal[VozCanalActual].clip.name + " SonidoVoz Encontrado tocado en el canal " + VozCanalActual);
+                        Debug.Log(VocesSourceCanal[VozCanalActual].clip.name + " SonidoVoz Encontrado tocado en el canal " + VozCanalActual);
                         VocesSourceCanal[VozCanalActual].Play();
                         isVozPlay = true;
-                        if (VocesSourceCanal[1].isPlaying == true)
-                        {
-                            VozCanalAntiguo = 0;
-                        }
                         StartCoroutine(CheckingPlayVoz());//************************************************************07-08-24
                         break;
                     }
                     else
                     {
-                        if (VozCanalActual == 1 && s.clip != VocesSourceCanal[0].clip)
+                        if (VozCanalActual == 1 && s.clip != VocesSourceCanal[1].clip)
                         {
                             VocesSourceCanal[VozCanalActual].clip = s.clip;
-                            //Debug.Log(VocesSourceCanal[VozCanalActual].clip.name + " SonidoVoz Encontrado tocado en el canal " + VozCanalActual);
+                            Debug.Log(VocesSourceCanal[VozCanalActual].clip.name + " SonidoVoz Encontrado tocado en el canal " + VozCanalActual);
                             VocesSourceCanal[VozCanalActual].Play();
                             isVozPlay = true;
-                            if (VocesSourceCanal[0].isPlaying == true)
-                            {
-                                VozCanalAntiguo = 1;
-                            }
                             StartCoroutine(CheckingPlayVoz());//************************************************************07-08-24
                             break;
                         }
@@ -326,18 +318,25 @@ public class AudioManager : MonoBehaviour
                     }*/
                 }
                 else
+
                 {
+
                     VocesSourceCanal[VozCanalAntiguo].clip = s.clip;
+
                     //Debug.Log(VocesSourceCanal[VozCanalActual].clip.name + " SonidoVoz Encontrado tocado en el canal " + VozCanalActual);
+
                     VocesSourceCanal[VozCanalAntiguo].Play();
+
                     isVozPlay = true;
                     break;
                 }
+
             }
             Debug.Log(VocesSourceCanal[VozCanalActual].clip+" playVoz en canal " + VozCanalActual);
             VozCanalActual++;
             if (VozCanalActual >= VocesSourceCanal.Length) { VozCanalActual = 0; }
             Debug.Log("playVoz en canal a usar " + VozCanalActual);
+            
         }
     }
     /*public void playFxLoop(string nombre)
@@ -678,6 +677,58 @@ public class AudioManager : MonoBehaviour
             }
         }
     }
+
+    public void goFxWithTime(string nombre, float time)
+    {
+        Sonido s = Array.Find(FxSonidos, x => x.nombre == nombre);
+        if (s == null)
+        {
+            Debug.Log("SonidoFX no Encontrado " + nombre);
+        }
+        else
+        {
+            for (int i = 0; i < FxSourceCanal.Length; i++)
+            {
+                if (FxSourceCanal[i].isPlaying == false)
+                {
+                    fxPlaying[i] = false;
+                    fxNoReemplazable[i] = false;
+                    fxloop[i] = false;
+                    //Debug.Log("Limpieza de valores para insertar" + nombre);
+                }
+            }
+
+            for (int i = 0; i < FxSourceCanal.Length; i++)
+            {
+                if (fxPlaying[i] == false)
+                {
+                    fxDarValores(s, i, 1, false, false);
+                    FxSourceCanal[i].time = time;
+                    FxSourceCanal[i].Play();
+                    break;
+
+                }
+                else
+                {
+                    if (fxNoReemplazable[i] == false)
+                    {
+                        if (fxloop[i] == true)
+                        {
+                            if (s.clip.name == FxSourceCanal[i].clip.name)
+                            {
+                                // Debug.Log("se volvio a dar play a " + FxSourceCanal[i].clip.name + "en el canal " + i);
+                                FxSourceCanal[i].Play();
+                                //fxDarValores(s, i, 1, false, false);
+                                break;
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
     public void altoFxLoop(string nombre)
     {
         Sonido s = Array.Find(FxSonidos, x => x.nombre == nombre);
