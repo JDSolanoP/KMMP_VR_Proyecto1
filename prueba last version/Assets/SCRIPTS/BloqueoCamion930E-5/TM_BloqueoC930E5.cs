@@ -413,7 +413,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                             Tablero_Indicaciones[1].SetActive(false);//panelP1
                             Tablero_Indicaciones[0].SetActive(false);//panel bienvenida
                         }
-                        StartCoroutine(TiempoEsperaTarea(0,6,43));//************************************************COMPLETA TAREA 0
+                        StartCoroutine(TiempoEsperaTarea(0,5,43));//************************************************COMPLETA TAREA 0
                         aSource.goFx(aSource.FxSonidos[21].nombre);
                         aSource.goFx(aSource.FxSonidos[23].nombre);
                         if (ModuloEvaluacion != null)//*********************************************04-09-25*************
@@ -441,7 +441,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                             Tablero_Indicaciones[1].SetActive(false);//panelP1
                             Tablero_Indicaciones[0].SetActive(false);//panel bienvenida
                         }
-                        StartCoroutine(TiempoEsperaTarea(0, 6, 43));//************************************************COMPLETA TAREA 0
+                        StartCoroutine(TiempoEsperaTarea(0, 5, 43));//************************************************COMPLETA TAREA 0
                         aSource.goFx(aSource.FxSonidos[21].nombre);
                         aSource.goFx(aSource.FxSonidos[23].nombre);
                         if (ModuloEvaluacion != null)//*********************************************04-09-25*************
@@ -604,7 +604,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     aSource.goFx("Bien");
                     aSource.goFx("Locu_Bien");
                     Tablero_Indicaciones[15].SetActive(true);//panel de victoria acu aux
-                    StartCoroutine(TiempoEsperaTarea(6, 6, 43));//*******************************************************************fin de acumulador aux TAREA 6
+                    StartCoroutine(TiempoEsperaTarea(6, 5, 43));//*******************************************************************fin de acumulador aux TAREA 6
                 }
                 break;
             case 12://refe volti
