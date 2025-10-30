@@ -154,10 +154,10 @@ public class TM_IZAJE_M1 : Lista_Tareas_Controller
                 }
                 break;
             case 4:// Finde conclusiones
-                if (si_login == true)
-                {
+                
+                if(TM_Lobby.lb!=null)
                     TM_Lobby.lb.moverPanelFinal();
-                }
+                
                 //aSource.VocesSourceCanal[aSource.VozCanalActual].Stop();
                 UI_btn_Reiniciar_Panel.SetActive(false);
                 UI_btn_Salir_Panel.SetActive(false);
