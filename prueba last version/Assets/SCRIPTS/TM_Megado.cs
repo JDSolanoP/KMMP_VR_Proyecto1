@@ -47,6 +47,10 @@ public class TM_Megado : Lista_Tareas_Controller
     public TMP_Text tmp_voltajeSecun;
     public TMP_Text tmp_tiempo;
     public TMP_Text tmp_Resistencia;
+    public int contacto_aux;
+    [Header("Pinzas correctas")]
+    public bool PinzaRoja;
+    public bool PinzaNegra;
 
 
     public override void Start()
@@ -71,11 +75,18 @@ public class TM_Megado : Lista_Tareas_Controller
         switch (tarea)
         {//Agregar notaciones de tareas en cada caso
             case 0:// AQUI
+                aSource.PlayMusica(aSource.MusicaSonidos[0].nombre, 0.6f, true);
                 //Tarea inicial, se ejecuta por defecto al iniciar el proyecto
                 //Codigo de referencia : yield return new WaitForSeconds(2f);
                 Tablero_Indicaciones[0].SetActive(false);//tablero0:bienvenida colocar guantes
+                Tablero_Indicaciones[8].SetActive(true);
+                yield return new WaitForSeconds(0.5f);
+                //Tablero_Indicaciones[0].SetActive(true);//tablero0:bienvenida colocar guantes
+                yield return new WaitForSeconds(1f);//**********************************************tiempo
+                Tablero_Indicaciones[8].SetActive(false);
                 yield return new WaitForSeconds(0.5f);
                 Tablero_Indicaciones[0].SetActive(true);//tablero0:bienvenida colocar guantes
+                
                 guantesComplementos[0].SetActive(false);
                 guantesComplementos[1].SetActive(false);
                 /*while (AudioManager.aSource.IsPlayingVoz() == true)
@@ -98,6 +109,7 @@ public class TM_Megado : Lista_Tareas_Controller
                 yield return new WaitForSeconds(1f);
                 Tablero_Indicaciones[1].SetActive(true);//TABLERO 1 PRENDER
                 ObjRefe[1].SetActive(true);//ACTIVAR PINZA ROJA REFERENCIAS
+                ObjRefe[6].SetActive(true);//PRENDER PPINZA NEGRA REFE **************************6-11-25
                 /*while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
                     //Debug.Log("Se esta reproduciendo audio");
@@ -216,27 +228,55 @@ public class TM_Megado : Lista_Tareas_Controller
     }
     //*********************** TAREA 1 y TAREA 2*****************
     //************VERIFICACION DE PINZAS************************
-    public void SoltarPinza(int tarea)
+    public void SoltarPinza(int aux)
     {
-        switch (tarea)
+        switch (aux)
         {
-            case 1:
-                congelarObj(2);//PINZA ROJA GRAB
-                ObjRefe[2].SetActive(false);
-                ObjRefe[3].SetActive(false);
-                ObjRefe[4].SetActive(true);
-                ObjRefe[5].SetActive(true);
-                //ObjRefe[6].SetActive(true);
-                TareaCompletada(tarea);
+            case 0:
+                if (contacto_confirmado[0] == true&&PinzaRoja == false)
+                {
+                    congelarObj(2);//PINZA ROJA GRAB
+                    ObjRefe[2].SetActive(false);
+                    ObjRefe[3].SetActive(false);
+                    ObjRefe[4].SetActive(true);
+                    ObjRefe[5].SetActive(true);
+                    ObjRefe[1].SetActive(false);//DESACTIVAR PINZA ROJA REFE
+                    //ObjRefe[6].SetActive(true);
+                    AudioManager.aSource.goFx("Bien");
+                    PinzaRoja=true;
+                    if (PinzaRoja == true && PinzaNegra==true)
+                    {
+                        TareaCompletada(TareaActual);
+                    }
+                    //TareaCompletada(TareaActual);
+                }
+                else
+                {
+                    AudioManager.aSource.goFx("Fallo");
+                    Debug.Log("Fallo 0");
+                }
+                
                 //TareaCompletada(1);
                 break;
-            case 2:
-                congelarObj(7);// PINZA NEGRA GRAB
-                ObjRefe[7].SetActive(false);
-                ObjRefe[8].SetActive(false);
-                ObjRefe[9].SetActive(true);
-                ObjRefe[10].SetActive(true);
-                TareaCompletada(tarea);
+            case 1:
+                if (contacto_confirmado[1] == true&&PinzaNegra == false)
+                {
+                    congelarObj(7);// PINZA NEGRA GRAB
+                    ObjRefe[6].SetActive(false);//APAGAR PINZA NEGRA DE REFERENCIA
+                    
+                    ObjRefe[7].SetActive(false);
+                    ObjRefe[8].SetActive(false);
+                    ObjRefe[9].SetActive(true);
+                    ObjRefe[10].SetActive(true);
+                    AudioManager.aSource.goFx("Bien");
+                    PinzaNegra = true;
+                    if (PinzaRoja ==true&& PinzaNegra==true)
+                    {
+                        TareaCompletada(TareaActual);
+                    }
+                    
+                }
+                else { AudioManager.aSource.goFx("Fallo"); Debug.Log("FAllo1"); }
                 break;
         }
     }
@@ -255,10 +295,10 @@ public class TM_Megado : Lista_Tareas_Controller
     }
     public void verificarPosPinza(int tarea)
     {
-        if (contactoPinza == true && SoltarObj==true)
+        if (contactoPinza == true/*contacto_confirmado[contacto_aux]*/ && SoltarObj==true)
         {
             //Debug.Log("verificando obj para completar tarea");
-            SoltarPinza(tarea);
+            SoltarPinza(contacto_aux);
             contactoPinza = false;
             SoltarObj = false;
         }
