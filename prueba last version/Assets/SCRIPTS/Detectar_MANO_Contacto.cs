@@ -23,15 +23,11 @@ public class Detectar_MANO_Contacto : MonoBehaviour
             {
                 if (other.name == ManoContacto[0].name || other.name == ManoContacto[1].name)
 
-                //if (other.name == ManoContacto[0].name) { megado.ContactoManoIzq = true; }
-                //if (other.name == ManoContacto[1].name) { megado.ContactoManoDer = true; }
-
                 {
                     Debug.Log("solo 1 pulsacion");
                     megado.si_realizar_accion[0] = true;
                     verificarUnaAccion();
-                    //megado.si_realizar_accion[0]=true;
-                    //megado.TareaCompletada(TareaPorCumplir);
+                    
                     this.gameObject.SetActive(false);
                 }
             }else  
@@ -44,32 +40,10 @@ public class Detectar_MANO_Contacto : MonoBehaviour
                     {
                         megado.si_realizar_accion[nTareaAsignada] = true;
                         Debug.Log("cumpliento activacion de accion por mano -> tarea "+nTareaAsignada);
-                        //megado.accionConfirmadaPorContactoMano(nTareaAsignada);
-                        /*if (nTareaAsignada == 1 )
-                        {
-                            this.gameObject.SetActive(false);
-                        }*/
-                        /*if(this.gameObject.name == ObjReferencia.name)
-                        {
-                            megado.si_realizar_accion[] = true;
-                        }*/
+                        
                     }
                 }
             }
-        /*else
-        {
-            if (other.name == ManoContacto[0].name) 
-            {
-                if (other.name == ManoContacto[0].name) { megado.ContactoManoIzq = true; }
-            }
-            else
-            {
-                if (other.name == ManoContacto[1].name)
-                {
-                    if (other.name == ManoContacto[0].name) { megado.ContactoManoIzq = true; }
-                }
-            }*/
-           
         }
     }
     void OnTriggerExit(Collider other)

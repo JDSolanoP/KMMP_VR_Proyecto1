@@ -16,32 +16,38 @@ public class DetectarOBJ : MonoBehaviour
         {
             megado.contacto_confirmado[contacto_Aux]=false;
             megado.contacto_aux=contacto_Aux;
-            Debug.Log(contacto_Aux+" Malo desde el OBJ "+ObjetoReferencia.name);
+            Debug.Log(contacto_Aux+" Malo desde el OBJ "+other.name);
         }
         else
         {
             megado.contacto_confirmado[contacto_Aux] = true;
             megado.contacto_aux = contacto_Aux;
-            Debug.Log(contacto_Aux + " bueno desde el OBJ " + ObjetoReferencia.name);
+            Debug.Log(contacto_Aux + " bueno desde el OBJ " + other.name);
         }
     }
-    public void OnTriggerStay(Collider col)
+    public void OnTriggerStay(Collider other)
     {
-        //Debug.Log("verificando contacto");
-        /*if (col.name == ObjetoReferencia.name)
+        if (other.name == ObjetoReferencia.name)
         {
-            //megado.contacto_confirmado[contacto_Aux] = true;
-            //Debug.Log("verificando contacto de entrada  CON "+ ObjetoReferencia.name);
+            megado.contacto_confirmado[contacto_Aux] = true;
+            megado.contacto_aux = contacto_Aux;
+        }
+            //Debug.Log("verificando contacto");
+            /*if (col.name == ObjetoReferencia.name)
+            {
+                //megado.contacto_confirmado[contacto_Aux] = true;
+                //Debug.Log("verificando contacto de entrada  CON "+ ObjetoReferencia.name);
+                megado.contactoPinza = true;
+                //megado.verificarPosPinza(TareaPorCumplir);
+            }*/
             megado.contactoPinza = true;
-            //megado.verificarPosPinza(TareaPorCumplir);
-        }*/
-        megado.contactoPinza = true;
 
     }
     public void OnTriggerExit(Collider col)
     {
         if(col.name== ObjetoReferencia.name)
         {
+            megado.contacto_confirmado[contacto_Aux] = false;
             //Debug.Log("verificando contacto de salida CON " + ObjetoReferencia.name);
             megado.contactoPinza = false;
         }

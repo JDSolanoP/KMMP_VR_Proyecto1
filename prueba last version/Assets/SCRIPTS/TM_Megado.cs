@@ -20,14 +20,18 @@ public class TM_Megado : Lista_Tareas_Controller
     public GameObject[] manosXR;//agregos viernes 31-05-24
     public GameObject[] guantesComplementos;
     public Material[] manosXRMaterial;//agregos viernes 31-05-24
+    
     [Header ("Izq=0, Der=1")]
     public GameObject[] Indices_Mano;//indica los detectores de dedos indices de cada mano para presionar los botones
     public bool[] CheckListaTarea;
     public GameObject[] BarraUIMedicion;
     public int BarraUI_contador=0;//contador que indica hasta donde se marcara dependiendo del ejercicio
     public int intentos, MaxIntentos;
-    public bool contactoPinza =false;
-    public bool SoltarObj=false;
+    public bool contactoPinza = false;
+    public bool SoltarObj = false;
+    [Header("Pinzas correctas")]
+    public bool PinzaRoja;
+    public bool PinzaNegra;
     public bool ContactoManoDer;
     public bool ContactoManoIzq;
     public bool objPantalla0=false;
@@ -48,9 +52,7 @@ public class TM_Megado : Lista_Tareas_Controller
     public TMP_Text tmp_tiempo;
     public TMP_Text tmp_Resistencia;
     public int contacto_aux;
-    [Header("Pinzas correctas")]
-    public bool PinzaRoja;
-    public bool PinzaNegra;
+    
 
 
     public override void Start()
@@ -97,7 +99,7 @@ public class TM_Megado : Lista_Tareas_Controller
                 }*/
                 //ORefe[0].SetActive(true);
                 break;
-                case 1://colocar caBLE ROJO
+            case 1://colocar caBLE ROJO + colocar caBLE negro *********12-11-25***********
                 manosXR[0].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[0];
                 manosXR[1].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[0];
                 guantesComplementos[0].SetActive(true);
@@ -117,35 +119,48 @@ public class TM_Megado : Lista_Tareas_Controller
                 }*/
 
                 break;
-            case 2://colocar caBLE negro
-                ObjRefe[1].SetActive(false);//DESACTIVAR PINZA ROJA REFE
+            case 2://Encender MEgometro***************12-11-25
+                //ObjRefe[1].SetActive(false);//DESACTIVAR PINZA ROJA REFE
                 Tablero_Indicaciones[1].SetActive(false);//APAGAR TABLERO1
                 yield return new WaitForSeconds(1f);
-                Tablero_Indicaciones[2].SetActive(true);//PRENDER TABLERO2
-                ObjRefe[6].SetActive(true);//PRENDER PPINZA NEGRA REFE
-                /*while (AudioManager.aSource.IsPlayingVoz() == true)
-                {
-                    //Debug.Log("Se esta reproduciendo audio");
-                    yield return new WaitForFixedUpdate();
-                }*/
-                break;
-            case 3://Encender MEgometro
-                ObjRefe[6].SetActive(false);//APAGAR PINZA NEGRA DE REFERENCIA
-                Tablero_Indicaciones[2].SetActive(false);//DESACTIVAR TABLERO2
                 yield return new WaitForSeconds(1f);
                 ObjRefeBotones[0].SetActive(true);//ACTIVAR BOTON DE REFERENCIA DE ENCENDIDO
-                Tablero_Indicaciones[3].SetActive(true);//ACTIVAR TABLERO3
-
-                //Tablero_Indicaciones[2].SetActive(true);
-                //ObjRefe[2].SetActive(true);
-                /*while (AudioManager.aSource.IsPlayingVoz() == true)
-                {
-                    //Debug.Log("Se esta reproduciendo audio");
-                    yield return new WaitForFixedUpdate();
-                }*/
+                Tablero_Indicaciones[2].SetActive(true);//PRENDER TABLERO2
+                
                 break;
-            case 4://Esperar encendidio y Calibrar voltaje y tiempo
+            case 3:////Esperar encendidio y Calibrar voltaje y tiempo (antes)Encender MEgometro*****12-11-25
+                //ObjRefe[6].SetActive(false);//APAGAR PINZA NEGRA DE REFERENCIA
+                Tablero_Indicaciones[2].SetActive(false);//DESACTIVAR TABLERO2
+                
+                Tablero_Indicaciones[3].SetActive(true);//ACTIVAR TABLERO3
                 activarBTN(0);
+                ObjRefeBotones[0].SetActive(false);//DESACTIVAR BOTON DE REFERENCIA DE ENCENDIDO
+                //Tablero_Indicaciones[3].SetActive(false);//DESACTIVAR TABLERO03
+                yield return new WaitForSeconds(1f);
+                //Tablero_Indicaciones[4].SetActive(true);//ACTIVAR TABLERO04
+                yield return new WaitForSeconds(1f);
+                pantallaUIMegometro[8].SetActive(false);
+                yield return new WaitForSeconds(4f);
+                pantallaUIMegometro[8].SetActive(false);
+                ObjRefeBotones[1].SetActive(true);//ACTIVAR DIAL DE REFERENCIA
+                yield return new WaitForSeconds(4f);
+                ObjRefeBotones[3].SetActive(true);//ACTIVAR de tiempo DE REFERENCIA
+
+                yield return new WaitForSeconds(6);
+
+                //Debug.Log("activar OBJ boton STart");
+                ObjRefeBotones[4].SetActive(true);//ACTIVAR de Start de referencia
+
+                break;
+            case 4://Esperando a que termine la medicion antes//Esperar encendidio y Calibrar voltaje y tiempo***12-11-25***
+                ObjRefeBotones[0].SetActive(false);//Apagar Boton de referencia de encendido
+                Tablero_Indicaciones[3].SetActive(false);//apagar panel 02
+                ObjRefeBotones[1].SetActive(false);//encender dial de referencia;Movera el ObjRefeBotones[2], no debe apagarse
+                ObjRefeBotones[3].SetActive(false);//encnder dial de referencia;Movera el ObjRefeBotones[2], no debe apagarse
+                ObjRefeBotones[4].SetActive(false);//encender dial de referencia;Movera el ObjRefeBotones[2], no debe apagarse
+                yield return new WaitForSeconds(1f);
+                Tablero_Indicaciones[4].SetActive(true);//apagar panel 02
+                /*activarBTN(0);
                 ObjRefeBotones[0].SetActive(false);//DESACTIVAR BOTON DE REFERENCIA DE ENCENDIDO
                 Tablero_Indicaciones[3].SetActive(false);//DESACTIVAR TABLERO03
                 yield return new WaitForSeconds(1f);
@@ -168,8 +183,9 @@ public class TM_Megado : Lista_Tareas_Controller
                     yield return new WaitForFixedUpdate();
                 }*/
                 break;
-            case 5://Esperando a que termine la medicion
-                ObjRefeBotones[0].SetActive(false);//Apagar Boton de referencia de encendido
+            case 5://Se uso boton Start y se mostrará resulta de victoria o derrota (antes)//Esperando a que termine la medicion
+                pantallaUIMegometro[0].SetActive(false);
+                /*ObjRefeBotones[0].SetActive(false);//Apagar Boton de referencia de encendido
                 Tablero_Indicaciones[4].SetActive(false);//apagar panel 02
                 ObjRefeBotones[1].SetActive(false);//encender dial de referencia;Movera el ObjRefeBotones[2], no debe apagarse
                 ObjRefeBotones[3].SetActive(false);//encnder dial de referencia;Movera el ObjRefeBotones[2], no debe apagarse
@@ -253,7 +269,7 @@ public class TM_Megado : Lista_Tareas_Controller
                 else
                 {
                     AudioManager.aSource.goFx("Fallo");
-                    Debug.Log("Fallo 0");
+                    Debug.Log(aux+" Fallo 0;contacto_confirmado[0]= " + contacto_confirmado[0]+ " PinzaRoja= "+ PinzaRoja);
                 }
                 
                 //TareaCompletada(1);
@@ -276,7 +292,7 @@ public class TM_Megado : Lista_Tareas_Controller
                     }
                     
                 }
-                else { AudioManager.aSource.goFx("Fallo"); Debug.Log("FAllo1"); }
+                else { AudioManager.aSource.goFx("Fallo"); Debug.Log(aux + " Fallo 1;contacto_confirmado[1]= " + contacto_confirmado[1] + " PinzaNegra= " + PinzaNegra); }
                 break;
         }
     }
@@ -293,12 +309,12 @@ public class TM_Megado : Lista_Tareas_Controller
         ObjRefe[nObjClave].GetComponent<Rigidbody>().constraints &= ~RigidbodyConstraints.FreezePositionX;
         //Debug.Log("congelando obj en pos indicada");
     }
-    public void verificarPosPinza(int tarea)
+    public void verificarPosPinza(int aux)
     {
-        if (contactoPinza == true/*contacto_confirmado[contacto_aux]*/ && SoltarObj==true)
+        if (/*contactoPinza == true*/contacto_confirmado[aux]==true && SoltarObj==true)
         {
             //Debug.Log("verificando obj para completar tarea");
-            SoltarPinza(contacto_aux);
+            SoltarPinza(aux);
             contactoPinza = false;
             SoltarObj = false;
         }
@@ -509,7 +525,7 @@ public class TM_Megado : Lista_Tareas_Controller
         {
             yield return new WaitForSeconds(58);
         }
-        Tablero_Indicaciones[5].SetActive(false);
+        Tablero_Indicaciones[4].SetActive(false);//*****13-11-25****** cambiado de 5 a 4
         yield return new WaitForSeconds(1);
         Tablero_Indicaciones[pantallaMostrar].SetActive(true);
         yield return new WaitForSeconds(2);
