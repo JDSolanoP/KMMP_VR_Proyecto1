@@ -1,0 +1,367 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 03.11.2021 17:51:52
+
+newmtl paint_Cabin
+	Ns 53.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.0000 0.0000 0.0000
+	Ks 0.9531 0.9531 0.9531
+	Ke 0.0000 0.0000 0.0000
+	map_Ka E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_cabin.tif
+	map_Kd E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_cabin.tif
+
+newmtl plastics_Cabin
+	Ns 46.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.0196 0.0196 0.0196
+	Ks 0.9804 0.9804 0.9804
+	Ke 0.0000 0.0000 0.0000
+	map_Ka E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_cabin.tif
+	map_Kd E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_cabin.tif
+
+newmtl display
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.0000 0.0000 0.0000
+	Ks 0.0000 0.0000 0.0000
+	Ke 1.0000 1.0000 1.0000
+	map_Ka E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_cabin.tif
+	map_Kd E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_cabin.tif
+	map_Ke E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_cabin.tif
+
+newmtl fabric_Seat_logo
+	Ns 39.2857
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.0000 0.0000 0.0000
+	Ks 0.0235 0.0235 0.0235
+	Ke 0.0000 0.0000 0.0000
+	map_Ka E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_fabricSeat0Logo_d.tif
+	map_Kd E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_fabricSeat0Logo_d.tif
+	map_bump -bm 0.5000 Map__1359796515_Normal_Bump.tga
+
+newmtl Rubber_black
+	Ns 32.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.0275 0.0275 0.0275
+	Ks 0.7745 0.7745 0.7745
+	Ke 0.0000 0.0000 0.0000
+
+newmtl Steel
+	Ns 35.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.4471 0.4510 0.4667
+	Kd 0.4471 0.4510 0.4667
+	Ks 0.9706 0.9706 0.9706
+	Ke 0.0000 0.0000 0.0000
+
+newmtl Fill_holes
+	Ns 71.4286
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.0000 0.0000 0.0000
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+
+newmtl cloth
+	Ns 21.4286
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.0784 0.0784 0.0784
+	Ks 0.1091 0.1091 0.1091
+	Ke 0.0000 0.0000 0.0000
+
+newmtl fabric_Seat01
+	Ns 39.2857
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.0000 0.0000 0.0000
+	Ks 0.1078 0.1078 0.1078
+	Ke 0.0000 0.0000 0.0000
+	map_Ka E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_fabricSeat01_d.tif
+	map_Kd E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_fabricSeat01_d.tif
+	map_bump -bm 0.5000 Map__1359796518_Normal_Bump.tga
+
+newmtl fabric_Seat02
+	Ns 39.2857
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.0000 0.0000 0.0000
+	Ks 0.0235 0.0235 0.0235
+	Ke 0.0000 0.0000 0.0000
+	map_Ka E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_fabricSeat02_d.tif
+	map_Kd E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_fabricSeat02_d.tif
+	map_bump -bm 0.5000 Map__1359796518_Normal_Bump.tga
+
+newmtl paint_body
+	Ns 60.7143
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.0000 0.0000 0.0000
+	Ks 0.7255 0.7255 0.7255
+	Ke 0.0000 0.0000 0.0000
+	map_Ka E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_body.tif
+	map_Kd E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_body.tif
+
+newmtl Aluminium
+	Ns 40.0000
+	Ni 10.0000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5647 0.5686 0.5804
+	Ks 0.8235 0.8235 0.8235
+	Ke 0.0000 0.0000 0.0000
+
+newmtl Chrome
+	Ns 40.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.3608 0.3765 0.4078
+	Kd 0.3608 0.3765 0.4078
+	Ks 0.9882 0.9882 0.9882
+	Ke 0.0000 0.0000 0.0000
+
+newmtl paint_bodyBump
+	Ns 54.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.0000 0.0000 0.0000
+	Ks 0.9105 0.9105 0.9105
+	Ke 0.0000 0.0000 0.0000
+	map_Ka E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_body.tif
+	map_Kd E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_body.tif
+	map_bump Map__5_Normal_Bump.tga
+
+newmtl track
+	Ns 60.7143
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.0000 0.0000 0.0000
+	Ks 0.7197 0.7197 0.7197
+	Ke 0.0000 0.0000 0.0000
+	map_Ka E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_track_d.tif
+	map_Kd E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_track_d.tif
+	map_Ks E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_track_r.tif
+	map_bump Map__17_Normal_Bump.tga
+
+newmtl Plastic_black
+	Ns 40.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.0196 0.0196 0.0196
+	Ks 0.9020 0.9020 0.9020
+	Ke 0.0000 0.0000 0.0000
+
+newmtl hoses_steel
+	Ns 32.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.1294 0.1294 0.1333
+	Ks 0.6711 0.6711 0.6684
+	Ke 0.0000 0.0000 0.0000
+	map_Ks E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_hoses_g.tif
+	map_bump Map__31_Normal_Bump.tga
+
+newmtl Glass_windows
+	Ns 64.2857
+	Ni 1.6000
+	d 0.0500
+	Tr 0.9500
+	Tf 0.0500 0.0500 0.0500 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.0431 0.1569 0.2588
+	Ks 0.9706 0.9706 0.9706
+	Ke 0.0000 0.0000 0.0000
+
+newmtl lights_cap01
+	Ns 57.1429
+	Ni 1.6000
+	d 0.0500
+	Tr 0.9500
+	Tf 0.0500 0.0500 0.0500 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.4745 0.4745 0.4745
+	Ks 0.9046 0.9046 0.9046
+	Ke 0.0000 0.0000 0.0000
+	map_bump Map__0_Normal_Bump.tga
+
+newmtl mirror
+	Ns 37.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.7098 0.7098 0.7098
+	Ks 0.9224 0.9224 0.9224
+	Ke 0.0000 0.0000 0.0000
+
+newmtl light_led
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 1.0000 1.0000 1.0000
+	Ks 0.0000 0.0000 0.0000
+	Ke 1.0000 1.0000 1.0000
+
+newmtl cabin_Floor
+	Ns 35.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.0588 0.0588 0.0588
+	Ks 0.7745 0.7745 0.7745
+	Ke 0.0000 0.0000 0.0000
+	map_bump Map__1359796513_Normal_Bump.tga
+
+newmtl pedals
+	Ns 38.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.0784 0.0784 0.0784
+	Ks 0.7362 0.7362 0.7362
+	Ke 0.0000 0.0000 0.0000
+	map_bump Map__1359796513_Normal_Bump.tga
+
+newmtl speakers
+	Ns 39.0000
+	Ni 1.6000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.0196 0.0196 0.0196
+	Ks 0.9589 0.9589 0.9589
+	Ke 0.0000 0.0000 0.0000
+	map_Ka E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_speaker_d.tif
+	map_Kd E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_speaker_d.tif
+	map_Ks E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_speaker_r.tif
+	map_bump Map__22_Normal_Bump.tga
+
+newmtl katafot
+	Ns 64.2857
+	Ni 1.6000
+	d 0.6000
+	Tr 0.4000
+	Tf 0.6000 0.6000 0.6000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5020 0.0000 0.0000
+	Ks 0.8558 0.8558 0.8558
+	Ke 0.0000 0.0000 0.0000
+	map_bump E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_katafot_b.tif
+	bump E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_katafot_b.tif
+
+newmtl radiator
+	Ns 50.0000
+	Ni 10.0000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.0000 0.0000 0.0000
+	Ks 0.3696 0.3696 0.3696
+	Ke 0.0000 0.0000 0.0000
+	map_Ka E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_radiator_d.tif
+	map_Kd E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_radiator_d.tif
+	map_Ks E:\YandexDisk\HTC\Convert\35\Komatsu_PC210LC\komatsu_pc210_radiator_r.tif
+	map_bump Map__9_Normal_Bump.tga
+
+newmtl lights_cap02
+	Ns 57.1429
+	Ni 1.6000
+	d 0.0500
+	Tr 0.9500
+	Tf 0.0500 0.0500 0.0500 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.4745 0.4745 0.4745
+	Ks 0.9628 0.9628 0.9628
+	Ke 0.0000 0.0000 0.0000
+	map_bump Map__0_Normal_Bump.tga

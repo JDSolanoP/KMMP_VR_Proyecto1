@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using JetBrains.Annotations;
+using UnityEngine.SceneManagement;
+//using UnityEditor.SearchService;
 
 public class TM_Megado : Lista_Tareas_Controller
 {
@@ -52,8 +54,8 @@ public class TM_Megado : Lista_Tareas_Controller
     public TMP_Text tmp_tiempo;
     public TMP_Text tmp_Resistencia;
     public int contacto_aux;
-    
-
+    public GameObject[] muros;
+    public GameObject[] BTN_UI;
 
     public override void Start()
     {
@@ -77,20 +79,26 @@ public class TM_Megado : Lista_Tareas_Controller
         switch (tarea)
         {//Agregar notaciones de tareas en cada caso
             case 0:// AQUI
-                aSource.PlayMusica(aSource.MusicaSonidos[0].nombre, 0.6f, true);
-                //Tarea inicial, se ejecuta por defecto al iniciar el proyecto
-                //Codigo de referencia : yield return new WaitForSeconds(2f);
-                Tablero_Indicaciones[0].SetActive(false);//tablero0:bienvenida colocar guantes
-                Tablero_Indicaciones[8].SetActive(true);
-                yield return new WaitForSeconds(0.5f);
-                //Tablero_Indicaciones[0].SetActive(true);//tablero0:bienvenida colocar guantes
-                yield return new WaitForSeconds(1f);//**********************************************tiempo
-                Tablero_Indicaciones[8].SetActive(false);
-                yield return new WaitForSeconds(0.5f);
-                Tablero_Indicaciones[0].SetActive(true);//tablero0:bienvenida colocar guantes
-                
+                for (int i = 0; i < Tablero_Indicaciones.Length; i++)
+                {
+                    Tablero_Indicaciones[i].SetActive(false);
+                }
                 guantesComplementos[0].SetActive(false);
                 guantesComplementos[1].SetActive(false);
+                aSource.PlayMusica(aSource.MusicaSonidos[0].nombre, 0.6f, true);
+                yield return new WaitForSeconds(0.5f);
+                //Tarea inicial, se ejecuta por defecto al iniciar el proyecto
+                //Codigo de referencia : yield return new WaitForSeconds(2f);
+                //Tablero_Indicaciones[0].SetActive(false);//tablero0:bienvenida colocar guantes
+                Tablero_Indicaciones[8].SetActive(true);
+                
+                //Tablero_Indicaciones[0].SetActive(true);//tablero0:bienvenida colocar guantes
+                //yield return new WaitForSeconds(1f);//**********************************************tiempo
+                //Tablero_Indicaciones[8].SetActive(false);
+                //yield return new WaitForSeconds(0.5f);
+                //Tablero_Indicaciones[0].SetActive(true);//tablero0:bienvenida colocar guantes
+
+                
                 /*while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
                     //Debug.Log("Se esta reproduciendo audio");
@@ -122,16 +130,18 @@ public class TM_Megado : Lista_Tareas_Controller
             case 2://Encender MEgometro***************12-11-25
                 //ObjRefe[1].SetActive(false);//DESACTIVAR PINZA ROJA REFE
                 Tablero_Indicaciones[1].SetActive(false);//APAGAR TABLERO1
+                aSource.goFx("Boton");
                 yield return new WaitForSeconds(1f);
-                yield return new WaitForSeconds(1f);
+                //yield return new WaitForSeconds(1f);
                 ObjRefeBotones[0].SetActive(true);//ACTIVAR BOTON DE REFERENCIA DE ENCENDIDO
                 Tablero_Indicaciones[2].SetActive(true);//PRENDER TABLERO2
-                
+
                 break;
             case 3:////Esperar encendidio y Calibrar voltaje y tiempo (antes)Encender MEgometro*****12-11-25
+                
                 //ObjRefe[6].SetActive(false);//APAGAR PINZA NEGRA DE REFERENCIA
                 Tablero_Indicaciones[2].SetActive(false);//DESACTIVAR TABLERO2
-                
+                yield return new WaitForSeconds(1f);
                 Tablero_Indicaciones[3].SetActive(true);//ACTIVAR TABLERO3
                 activarBTN(0);
                 ObjRefeBotones[0].SetActive(false);//DESACTIVAR BOTON DE REFERENCIA DE ENCENDIDO
@@ -160,51 +170,21 @@ public class TM_Megado : Lista_Tareas_Controller
                 ObjRefeBotones[4].SetActive(false);//encender dial de referencia;Movera el ObjRefeBotones[2], no debe apagarse
                 yield return new WaitForSeconds(1f);
                 Tablero_Indicaciones[4].SetActive(true);//apagar panel 02
-                /*activarBTN(0);
-                ObjRefeBotones[0].SetActive(false);//DESACTIVAR BOTON DE REFERENCIA DE ENCENDIDO
-                Tablero_Indicaciones[3].SetActive(false);//DESACTIVAR TABLERO03
-                yield return new WaitForSeconds(1f);
-                Tablero_Indicaciones[4].SetActive(true);//ACTIVAR TABLERO04
-                yield return new WaitForSeconds(1f);
-                pantallaUIMegometro[8].SetActive(false);
-                yield return new WaitForSeconds(4f);
-                pantallaUIMegometro[8].SetActive(false);
-                ObjRefeBotones[1].SetActive(true);//ACTIVAR DIAL DE REFERENCIA
-                yield return new WaitForSeconds(4f);
-                ObjRefeBotones[3].SetActive(true);//ACTIVAR de tiempo DE REFERENCIA
-                
-                yield return new WaitForSeconds(6);
 
-                //Debug.Log("activar OBJ boton STart");
-                ObjRefeBotones[4].SetActive(true);//ACTIVAR de Start de referencia
-                /*while (AudioManager.aSource.IsPlayingVoz() == true)
-                {
-                    //Debug.Log("Se esta reproduciendo audio");
-                    yield return new WaitForFixedUpdate();
-                }*/
                 break;
             case 5://Se uso boton Start y se mostrará resulta de victoria o derrota (antes)//Esperando a que termine la medicion
                 pantallaUIMegometro[0].SetActive(false);
-                /*ObjRefeBotones[0].SetActive(false);//Apagar Boton de referencia de encendido
-                Tablero_Indicaciones[4].SetActive(false);//apagar panel 02
-                ObjRefeBotones[1].SetActive(false);//encender dial de referencia;Movera el ObjRefeBotones[2], no debe apagarse
-                ObjRefeBotones[3].SetActive(false);//encnder dial de referencia;Movera el ObjRefeBotones[2], no debe apagarse
-                ObjRefeBotones[4].SetActive(false);//encender dial de referencia;Movera el ObjRefeBotones[2], no debe apagarse
-                yield return new WaitForSeconds(1f);
-                Tablero_Indicaciones[5].SetActive(true);//apagar panel 02
-                /*while (AudioManager.aSource.IsPlayingVoz() == true)
-                {
-                    //Debug.Log("Se esta reproduciendo audio");
-                    yield return new WaitForFixedUpdate();
-                }*/
-                //TareaCompletada(5);
+                
                 break;
             case 6://Se uso boton Start y se mostrará resulta de victoria o derrota
-                //ObjRefeBotones[0].SetActive(false);//Apagar Boton de referencia de encendido
-                //Tablero_Indicaciones[4].SetActive(false);//apagar panel 02
-                //ObjRefeBotones[1].SetActive(false);//encender dial de referencia;Movera el ObjRefeBotones[2], no debe apagarse
-                //ObjRefeBotones[3].SetActive(false);//encender dial de referencia;Movera el ObjRefeBotones[2], no debe apagarse
-                //ObjRefeBotones[4].SetActive(false);//encender dial de referencia;Movera el ObjRefeBotones[2], no debe apagarse
+                
+                BTN_UI[0].SetActive(false);//continuar
+
+                muros[0].SetActive(false);
+                Tablero_Indicaciones[9].SetActive(true);
+                yield return new WaitForSeconds(5f);
+                BTN_UI[0].SetActive(true);
+                
                 pantallaUIMegometro[0].SetActive(false);
                 /*while (AudioManager.aSource.IsPlayingVoz() == true)
                 {
@@ -213,33 +193,20 @@ public class TM_Megado : Lista_Tareas_Controller
                 }*/
                 //TareaCompletada(5);
                 break;
-                
-            /*case 6://Usar boton tiempo para calibrar tiempo
-                ObjRefeBotones[1].SetActive(false);//Apagar dial de encendido
-                Tablero_Indicaciones[5].SetActive(false);//apagar panel 05
-                ObjRefeBotones[3].SetActive(true);//encender boton de referencia de tiempo;
-                Tablero_Indicaciones[6].SetActive(true);
-                //Tablero_Indicaciones[2].SetActive(true);
-                //ObjRefe[2].SetActive(true);
-                while (audioManager.aSource.isPlaying == true)
-                {
-                    //Debug.Log("Se esta reproduciendo audio");
-                    yield return new WaitForFixedUpdate();
-                }
+            case 7:
+                Tablero_Indicaciones[9].SetActive(false);
+                Tablero_Indicaciones[10].SetActive(true);
+                aSource.goFx("aplausos");
+                aSource.goFx("fanfarrias");
+                muros[1].SetActive(false);
+                BTN_UI[1].SetActive(false);//reiniciar
+                BTN_UI[2].SetActive(false);//salir
+                yield return new WaitForSeconds(5f);
+                BTN_UI[1].SetActive(true);//reiniciar
+                yield return new WaitForSeconds(5f);
+                BTN_UI[2].SetActive(true);//reiniciar
                 break;
-            case 7://Usar boton tiempo para calibrar tiempo
-                ObjRefeBotones[2].SetActive(false);//Apagar Boton de referencia de encendido
-                Tablero_Indicaciones[2].SetActive(false);//apagar panel 02
-                ObjRefeBotones[1].SetActive(true);//encender dial de referencia;
-                Tablero_Indicaciones[3].SetActive(true);
-                //Tablero_Indicaciones[2].SetActive(true);
-                //ObjRefe[2].SetActive(true);
-                while (audioManager.aSource.isPlaying == true)
-                {
-                    //Debug.Log("Se esta reproduciendo audio");
-                    yield return new WaitForFixedUpdate();
-                }
-                break;*/
+           
         }
     }
     //*********************** TAREA 1 y TAREA 2*****************
@@ -262,13 +229,13 @@ public class TM_Megado : Lista_Tareas_Controller
                     PinzaRoja=true;
                     if (PinzaRoja == true && PinzaNegra==true)
                     {
-                        TareaCompletada(TareaActual);
+                        TareaCompletada(TareaActual);//*************************************************************
                     }
                     //TareaCompletada(TareaActual);
                 }
                 else
                 {
-                    AudioManager.aSource.goFx("Fallo");
+                    aSource.goFx("Fallo");
                     Debug.Log(aux+" Fallo 0;contacto_confirmado[0]= " + contacto_confirmado[0]+ " PinzaRoja= "+ PinzaRoja);
                 }
                 
@@ -284,15 +251,15 @@ public class TM_Megado : Lista_Tareas_Controller
                     ObjRefe[8].SetActive(false);
                     ObjRefe[9].SetActive(true);
                     ObjRefe[10].SetActive(true);
-                    AudioManager.aSource.goFx("Bien");
+                    aSource.goFx("Bien");
                     PinzaNegra = true;
                     if (PinzaRoja ==true&& PinzaNegra==true)
                     {
-                        TareaCompletada(TareaActual);
+                        TareaCompletada(TareaActual);//*****************************************************
                     }
                     
                 }
-                else { AudioManager.aSource.goFx("Fallo"); Debug.Log(aux + " Fallo 1;contacto_confirmado[1]= " + contacto_confirmado[1] + " PinzaNegra= " + PinzaNegra); }
+                else { aSource.goFx("Fallo"); Debug.Log(aux + " Fallo 1;contacto_confirmado[1]= " + contacto_confirmado[1] + " PinzaNegra= " + PinzaNegra); }
                 break;
         }
     }
@@ -339,6 +306,7 @@ public class TM_Megado : Lista_Tareas_Controller
             case 0:
                 //tintineo(0);
                 //TareaCompletada(3);
+                aSource.goFx("Boton");
                 StartCoroutine(Tintineo(0));
 
                 ObjRefePantalla[0].SetActive(true);
@@ -356,7 +324,8 @@ public class TM_Megado : Lista_Tareas_Controller
                 pantallaUIMegometro[8].SetActive(true);
                 break;
             case 1:
-//                Debug.Log("contacto boton tiempo, pos = "+TiempoPress);
+                //                Debug.Log("contacto boton tiempo, pos = "+TiempoPress);
+                aSource.goFx("Boton");
                 TiempoPress++;
                 if (TiempoPress > contadorTiemposPosibles)
                 {
@@ -366,9 +335,24 @@ public class TM_Megado : Lista_Tareas_Controller
                 //TiempoPress++;
                 break;
             case 2:
-                TareaCompletada(4);
+                if (TareaActual == 3)
+                {
+                    TareaCompletada(4);//**************************************************************************
+                }
+                aSource.goFx("Boton");
+                finDeMedicion = false;
                 ObjRefeBotones[4].SetActive(false);
+                
+                for(int i = 0; i < BarraUIMedicion.Length; i++)
+                {
+                    BarraUIMedicion[i].SetActive(false);
+                }
                 StartCoroutine(animacionCalibracion());
+                
+                break;
+            case 3://detector
+                TareaCompletada(5);//****************************************************************************
+                aSource.goFx("Bien");
                 break;
 
         }
@@ -432,15 +416,19 @@ public class TM_Megado : Lista_Tareas_Controller
                         break;
                     case 1:
                         tmp_voltaje.text = "200.0 mV";
+                        voltajeCorrecto = false;
                         break;
                     case 2:
                         tmp_voltaje.text = "2.0 V";
+                        voltajeCorrecto = false;
                         break;
                     case 3:
                         tmp_voltaje.text = "20.0 V";
+                        voltajeCorrecto = false;
                         break;
                     case 4:
                         tmp_voltaje.text = "200.0 V";
+                        voltajeCorrecto = false;
                         break;
                     case 5://Voltaje correcto
                         tmp_voltaje.text = "500.0 V";
@@ -489,6 +477,8 @@ public class TM_Megado : Lista_Tareas_Controller
         pantallaUIMegometro[8].SetActive(true);
         Debug.Log("iniciando animacion de calibracion");
         ObjRefeBotones[4].SetActive(false);
+        ObjRefeBotones[3].SetActive(false);
+        ObjRefeBotones[1].SetActive(false);
         StartCoroutine(llamado_tiempo(tiempoMedicion));
         StartCoroutine(tintineoPorBool(4));
         StartCoroutine(tintineoPorBool(5));
@@ -517,29 +507,47 @@ public class TM_Megado : Lista_Tareas_Controller
             
         }
         StartCoroutine(mostrarBarraUI());
-        if (tiempoCorrecto == false)
+        if (tiempoCorrecto == false||voltajeCorrecto==false)
         {
-            yield return new WaitForSeconds(30);
+            Debug.Log("**********************************error calibracion");
+            yield return new WaitForSeconds(15);
+            Tablero_Indicaciones[4].SetActive(false);
+            aSource.goFx("Fallo");
+            aSource.goFx("Locu_Fallo");
+            ObjRefeBotones[1].SetActive(true);
+            ObjRefeBotones[3].SetActive(true);
+            ObjRefeBotones[4].SetActive(true);
+            tiempoContador = 0;
+            //tiempoMedicion = 0;
         }
         else
         {
+            Debug.Log("********************************buena calibracion");
             yield return new WaitForSeconds(58);
+            aSource.goFx("Bien");
+            aSource.goFx("Locu_Bien");
+            muros[0].SetActive(false);
+            ObjRefe[11].SetActive(true);
+            if (Tablero_Indicaciones[7].activeInHierarchy == true)
+            {
+                Tablero_Indicaciones[7].SetActive(false);//derrota
+                yield return new WaitForSecondsRealtime(.5f);
+            }
+            Tablero_Indicaciones[6].SetActive(true);//victoria
+            TareaCompletada(4);
         }
         Tablero_Indicaciones[4].SetActive(false);//*****13-11-25****** cambiado de 5 a 4
         yield return new WaitForSeconds(1);
         Tablero_Indicaciones[pantallaMostrar].SetActive(true);
         yield return new WaitForSeconds(2);
-        
-        //StartCoroutine(Tintineo(4));//prueba1 on
-        //StartCoroutine(Tintineo(5));
-        //yield return new WaitForSeconds(2);
+
     }
     public IEnumerator mostrarBarraUI()
     {
 
         for (int i = 0; i <= BarraUI_contador; i++)
         {
-            Debug.Log("barra activada : "+i);
+            //Debug.Log("barra activada : "+i);
             BarraUIMedicion[i].SetActive(true);
             switch (i)
             {
@@ -594,18 +602,13 @@ public class TM_Megado : Lista_Tareas_Controller
     }
     public IEnumerator llamado_tiempo(float tiempo)
     {
+        
         float mod = 0;
          float auxmin = 0;
         //tiempoContador += Time.deltaTime;
         //tiempo = Time.realtimeSinceStartup;
         for (int i = 0; i < tiempo; i++) 
         {
-
-            if (tiempo > 60)
-            {
-                //Tablero_Indicaciones[5].SetActive(false);//apagar panel 02
-                TareaCompletada(TareaActual);
-            }
             if (i > 60)
             {
                 auxmin = i;
@@ -613,25 +616,64 @@ public class TM_Megado : Lista_Tareas_Controller
                 auxmin = (auxmin-mod)/60;
                 tiempoContador = mod;
             }
-            //string fTime=System.TimeSpan.FromSeconds(tiempoContador).ToString("mm\\:ss");
+            
             tmp_tiempo.text = auxmin.ToString("00:")+tiempoContador.ToString("00");
             tiempoContador++;
+            
+            if (i == 15)
+            {
+                if (tiempoCorrecto == false || voltajeCorrecto == false)
+                {
+                    
+                    i = 60;
+                    Debug.Log("error cali**********************************");
+                    Tablero_Indicaciones[7].SetActive(true);
+                    switch (TiempoPress)
+                    {
+                        case 0:
+                            tmp_tiempo.text = "00:00";
+                            
+                            break;
+                        case 1:
+                            tmp_tiempo.text = "00:30";
+                            
+                            break;
+                        case 2:
+                            tmp_tiempo.text = "01:00";
+                            
+                            break;
+                        case 3:
+                            tmp_tiempo.text = "05:00";
+                            
+                            break;
+                        case 4:
+                            tmp_tiempo.text = "10:00";
+                            
+                            break;
+                    }
+                    finDeMedicion = true;
+                    break;
+                }
+                
+            }
             yield return new WaitForSecondsRealtime(1);
         }
         //Tablero_Indicaciones[5].SetActive(false);//apagar panel 02
         if (tiempo == 30)
         {
             tmp_tiempo.text = "00:30";
-            TareaCompletada(TareaActual);
+            tiempoContador = 0;
             Tablero_Indicaciones[5].SetActive(false);//apagar panel 02
         }
         else
         {
+            tiempoContador = 0;
             tmp_tiempo.text = (tiempo / 60).ToString("00") + ":00";
             Tablero_Indicaciones[5].SetActive(false);//apagar panel 02
-            TareaCompletada(TareaActual);
+            //TareaCompletada(TareaActual);
 
         }
+        
         finDeMedicion = true;
     }
     public IEnumerator tintineoPorBool(int objeto)
@@ -644,6 +686,33 @@ public class TM_Megado : Lista_Tareas_Controller
             ObjRefePantalla[objeto].SetActive(false);
             yield return new WaitForSeconds(0.25f);
             ObjRefePantalla[objeto].SetActive(true);
+        }
+    }
+    public void activacionXR(int t)
+    {
+        switch (t)
+        {
+            case 0:
+                TareaCompletada(6);//*****************************************************
+                break;
+            case 1:
+                IrEscenaAsincron(0);
+                break;
+            case 2://SAlir
+                Debug.Log("salir");
+                Application.Quit();
+                break;
+            case 3:
+                if (TareaActual == 0||TareaActual==5)
+                {
+                    aSource.goFx("Fallo");
+                    Debug.Log("No esta listo para agarrarse");
+                }
+                break;
+            case 4:
+                Tablero_Indicaciones[8].SetActive(false);
+                Tablero_Indicaciones[0].SetActive(true);
+                break;
         }
     }
 }

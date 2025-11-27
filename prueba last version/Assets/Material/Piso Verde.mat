@@ -58,7 +58,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _GlossMapScale: 0.3
-    - _Glossiness: 0
+    - _Glossiness: 1
     - _Metallic: 0.785
     - _OcclusionStrength: 0
     - _Parallax: 0.005

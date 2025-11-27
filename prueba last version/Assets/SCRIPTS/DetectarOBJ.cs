@@ -7,6 +7,7 @@ public class DetectarOBJ : MonoBehaviour
     public TM_Megado megado;
     public GameObject ObjetoReferencia;//objeto con el que interactua
     public int contacto_Aux;
+    public bool llamar_funcion;
     // Start is called before the first frame update
 
     // Update is called once per frame
@@ -23,6 +24,10 @@ public class DetectarOBJ : MonoBehaviour
             megado.contacto_confirmado[contacto_Aux] = true;
             megado.contacto_aux = contacto_Aux;
             Debug.Log(contacto_Aux + " bueno desde el OBJ " + other.name);
+            if (llamar_funcion==true)
+            {
+                megado.activarBTN(contacto_Aux);
+            }
         }
     }
     public void OnTriggerStay(Collider other)
