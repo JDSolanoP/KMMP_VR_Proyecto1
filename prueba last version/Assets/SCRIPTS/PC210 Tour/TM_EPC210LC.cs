@@ -75,13 +75,27 @@ public class TM_EPC210LC : Lista_Tareas_Controller
                 
                 StartCoroutine(Transporte());
                 break;
+            case 1:
+                Tablero_Indicaciones[0].SetActive(false);//intro
+                //locucion
+                break;
         }
     }
     public IEnumerator Transporte()
     {
-        int nMuro =0;
+        
         FadeOutIn(1,1,1);
         yield return new WaitForSecondsRealtime(1f);
+        
+        muro[seleccionMuro()].SetActive(false);
+        Debug.Log(seleccionMuro()+"=nMuro - pos ="+ actualPos);
+        muro[actualPos+1].SetActive(true);
+        usuario.transform.position = pos[actualPos].position;
+        actualPos++;
+    }
+    public int seleccionMuro()
+    {
+        int nMuro = 0;
         switch (actualPos)
         {
             case 1://epps a maquina
@@ -91,9 +105,6 @@ public class TM_EPC210LC : Lista_Tareas_Controller
                 nMuro = 1;
                 break;
         }
-        muro[nMuro].SetActive(false);
-        muro[actualPos+1].SetActive(true);
-        usuario.transform.position = pos[actualPos].position;
-        actualPos++;
+        return nMuro;
     }
 }
