@@ -9,6 +9,7 @@ TagManager:
   - Colision Rojo
   - Ground
   - Muro_Area_Delimitada
+  - AntiTeleport
   layers:
   - Default
   - TransparentFX
@@ -19,8 +20,8 @@ TagManager:
   - Usuario
   - Obj_Interactuable
   - GUI
-  - 
-  - 
+  - BloqueoDeMovimientoSinCabeza
+  - InteractuableMeta
   - 
   - 
   - 

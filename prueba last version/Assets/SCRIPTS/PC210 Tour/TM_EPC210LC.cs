@@ -12,6 +12,9 @@ public class TM_EPC210LC : Lista_Tareas_Controller
     public GameObject[] BtnContinue;
     public int actualPos = 0;
     public int aux;
+    public GameObject[] Epps;
+
+    private int totalEpps = 0;
 
     public override void Start()
     {
@@ -65,6 +68,15 @@ public class TM_EPC210LC : Lista_Tareas_Controller
                     yield return new WaitForFixedUpdate();
                 }
                 break;
+            case 1:
+                Tablero_Indicaciones[1].SetActive(true);
+                break;
+            case 2:
+                Debug.Log("Tarea 2, entrando al taller");
+                TeleportToZone(0);
+                Tablero_Indicaciones[1].SetActive(false);
+                Tablero_Indicaciones[2].SetActive(true);
+                break;
         }
     }
     public void activacionXR(int contacto) //contacto con manos
@@ -77,14 +89,19 @@ public class TM_EPC210LC : Lista_Tareas_Controller
                 break;
             case 1:
                 Tablero_Indicaciones[0].SetActive(false);//intro
+                muro[0].SetActive(false);
+                TareaCompletada(0);
                 //locucion
+                break;
+            case 2:
+                BtnContinue[0].SetActive(false);
+                TareaCompletada(1);
                 break;
         }
     }
     public IEnumerator Transporte()
     {
-        
-        FadeOutIn(1,1,1);
+        StartCoroutine(FadeOutIn(1, 1, 1));
         yield return new WaitForSecondsRealtime(1f);
         
         muro[seleccionMuro()].SetActive(false);
@@ -92,6 +109,11 @@ public class TM_EPC210LC : Lista_Tareas_Controller
         muro[actualPos+1].SetActive(true);
         usuario.transform.position = pos[actualPos].position;
         actualPos++;
+    }
+
+    private void TeleportToZone(int zoneNumber)
+    {
+        usuario.transform.position = pos[0].position;
     }
     public int seleccionMuro()
     {
@@ -106,5 +128,35 @@ public class TM_EPC210LC : Lista_Tareas_Controller
                 break;
         }
         return nMuro;
+    }
+
+    public void EppPuesto(int numeroEpp)
+    {
+        if (numeroEpp == 0)
+        {
+            Debug.Log("Cambiar textura guante");
+        }
+        Epps[numeroEpp].SetActive(false);
+        ActivarEvento(0);
+    }
+    private void ActivarEvento(int NumeroEvento)
+    {
+        switch (NumeroEvento)
+        {
+            case 0:
+                totalEpps++;
+                if (totalEpps == 5)
+                {
+                    Debug.Log("Se agararon todos los EPPs");
+                    BtnContinue[0].SetActive(true);
+                }
+                break;
+        }
+    }
+
+    public void PasarAlSiguienteTablero(int TableroPorActivar)
+    {
+        Tablero_Indicaciones[TableroPorActivar - 1].SetActive(false);
+        Tablero_Indicaciones[TableroPorActivar].SetActive(true);
     }
 }
