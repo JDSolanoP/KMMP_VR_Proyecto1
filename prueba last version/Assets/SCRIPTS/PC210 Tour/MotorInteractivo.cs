@@ -9,17 +9,17 @@ public class MotorInteractivo : MonoBehaviour
     [SerializeField] private Collider tapaMotorGrabbable;
 
     private Vector3 _initialLocalPosition;
-    //private Collider _grabbableCollider;
+    private Collider _grabbableCollider;
 
     private void Awake()
     {
         _initialLocalPosition = transform.localPosition;
-        //_grabbableCollider = GetComponent<Collider>();
+        _grabbableCollider = GetComponent<Collider>();
     }
 
     private void Start()
     {
-        //_grabbableCollider.enabled = false;
+        _grabbableCollider.enabled = false;
     }
 
     public void PlayMoveMotor()
@@ -44,6 +44,6 @@ public class MotorInteractivo : MonoBehaviour
             yield return null;
         }
         transform.localPosition = targetPosition.localPosition;
-        //_grabbableCollider.enabled = true;
+        _grabbableCollider.enabled = true;
     }
 }
