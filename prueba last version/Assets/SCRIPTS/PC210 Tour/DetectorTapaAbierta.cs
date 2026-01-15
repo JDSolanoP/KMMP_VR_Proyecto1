@@ -3,6 +3,7 @@ using UnityEngine;
 public class DetectorTapaAbierta : MonoBehaviour
 {
     public GameObject Button3DInspeccionar;
+    public GameObject Button3DGuardar;
 
     [SerializeField] private Collider TapaCollider;
 

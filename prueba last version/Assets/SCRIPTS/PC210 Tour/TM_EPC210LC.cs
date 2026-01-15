@@ -14,6 +14,15 @@ public class TM_EPC210LC : Lista_Tareas_Controller
     public int aux;
     public GameObject[] Epps;
 
+    [SerializeField] private GameObject[] Flechas;
+    [SerializeField] private GameObject[] Referencias;
+
+    [Header("Motor")]
+    [SerializeField] public GameObject numerosDePanel;
+    [SerializeField] public GameObject BotonContinuarDelMotor;
+
+    private int _parteActualDelModulo = -1;
+
     private int totalEpps = 0;
 
     public override void Start()
@@ -45,6 +54,12 @@ public class TM_EPC210LC : Lista_Tareas_Controller
                 {
                     BtnContinue[i].SetActive(false);
                 }
+
+                for (int i = 0; i < Flechas.Length; i++) Flechas[i].SetActive(false);
+                for (int i = 0; i < Referencias.Length; i++) Referencias[i].SetActive(false);
+                numerosDePanel.SetActive(false);
+                BotonContinuarDelMotor.SetActive(false);
+
                 yield return new WaitForSecondsRealtime(0.5f);
 
                 Tablero_Indicaciones[0].SetActive(true);//panel de bienvenido
@@ -154,9 +169,131 @@ public class TM_EPC210LC : Lista_Tareas_Controller
         }
     }
 
+    public void EstablecerSiguienteParteDelModulo(int siguienteParteDelModulo)
+    {
+        _parteActualDelModulo = siguienteParteDelModulo;
+        ActualizarParteActual();
+    }
+
+    public void ActualizarParteActual()
+    {
+        for (int i = 0; i < Flechas.Length; i++) Flechas[i].SetActive(false);
+
+        if (_parteActualDelModulo == 0) //Panel 1.1
+        {
+
+        }
+        if (_parteActualDelModulo == 1) //Panel 1.2
+        {
+            Tablero_Indicaciones[4].SetActive(false);
+            ActivarGrupoDeFlechas(0);
+        }
+        if (_parteActualDelModulo == 2)
+        {
+            ActivarGrupoDeFlechas(1);
+        }
+        if (_parteActualDelModulo == 3)
+        {
+
+        }
+        if (_parteActualDelModulo == 4)
+        {
+            ActivarGrupoDeFlechas(4);
+        }
+        if (_parteActualDelModulo == 5)
+        {
+            ActivarGrupoDeFlechas(5);
+        }
+        if (_parteActualDelModulo == 6)
+        {
+            ActivarGrupoDeFlechas(6);
+        }
+        if (_parteActualDelModulo == 7)
+        {
+            ActivarGrupoDeFlechas(7);
+        }
+        if (_parteActualDelModulo == 8)
+        {
+            ActivarGrupoDeFlechas(8);
+        }
+        if (_parteActualDelModulo == 9)
+        {
+            ActivarGrupoDeFlechas(9);
+        }
+        if (_parteActualDelModulo == 10)
+        {
+            ActivarGrupoDeFlechas(10);
+        }
+        if (_parteActualDelModulo == 11)
+        {
+            ActivarGrupoDeFlechas(11);
+        }
+        if (_parteActualDelModulo == 12)
+        {
+
+        }
+        if (_parteActualDelModulo == 13)
+        {
+            ActivarGrupoDeFlechas(13);
+        }
+        if (_parteActualDelModulo == 14)
+        {
+
+        }
+        if (_parteActualDelModulo == 15)
+        {
+
+        }
+        if (_parteActualDelModulo == 16)
+        {
+
+        }
+    }
     public void PasarAlSiguienteTablero(int TableroPorActivar)
     {
         Tablero_Indicaciones[TableroPorActivar - 1].SetActive(false);
         Tablero_Indicaciones[TableroPorActivar].SetActive(true);
+    }
+
+    public void DesactivarTablero(int TableroPorDesactivar)
+    {
+        Tablero_Indicaciones[TableroPorDesactivar].SetActive(false);
+    }
+
+    public void ActivarTablero(int TableroPorActivar)
+    {
+        Tablero_Indicaciones[TableroPorActivar].SetActive(true);
+        if (_parteActualDelModulo != 1)
+        {
+            Tablero_Indicaciones[3].SetActive(false);
+        }
+    }
+
+    public void ActivarGrupoDeFlechas(int GrupoDeFlechasPorActivar)
+    {
+        Flechas[GrupoDeFlechasPorActivar].SetActive(true);
+        if (_parteActualDelModulo != 2)
+        {
+            DesactivarGrupoDeFlechas(3);
+        }
+        if (_parteActualDelModulo != 11)
+        {
+            DesactivarGrupoDeFlechas(12);
+        }
+    }
+
+    public void DesactivarGrupoDeFlechas(int GrupoDeFlechasPorDesactivar)
+    {
+        Flechas[GrupoDeFlechasPorDesactivar].SetActive(false);
+    }
+
+    public void ActivarReferencia(int ReferenciaPorActivar)
+    {
+        Referencias[ReferenciaPorActivar].SetActive(true);
+    }
+
+    public void DesactivarReferencia(int ReferenciaPorDesactivar)
+    {
+        Referencias[ReferenciaPorDesactivar].SetActive(false);
     }
 }
