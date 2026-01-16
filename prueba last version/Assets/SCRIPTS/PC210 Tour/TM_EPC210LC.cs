@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TM_EPC210LC : Lista_Tareas_Controller
 {
@@ -70,7 +71,7 @@ public class TM_EPC210LC : Lista_Tareas_Controller
                 manosXR[1].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[1];
                 */
 
-                aSource.PlayMusica(aSource.MusicaSonidos[0].nombre, 0.75f, true);
+                aSource.PlayMusica(aSource.MusicaSonidos[0].nombre, 0.35f, true);
                 //aSource.MusicaVol(0.75f);//**************************************Sonido Musica Inicial*************
                 aSource.FxVol(1);
 
@@ -296,4 +297,79 @@ public class TM_EPC210LC : Lista_Tareas_Controller
     {
         Referencias[ReferenciaPorDesactivar].SetActive(false);
     }
+    public void activarEvento(int nContacto)
+    {
+        int nPanel = 0;
+        int nFX = 0;
+        switch (nContacto)
+        {
+            case -1://boton reinicio
+                IrEscenaAsincron(0);
+                Debug.Log("reinicio");
+                break;
+            case 0://boton SALIR
+                Debug.Log("salir");
+                Application.Quit();
+                break;
+            case 1:
+                nPanel = 1;
+                nFX = 45;
+                break;
+            case 2:
+                nPanel = 1;
+                nFX = 46;
+                break;
+            default:
+                nPanel = nContacto-1;
+                nFX = 44+nContacto;
+                break;
+            case 20:
+                aSource.goFx("fanfarrias");
+                aSource.goFx("aplausos");
+                nPanel = nContacto - 1;
+                nFX = 44 + nContacto;
+                break;
+        }
+
+        Debug.Log(nContacto + " : Contacto Pj Hotspot - Audio : " + 
+            nFX+" Panel : " + nPanel +"->"+ 
+            Tablero_Indicaciones[nPanel].name + " activado :"+ 
+            Tablero_Indicaciones[nPanel].activeInHierarchy);
+        if (contacto_confirmado[nContacto] == false&& Tablero_Indicaciones[nPanel].activeInHierarchy == true)
+        {
+            AudioManager.aSource.goFx(AudioManager.aSource.FxSonidos[nFX].nombre);
+            contacto_confirmado[nContacto] = true;
+            
+        }
+    }
+    public void activarEventoXBtn(int nContacto)
+    {
+        int nPanel = 0;
+        int nFX = 0;
+        switch (nContacto)
+        {
+            case 1:
+                nPanel = 1;
+                nFX = 45;
+                break;
+            case 2:
+                nPanel = 1;
+                nFX = 46;
+                break;
+            default:
+                nPanel = nContacto - 1;
+                nFX = 44 + nContacto;
+                break;
+        }
+
+        Debug.Log(nContacto + " : Por BTN - Audio : " + nFX + " Panel : " + nPanel + "->" + Tablero_Indicaciones[nPanel].name + " activado :" + Tablero_Indicaciones[nPanel].activeInHierarchy);
+        if (contacto_confirmado[nContacto] == false)
+        {
+            AudioManager.aSource.goFx(AudioManager.aSource.FxSonidos[nFX].nombre);
+            contacto_confirmado[nContacto] = true;
+
+        }
+    }
+
+
 }
