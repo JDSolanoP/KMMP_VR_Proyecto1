@@ -53,6 +53,7 @@ public class MotorInteractivo : MonoBehaviour
 
         transform.localPosition = targetPosition.localPosition;
         _grabbableCollider.enabled = true;
+        detectorTapaAbierta.Button3DGuardar.SetActive(true);
         tm_epc210lc.numerosDePanel.SetActive(true);
     }
 
@@ -109,6 +110,7 @@ public class MotorInteractivo : MonoBehaviour
         transform.localPosition = _initialLocalPosition;
         tm_epc210lc.numerosDePanel.SetActive(false);
         tm_epc210lc.BotonContinuarDelMotor.SetActive(true);
+        detectorTapaAbierta.Button3DInspeccionar.SetActive(true);
     }
 
 }

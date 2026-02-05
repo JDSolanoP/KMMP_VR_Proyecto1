@@ -14,6 +14,7 @@ public class SwitchLucesEnCabina : MonoBehaviour
     }
     public void EncenderLuces()
     {
+        AudioManager.aSource.goFx("Boton");
         EstablecerRotacionSwitchOn();
         if (!horometro.GetIsPowerOn()) return;
         EstablecerLuces(true);
@@ -21,6 +22,7 @@ public class SwitchLucesEnCabina : MonoBehaviour
 
     public void ApagarLuces()
     {
+        AudioManager.aSource.goFx("Boton");
         EstablecerRotacionSwitchOff();
         EstablecerLuces(false);
     }

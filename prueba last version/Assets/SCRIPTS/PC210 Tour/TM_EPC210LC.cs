@@ -14,13 +14,16 @@ public class TM_EPC210LC : Lista_Tareas_Controller
     public int actualPos = 0;
     public int aux;
     public GameObject[] Epps;
-
+    public GameObject[] manosXR;
+    public Material manosXRMaterial;
+    public GameObject[] guantesComplementos;
     [SerializeField] private GameObject[] Flechas;
     [SerializeField] private GameObject[] Referencias;
 
     [Header("Motor")]
     [SerializeField] public GameObject numerosDePanel;
     [SerializeField] public GameObject BotonContinuarDelMotor;
+    public bool si_tapa_abierta = false;
 
     private int _parteActualDelModulo = -1;
 
@@ -71,7 +74,7 @@ public class TM_EPC210LC : Lista_Tareas_Controller
                 manosXR[1].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial[1];
                 */
 
-                aSource.PlayMusica(aSource.MusicaSonidos[0].nombre, 0.35f, true);
+                aSource.PlayMusica(aSource.MusicaSonidos[0].nombre, 0.1f, true);
                 //aSource.MusicaVol(0.75f);//**************************************Sonido Musica Inicial*************
                 aSource.FxVol(1);
 
@@ -151,6 +154,10 @@ public class TM_EPC210LC : Lista_Tareas_Controller
         if (numeroEpp == 0)
         {
             Debug.Log("Cambiar textura guante");
+            manosXR[0].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial;//19.01
+            manosXR[1].GetComponent<SkinnedMeshRenderer>().sharedMaterial = manosXRMaterial;
+            guantesComplementos[0].SetActive(true);
+            guantesComplementos[1].SetActive(true);
         }
         Epps[numeroEpp].SetActive(false);
         ActivarEvento(0);
@@ -161,6 +168,7 @@ public class TM_EPC210LC : Lista_Tareas_Controller
         {
             case 0:
                 totalEpps++;
+                
                 if (totalEpps == 5)
                 {
                     Debug.Log("Se agararon todos los EPPs");
@@ -268,6 +276,10 @@ public class TM_EPC210LC : Lista_Tareas_Controller
         {
             Tablero_Indicaciones[3].SetActive(false);
         }
+        if (_parteActualDelModulo != 10)
+        {
+            Tablero_Indicaciones[12].SetActive(false);
+        }
     }
 
     public void ActivarGrupoDeFlechas(int GrupoDeFlechasPorActivar)
@@ -290,7 +302,17 @@ public class TM_EPC210LC : Lista_Tareas_Controller
 
     public void ActivarReferencia(int ReferenciaPorActivar)
     {
-        Referencias[ReferenciaPorActivar].SetActive(true);
+        if (ReferenciaPorActivar != 6)
+        {
+            Referencias[ReferenciaPorActivar].SetActive(true);
+        }
+        else 
+        
+        if (si_tapa_abierta==false) {
+            Referencias[6].SetActive(true);
+            Debug.Log(si_tapa_abierta + ":tapa abierta - tapa refe:" + Referencias[6].activeInHierarchy);
+            si_tapa_abierta = true;
+        }
     }
 
     public void DesactivarReferencia(int ReferenciaPorDesactivar)
@@ -348,6 +370,14 @@ public class TM_EPC210LC : Lista_Tareas_Controller
         int nFX = 0;
         switch (nContacto)
         {
+            case -1://boton reinicio
+                IrEscenaAsincron(0);
+                Debug.Log("reinicio");
+                break;
+            case 0://boton SALIR
+                Debug.Log("salir");
+                Application.Quit();
+                break;
             case 1:
                 nPanel = 1;
                 nFX = 45;
@@ -356,6 +386,12 @@ public class TM_EPC210LC : Lista_Tareas_Controller
                 nPanel = 1;
                 nFX = 46;
                 break;
+            case 20:
+                aSource.goFx("fanfarrias");
+                aSource.goFx("aplausos");
+                nPanel = nContacto - 1;
+                nFX = 44 + nContacto;
+                break;
             default:
                 nPanel = nContacto - 1;
                 nFX = 44 + nContacto;
@@ -363,13 +399,34 @@ public class TM_EPC210LC : Lista_Tareas_Controller
         }
 
         Debug.Log(nContacto + " : Por BTN - Audio : " + nFX + " Panel : " + nPanel + "->" + Tablero_Indicaciones[nPanel].name + " activado :" + Tablero_Indicaciones[nPanel].activeInHierarchy);
-        if (contacto_confirmado[nContacto] == false)
+        if (contacto_confirmado[nContacto] == false&&nFX>44)
         {
             AudioManager.aSource.goFx(AudioManager.aSource.FxSonidos[nFX].nombre);
             contacto_confirmado[nContacto] = true;
 
         }
     }
-
-
+    private void Update()
+    {
+        if (Epps[0].activeInHierarchy == false)
+        {
+            if (manosXR[0].GetComponent<SkinnedMeshRenderer>().enabled == false)
+            {
+                guantesComplementos[0].SetActive(false);
+            }
+            if (manosXR[1].GetComponent<SkinnedMeshRenderer>().enabled == false)
+            {
+                guantesComplementos[1].SetActive(false);
+            }
+            if (manosXR[0].GetComponent<SkinnedMeshRenderer>().enabled == true)
+            {
+                guantesComplementos[0].SetActive(true);
+            }
+            if (manosXR[1].GetComponent<SkinnedMeshRenderer>().enabled == true)
+            {
+                guantesComplementos[1].SetActive(true);
+            }
+        }
+        
+    }
 }
