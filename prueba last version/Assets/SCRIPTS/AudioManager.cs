@@ -265,10 +265,13 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
-            while (AudioManager.aSource != null)
+            VocesSourceCanal[VozCanalActual].clip = s.clip;
+            Debug.Log(VocesSourceCanal[VozCanalActual].clip.name + " SonidoVoz Encontrado tocado en el canal " + VozCanalActual);
+            VocesSourceCanal[VozCanalActual].Play();
+            /*while (AudioManager.aSource != null)
             {
                 //if(AudioManager.aSource.isVozPlay == true) { }
-                if (VocesSourceCanal[VozCanalActual].isPlaying != true/* || s.clip.name != VocesSourceCanal[VozCanalActual].name*/)
+                if (VocesSourceCanal[VozCanalActual].isPlaying != true/* || s.clip.name != VocesSourceCanal[VozCanalActual].name)
                 {
                     if (VozCanalActual == 0&& s.clip != VocesSourceCanal[0].clip)
                     {
@@ -315,7 +318,7 @@ public class AudioManager : MonoBehaviour
                             StartCoroutine(CheckingPlayVoz());//************************************************************07-08-24
                             break;
                         }
-                    }*/
+                    }
                 }
                 else
 
@@ -331,11 +334,11 @@ public class AudioManager : MonoBehaviour
                     break;
                 }
 
-            }
+            }*/
             Debug.Log(VocesSourceCanal[VozCanalActual].clip+" playVoz en canal " + VozCanalActual);
-            VozCanalActual++;
+            /*VozCanalActual++;
             if (VozCanalActual >= VocesSourceCanal.Length) { VozCanalActual = 0; }
-            Debug.Log("playVoz en canal a usar " + VozCanalActual);
+            Debug.Log("playVoz en canal a usar " + VozCanalActual);*/
             
         }
     }

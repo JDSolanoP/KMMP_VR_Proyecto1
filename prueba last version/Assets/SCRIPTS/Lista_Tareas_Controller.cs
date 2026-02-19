@@ -22,7 +22,8 @@ public class Lista_Tareas_Controller : MonoBehaviour
     public float[] GlobalFloat;
     [Header("Transiciones_Elementos")]
     public bool SiFadeActivo;
-    public Renderer rend;//Renderimg Mode => Fade
+    public GameObject render;//Renderimg Mode => Fade
+    Renderer rend;
     public Color fadeColor;
     public float fadeTiempo = 2;
     public bool IniciaFade = true;
@@ -36,6 +37,7 @@ public class Lista_Tareas_Controller : MonoBehaviour
     // Ejemplo metodo para hacer herencia
     private void Awake()
     {
+        rend = render.GetComponent<Renderer>();
         if (tm == null)
         {
             tm = this;
@@ -47,7 +49,8 @@ public class Lista_Tareas_Controller : MonoBehaviour
         }
     }
     public virtual void Start()
-    {if (EnPruebas == false)
+    {
+        if (EnPruebas == false)
         {
             for (int i = 0; i < Tablero_Indicaciones.Length; i++)
             {
@@ -57,7 +60,7 @@ public class Lista_Tareas_Controller : MonoBehaviour
         
         if (SiFadeActivo)//mantener desactivado para usar render asigando en el editor
         {
-            rend = GetComponent<Renderer>();
+            
             if (IniciaFade) FadeIn();
         }
         //rend = GetComponent<Renderer>();
@@ -151,6 +154,7 @@ public class Lista_Tareas_Controller : MonoBehaviour
     }
     public void FadeIn(float tiempo)
     {
+        render.SetActive(true);
         fadeTiempo = tiempo;
         FadeIn();
     }
@@ -160,6 +164,7 @@ public class Lista_Tareas_Controller : MonoBehaviour
     }
     public void FadeOut(float tiempo)
     {
+        
         fadeTiempo = tiempo;
         FadeOut();
     }
@@ -179,6 +184,10 @@ public class Lista_Tareas_Controller : MonoBehaviour
             timer += Time.deltaTime;
             yield return null;
         }
+        if (alfaIn > alfaOut)
+        {
+            render.SetActive(false);
+        }
         Color newColor2 = fadeColor;
         newColor2.a = alfaOut;
         rend.material.SetColor("_Color",newColor2);
@@ -190,6 +199,7 @@ public class Lista_Tareas_Controller : MonoBehaviour
     }
     IEnumerator GoEscenaAsincro(int nEscena)
     {
+        render.SetActive(true);
         FadeOut();
         AsyncOperation ope = SceneManager.LoadSceneAsync(nEscena);
         ope.allowSceneActivation = false;
@@ -239,6 +249,7 @@ public class Lista_Tareas_Controller : MonoBehaviour
     }*/
     public IEnumerator FadeOutIn(float tOut, float tEspera,float tIn)
     {
+        render.SetActive(true);
         FadeOut(tOut);
         yield return new WaitForSecondsRealtime(tEspera);
         FadeIn(tIn);

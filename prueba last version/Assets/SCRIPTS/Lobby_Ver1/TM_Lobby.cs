@@ -564,7 +564,7 @@ public class TM_Lobby : MonoBehaviour
                 if (auxcontacto == 0)//iniciar
                 {
                     si_inicioModulo = true;
-                    //ltc.si_login = false;
+                    ltc.si_login = false;//PARA INICIAR EL MUDLO DESPUES DEL INICIAR//10.02.26
                     if (SoloTiempoPrevio == false)
                     {
                         btnPanel[0].transform.SetParent(GUI_Panel[1].transform);
