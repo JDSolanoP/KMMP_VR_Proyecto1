@@ -24,6 +24,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
     public GameObject[] Muros;
     public GameObject[] Flechas;
     [Header("*****ElementosModulo*****")]
+    [SerializeField] private GameObject itemsGameObject;
     [Header("***Tacos***")]
     public GameObject[] Tacos;
     [Header("***Caja_De_Aislamiento***")]
@@ -158,11 +159,12 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                         StartCoroutine(CoroutineAnimSonidoEntradaCamion());
                         aSource.goFx("BloqueoCamion_EntradaAnim");
                         yield return new WaitForSecondsRealtime(47f);//**********************fin de animacion de entrada a camion********
-                        FadeOut(3f);
+                        //FadeOut(3f);
+                        StartCoroutine(FadeOutIn(3f, 5f, 3f));
                         yield return new WaitForSecondsRealtime(5f);
                         PJ.transform.position = posPJ[1].position;
                         CamionAnim.SetActive(false);
-                        FadeIn(3f);
+                        //FadeIn(3f);
                     }
                     CamionC930.SetActive(true);
                     Muros[0].SetActive(false);
@@ -581,6 +583,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                     escalera[2].GetComponent<Rigidbody>().isKinematic = true;
                     escalera[2].GetComponent<Rigidbody>().useGravity = false;
                     escalera[2].transform.SetParent(CamionC930.transform);
+                    escalera[2].transform.SetParent(itemsGameObject.transform);
                     if (contacto_confirmado[confirmarcontacto] == true)
                     {
                         escalera[2].SetActive(false);//escalera obj
@@ -802,7 +805,62 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 break;
                 case 18:
                 TareaCompletada(8);//******************************************************fin de TAREA 8
+                Muros[5].SetActive(true);
                 ItemsVolti[15].SetActive(false);//detector conclusiones
+                break;
+            case 19:
+                si_verificacionGiro[1] = true;
+                aSource.goFx("4Puerta_Corrediza_Alto");
+                if (si_verificacionGiro[0] == true && si_verificacionGiro[1] == true && nVerificionesArranque[1] == false)
+                {
+                    nVerificionesArranque[1] = true;
+                    aSource.goFx("Bien");
+                    Debug.Log("saliendo de bucle por verificacion completada de ambos giros");
+                }
+                if (nVerificionesArranque[0] == true && nVerificionesArranque[1] == true && Tablero_Indicaciones[6].activeInHierarchy == true)
+                {
+                    Debug.Log("saliendo de bucle por verificacion de no arranque completada");
+                    aSource.goFx("Bien");
+                    aSource.goFx("Locu_Bien");
+                    Tablero_Indicaciones[6].SetActive(false);
+                    Tablero_Indicaciones[9].SetActive(true);
+                    StartCoroutine(TiempoEsperaTarea(3, 6, 45));//************************************************completa tarea 3
+                    break;
+                }
+                if (si_timon_agarrado == false)
+                {
+                    Debug.Log("saliendo de bucle por soltar timon");
+                    break;
+                }
+                Debug.Log("iniciando verificon timon-> ROTLOCAL : " + Timon[1].transform.localRotation.z + " " + Timon[1].transform.localEulerAngles.z);
+                TimonRot0 = Timon[1].transform.localEulerAngles;
+                break;
+            case 20:
+                si_verificacionGiro[0] = true;
+                aSource.goFx("4Puerta_Corrediza_Alto");
+                if (si_verificacionGiro[0] == true && si_verificacionGiro[1] == true && nVerificionesArranque[1] == false)
+                {
+                    nVerificionesArranque[1] = true;
+                    aSource.goFx("Bien");
+                    Debug.Log("saliendo de bucle por verificacion completada de ambos giros");
+                }
+                if (nVerificionesArranque[0] == true && nVerificionesArranque[1] == true && Tablero_Indicaciones[6].activeInHierarchy == true)
+                {
+                    Debug.Log("saliendo de bucle por verificacion de no arranque completada");
+                    aSource.goFx("Bien");
+                    aSource.goFx("Locu_Bien");
+                    Tablero_Indicaciones[6].SetActive(false);
+                    Tablero_Indicaciones[9].SetActive(true);
+                    StartCoroutine(TiempoEsperaTarea(3, 6, 45));//************************************************completa tarea 3
+                    break;
+                }
+                if (si_timon_agarrado == false)
+                {
+                    Debug.Log("saliendo de bucle por soltar timon");
+                    break;
+                }
+                Debug.Log("iniciando verificon timon-> ROTLOCAL : " + Timon[1].transform.localRotation.z + " " + Timon[1].transform.localEulerAngles.z);
+                TimonRot0 = Timon[1].transform.localEulerAngles;
                 break;
         }
     }
@@ -997,7 +1055,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 if (ItemsVolti[7].activeInHierarchy == false)
                 {
                     ItemsVolti[15].SetActive(true);//detector conclusiones
-                    Muros[5].SetActive(true);//muro que evita bajar escaleras diagonales
+                    //Muros[5].SetActive(true);//muro que evita bajar escaleras diagonales
                     aSource.goFx("Locu_Bien");
                     Muros[4].SetActive(false);//muro que evita bajar escaleras diagonales
                 }
@@ -1009,7 +1067,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 if (ItemsVolti[6].activeInHierarchy == false)
                 {
                     ItemsVolti[15].SetActive(true);//detector conclusiones
-                    Muros[5].SetActive(true);//muro que evita bajar escaleras diagonales
+                    //Muros[5].SetActive(true);//muro que evita bajar escaleras diagonales
                     aSource.goFx("Locu_Bien");
                     Muros[4].SetActive(false);//muro que evita bajar escaleras diagonales
                 }
@@ -1249,7 +1307,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
         Debug.Log("iniciando verificion timon-> ROTLOCAL : " + Timon[1].transform.localRotation.z + " " + Timon[1].transform.localEulerAngles.z);
         while (TareaActual >= 3)
         {
-            if (Timon[1].transform.localEulerAngles.z >= TimonRotDer )//el mayor 206
+            /*if (Timon[1].transform.localEulerAngles.z >= TimonRotDer )//el mayor 206
             {
                 Debug.Log("giro timonde timon lado der : " + si_verificacionGiro[1]);
                 aSource.goFx("4Puerta_Corrediza_Alto");
@@ -1266,7 +1324,7 @@ public class TM_BloqueoC930E5 : Lista_Tareas_Controller
                 {
                     si_verificacionGiro[0] = true;
                 }
-            }
+            }*/
             if (si_verificacionGiro[0] == true && si_verificacionGiro[1] == true&& nVerificionesArranque[1] == false)
                 {
                     nVerificionesArranque[1] = true;

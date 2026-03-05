@@ -15,6 +15,12 @@ public class TM_AtrapamientoMano : Lista_Tareas_Controller
     public Material[] manosXRMaterial;//19.02
     public int totalEpps;
     public GameObject[] BtnContinue;
+    [Header("Accion pistola")]
+    public ImpactWrenchGunAccion iwg;
+    
+    public GameObject IWP_Refe;
+    public GameObject IWP_Mesh;
+    public GameObject IWP_OBJ;
     public override void Start()
     {
         base.Start();
@@ -73,7 +79,7 @@ public class TM_AtrapamientoMano : Lista_Tareas_Controller
                     yield return new WaitForFixedUpdate();
                 }
                 break;//cuando se tiene todos los EPPS
-                break;
+                
             case 4:
                 break;
         }
