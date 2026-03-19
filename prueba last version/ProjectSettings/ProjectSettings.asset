@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: KMMP_CFK_JSolano
-  productName: BloqueoC930E5_Esp_ver.1.0
+  productName: IncidentesSsoma_Esp_ver.1.0
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0, g: 0, b: 0, a: 1}
@@ -171,8 +171,8 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.KMMP_CFK_JSolano.Excavadora
-    Standalone: com.KMMP-CFK-JSolano.TIEDT-1.0
+    Android: com.KMMP_CFK_JSolano.IncidentesSsoma
+    Standalone: com.KMMP-CFK-JSolano.IncidentesSsoma-1.0
   buildNumber:
     Standalone: 0
     VisionOS: 0

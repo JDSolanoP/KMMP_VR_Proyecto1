@@ -2,11 +2,17 @@ using UnityEngine;
 
 public class DetectorManoEnPolea : MonoBehaviour
 {
-    [SerializeField] private GameObject LeftHandPalm;
-    [SerializeField] private GameObject LeftHandMesh;
-    [SerializeField] private SkinnedMeshRenderer RealLeftHandSkinnedMeshRenderer;
-    [SerializeField] private Material InvisibleMaterial;
-    [SerializeField] private MeshRenderer LeftHandMeshRenderer;
+    [SerializeField] public GameObject ManoIzq_ReferenciaMalPuesta;
+    [SerializeField] public GameObject LeftHandPalm;
+    [SerializeField] public GameObject LeftHandMesh;
+    [SerializeField] public SkinnedMeshRenderer RealLeftHandSkinnedMeshRenderer;
+    [SerializeField] public MeshRenderer LeftHandMeshRenderer;
+
+    [Header("Materials")]
+    [SerializeField] public Material InvisibleMaterial;
+    [SerializeField] public Material GuantesMaterial;
+
+    public bool IsHandOnPolea = false;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -15,6 +21,7 @@ public class DetectorManoEnPolea : MonoBehaviour
             LeftHandMesh.SetActive(true);
             LeftHandMeshRenderer.enabled = false;
             RealLeftHandSkinnedMeshRenderer.material = InvisibleMaterial;
+            IsHandOnPolea = true;
         }
     }
 }
